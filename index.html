@@ -11,10 +11,10 @@
     --bg-base: #06090e;
     --bg-surface: #0f172a;
     --bg-panel: #1e293b;
-    --bg-card: #ffffff;
+    --bg-card: #0d1527;
     --border: #334155;
-    --border-light: #cbd5e1;
-    --text-primary: #0f172a;
+    --border-light: #1e293b;
+    --text-primary: #f8fafc;
     --text-inverse: #f8fafc;
     --text-muted: #94a3b8;
     --accent: #0284c7;
@@ -22,11 +22,17 @@
     --pass: #16a34a;
     --fail: #dc2626;
 
-    /* App UI Font Scope */
+    /* Scalable App UI Font Architecture (All UI elements scale proportionally) */
     --app-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     --app-font-size: 11px;
+    --ui-font-xs: calc(var(--app-font-size) * 0.72);
+    --ui-font-sm: calc(var(--app-font-size) * 0.82);
+    --ui-font-md: var(--app-font-size);
+    --ui-font-lg: calc(var(--app-font-size) * 1.15);
+    --ui-input-h: calc(var(--app-font-size) * 2.36);
+    --ui-hdr-h: calc(var(--app-font-size) * 1.6);
 
-    /* Report & Certificate Typography Scope */
+    /* Dedicated Report & Certificate Scope (Completely isolated from UI zoom) */
     --report-font-family: Arial, Helvetica, sans-serif;
     --report-font-size: 7.1pt;
     --report-line-height: 1.18;
@@ -40,7 +46,7 @@
     --bg-panel: #e2e8f0;
     --bg-card: #ffffff;
     --border: #cbd5e1;
-    --border-light: #94a3b8;
+    --border-light: #e2e8f0;
     --text-primary: #0f172a;
     --text-inverse: #0f172a;
     --text-muted: #64748b;
@@ -50,7 +56,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   body {
     font-family: var(--app-font-family);
-    font-size: var(--app-font-size);
+    font-size: var(--ui-font-md);
     background: var(--bg-base);
     color: var(--text-inverse);
     min-height: 100vh;
@@ -73,7 +79,7 @@
   }
   .brand-group { display: flex; align-items: center; gap: 8px; }
   .status-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; }
-  .brand-title { color: var(--text-inverse); font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+  .brand-title { color: var(--text-inverse); font-size: var(--ui-font-lg); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
 
   .engine-tabs {
     display: inline-flex;
@@ -88,7 +94,7 @@
     border: 1px solid transparent;
     color: var(--text-muted);
     padding: 4px 12px;
-    font-size: 10px;
+    font-size: var(--ui-font-sm);
     font-weight: 700;
     cursor: pointer;
     border-radius: 4px;
@@ -111,17 +117,18 @@
     flex-wrap: wrap;
     gap: 10px;
     align-items: center;
-    font-size: 9px;
+    font-size: var(--ui-font-xs);
   }
   .toolbar-group { display: flex; align-items: center; gap: 4px; background: rgba(0,0,0,0.22); padding: 2px 7px; border-radius: 4px; }
-  .formatting-toolbar label { font-weight: 700; color: var(--text-muted); }
+  .formatting-toolbar label { font-weight: 700; color: var(--text-muted); font-size: var(--ui-font-xs); }
   .formatting-toolbar select {
     background: var(--bg-surface);
     color: var(--text-inverse);
     border: 1px solid var(--border);
     padding: 2px 6px;
     border-radius: 3px;
-    font-size: 9px;
+    font-size: var(--ui-font-xs);
+    font-family: inherit;
   }
 
   header.app-bar {
@@ -137,8 +144,8 @@
     header.app-bar { flex-direction: row; justify-content: space-between; align-items: center; }
   }
   .app-title-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .app-title-group h1 { font-size: 11.5px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-inverse); }
-  .tag { background: var(--bg-panel); border: 1px solid var(--border); color: #38bdf8; font-size: 8px; padding: 1.5px 5px; font-weight: 700; border-radius: 2px; }
+  .app-title-group h1 { font-size: var(--ui-font-lg); font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-inverse); }
+  .tag { background: var(--bg-panel); border: 1px solid var(--border); color: #38bdf8; font-size: var(--ui-font-xs); padding: 1.5px 5px; font-weight: 700; border-radius: 2px; }
 
   .nav-tabs {
     display: flex;
@@ -154,7 +161,7 @@
     border: 1px solid var(--border);
     color: var(--text-muted);
     padding: 3px 8px;
-    font-size: 9.5px;
+    font-size: var(--ui-font-sm);
     font-weight: 700;
     cursor: pointer;
     border-radius: 3px;
@@ -169,44 +176,65 @@
     color: var(--text-inverse);
     border: 1px solid var(--border);
     padding: 4px 9px;
-    font-size: 10px;
+    font-size: var(--ui-font-sm);
     font-weight: 600;
     border-radius: 3px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    font-family: inherit;
   }
   .btn:hover { background: #475569; }
   .btn-success { background: var(--pass); border-color: transparent; color: #fff; }
   .btn-accent { background: var(--accent); border-color: transparent; color: #fff; }
   .btn-danger { background: var(--fail); border-color: transparent; color: #fff; }
 
-  /* Pill Toggle Badges */
-  .pill-toggle {
-    font-size: 8px;
-    font-weight: 700;
-    padding: 1.5px 6px;
-    border-radius: 10px;
-    cursor: pointer;
-    border: 1px solid transparent;
-    user-select: none;
-    text-transform: uppercase;
+  /* Sleek Telemetry Micro-Toggles */
+  .micro-toggle {
     display: inline-flex;
     align-items: center;
     gap: 3px;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: var(--ui-font-xs);
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    user-select: none;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+    line-height: calc(var(--ui-font-xs) + 4px);
   }
-  .pill-toggle.enabled { background: #166534; color: #dcfce7; border-color: #22c55e; }
-  .pill-toggle.disabled { background: #7f1d1d; color: #fee2e2; border-color: #ef4444; }
+  .micro-toggle.on {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+    border-color: rgba(34, 197, 94, 0.35);
+  }
+  .micro-toggle.off {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.35);
+  }
+  .micro-toggle .toggle-dot {
+    width: 4.5px;
+    height: 4.5px;
+    border-radius: 50%;
+    background: currentColor;
+  }
 
-  .voice-input-wrapper { display: flex; gap: 4px; align-items: center; width: 100%; }
+  .voice-input-wrapper { display: flex; gap: 3px; align-items: stretch; width: 100%; }
   .btn-mic {
-    background: #334155;
-    color: #fff;
-    border: 1px solid #475569;
+    background: #1e293b;
+    color: #94a3b8;
+    border: 1px solid var(--border);
     border-radius: 3px;
-    padding: 5px 7px;
-    font-size: 10px;
+    padding: 0 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--ui-font-md);
     cursor: pointer;
     user-select: none;
     transition: all 0.1s ease;
@@ -214,6 +242,7 @@
   }
   .btn-mic:active, .btn-mic.recording {
     background: #dc2626 !important;
+    color: #fff;
     border-color: #ef4444;
     box-shadow: 0 0 10px #dc2626;
   }
@@ -251,7 +280,7 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--border);
-    font-size: 10.5px;
+    font-size: var(--ui-font-sm);
     flex-shrink: 0;
   }
   .batch-strip strong { color: #38bdf8; }
@@ -265,18 +294,22 @@
     border: 1px solid var(--border-light);
     border-left: 3.5px solid #0f172a;
     border-radius: 4px;
-    padding: 10px;
-    margin-bottom: 10px;
+    padding: 11px 12px;
+    margin-bottom: 11px;
+  }
+  body.theme-light .card {
+    border-left-color: #0284c7;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   }
   .card h3 {
-    font-size: 10.5px;
+    font-size: var(--ui-font-md);
     font-weight: 800;
-    color: #0f172a;
+    color: inherit;
     text-transform: uppercase;
     letter-spacing: 0.4px;
-    margin-bottom: 8px;
-    border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 4px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -291,28 +324,63 @@
     .cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
   }
 
-  .fg { display: flex; flex-direction: column; gap: 3px; }
-  .fg label { font-size: 8.5px; font-weight: 700; text-transform: uppercase; color: #475569; display: flex; justify-content: space-between; align-items: center; }
+  /* Proportionally Scaled, Baseline-Aligned Form Inputs */
+  .fg {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .fg-hdr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--ui-hdr-h);
+    margin-bottom: 3px;
+    gap: 4px;
+  }
+  .fg-title {
+    font-size: var(--ui-font-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #94a3b8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  body.theme-light .fg-title { color: #475569; }
+
   .fg input, .fg select, .fg textarea {
-    padding: 5px 7px;
-    border: 1px solid var(--border-light);
+    padding: 4px 7px;
+    border: 1px solid var(--border);
     border-radius: 3px;
-    font-size: 11px;
+    font-size: var(--ui-font-md);
     font-family: inherit;
-    color: #0f172a;
-    background: #ffffff;
+    color: var(--text-primary);
+    background: #06090e;
     width: 100%;
-    transition: opacity 0.15s, background 0.15s;
+    min-height: var(--ui-input-h);
+    transition: opacity 0.15s, background 0.15s, border-color 0.15s;
+  }
+  .fg textarea { min-height: calc(var(--ui-input-h) * 1.8); }
+  body.theme-light .fg input, body.theme-light .fg select, body.theme-light .fg textarea {
+    background: #ffffff;
+    color: #0f172a;
+    border-color: #cbd5e1;
+  }
+  .fg input:focus, .fg select:focus, .fg textarea:focus {
+    border-color: var(--accent);
+    outline: none;
   }
   .fg input:disabled, .fg select:disabled, .fg textarea:disabled {
-    opacity: 0.45;
-    background: #f1f5f9;
+    opacity: 0.35;
+    background: rgba(0,0,0,0.25) !important;
+    border-style: dashed;
     cursor: not-allowed;
   }
 
-  .sig-box { border: 1px solid #94a3b8; background: #fff; position: relative; border-radius: 3px; margin-top: 3px; }
+  .sig-box { border: 1px solid var(--border); background: #fff; position: relative; border-radius: 3px; margin-top: 3px; }
   canvas.sig-pad { width: 100%; height: 50px; display: block; touch-action: none; cursor: crosshair; }
-  .sig-clear { position: absolute; top: 2px; right: 4px; font-size: 8px; font-weight: 700; color: var(--fail); background: rgba(255,255,255,0.9); padding: 1px 3px; border: 1px solid #cbd5e1; border-radius: 2px; cursor: pointer; }
+  .sig-clear { position: absolute; top: 2px; right: 4px; font-size: var(--ui-font-xs); font-weight: 700; color: var(--fail); background: rgba(255,255,255,0.9); padding: 1px 3px; border: 1px solid #cbd5e1; border-radius: 2px; cursor: pointer; }
 
   /* Right Live Preview Area */
   .right-pane {
@@ -337,7 +405,7 @@
     justify-content: space-between;
     align-items: center;
     color: #94a3b8;
-    font-size: 9px;
+    font-size: var(--ui-font-xs);
     flex-shrink: 0;
   }
   .a4-gauge-banner strong { color: #38bdf8; }
@@ -439,19 +507,22 @@
     flex-wrap: wrap;
     border: 1px solid #cbd5e1;
     color: #0f172a;
+    font-size: var(--ui-font-sm);
   }
-  .range-toolbar label { font-size: 9.5px; font-weight: 700; color: #334155; }
-  .range-toolbar input[type="number"], .range-toolbar input[type="date"] {
+  .range-toolbar label { font-size: var(--ui-font-xs); font-weight: 700; color: #334155; }
+  .range-toolbar input[type="number"], .range-toolbar input[type="date"], .range-toolbar select {
     padding: 3px 5px;
     border: 1px solid #94a3b8;
     border-radius: 2px;
     font-weight: 700;
+    font-size: var(--ui-font-xs);
+    font-family: inherit;
   }
 
   .sheet-wrap { overflow: auto; max-height: 440px; border: 1px solid var(--border-light); background: #fff; border-radius: 4px; color: #0f172a; }
-  table.sheet { width: 100%; border-collapse: collapse; font-size: 10px; white-space: nowrap; }
+  table.sheet { width: 100%; border-collapse: collapse; font-size: var(--ui-font-sm); white-space: nowrap; }
   table.sheet th { background: #0f172a; color: #fff; padding: 6px 8px; font-weight: 700; text-align: left; position: sticky; top: 0; z-index: 10; border-right: 1px solid #334155; }
-  table.sheet th .lock-btn { cursor: pointer; font-size: 10px; margin-left: 3px; opacity: 0.8; }
+  table.sheet th .lock-btn { cursor: pointer; font-size: var(--ui-font-sm); margin-left: 3px; opacity: 0.8; }
   table.sheet th .lock-btn:hover { opacity: 1; }
   table.sheet td { padding: 5px 8px; border-bottom: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
   table.sheet td[contenteditable="true"]:focus { background: #f0f9ff; outline: 1.5px solid var(--accent); }
@@ -469,7 +540,7 @@
     .a4-page-frame {
       width: 210mm !important;
       max-width: 210mm !important;
-      height: 295mm !important; /* Constrained strictly to prevent blank page spawn */
+      height: 295mm !important;
       max-height: 295mm !important;
       box-shadow: none !important;
       border: 1.5px solid #000 !important;
@@ -500,7 +571,7 @@
   <div style="display:flex; align-items:center; gap:8px;">
     <button class="btn" id="btnLayoutToggle" onclick="cyclePreviewLayout()">⊞ Preview: Beside</button>
     <button class="btn" id="btnThemeToggle" onclick="toggleThemeMode()">🌙 Dark</button>
-    <div style="color:#38bdf8; font-size:9.5px; font-weight:700;">ISO/IEC 17020 COMPLIANT</div>
+    <div style="color:#38bdf8; font-size:var(--ui-font-xs); font-weight:700;">ISO/IEC 17020 COMPLIANT</div>
   </div>
 </div>
 
@@ -515,10 +586,11 @@
       <option value="Georgia, serif">Serif</option>
     </select>
     <select id="globalSizeSelect" onchange="updateAppSize(this.value)">
-      <option value="10px">UI 10px</option>
-      <option value="11px" selected>UI 11px</option>
-      <option value="12px">UI 12px</option>
-      <option value="13px">UI 13px</option>
+      <option value="10px">UI 10px (Compact)</option>
+      <option value="11px" selected>UI 11px (Normal)</option>
+      <option value="12px">UI 12px (Medium)</option>
+      <option value="13px">UI 13px (Large)</option>
+      <option value="14px">UI 14px (XL)</option>
     </select>
   </div>
 
@@ -545,7 +617,7 @@
     </select>
   </div>
 
-  <button class="btn" style="margin-left:auto; padding:2px 6px; font-size:9px;" onclick="resetAppStyling()">Reset Styles</button>
+  <button class="btn" style="margin-left:auto; padding:2px 6px; font-size:var(--ui-font-xs);" onclick="resetAppStyling()">Reset Styles</button>
 </div>
 
 <header class="app-bar">
@@ -578,46 +650,46 @@
         <h3>1. Identification &amp; Technical Standards</h3>
         <div class="row cols-3">
           <div class="fg" id="fg_reportNo">
-            <label>
-              <span>Report Number (Auto-Incremented)</span>
-              <span class="pill-toggle enabled" id="pill_reportNo" onclick="toggleFieldPill('reportNo')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Report Number</span>
+              <span class="micro-toggle on" id="pill_reportNo" onclick="toggleFieldPill('reportNo')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <div class="voice-input-wrapper">
               <input type="text" id="in_reportNo" oninput="debouncedSync()">
               <button class="btn-mic" title="Hold to Speak" onpointerdown="startVoice(this, 'in_reportNo')" onpointerup="stopVoice(this)">🎙</button>
             </div>
           </div>
           <div class="fg" id="fg_jobRef">
-            <label>
-              <span>Job Reference</span>
-              <span class="pill-toggle enabled" id="pill_jobRef" onclick="toggleFieldPill('jobRef')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Job Reference</span>
+              <span class="micro-toggle on" id="pill_jobRef" onclick="toggleFieldPill('jobRef')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <div class="voice-input-wrapper">
               <input type="text" id="in_jobRef" oninput="debouncedSync()">
               <button class="btn-mic" title="Hold to Speak" onpointerdown="startVoice(this, 'in_jobRef')" onpointerup="stopVoice(this)">🎙</button>
             </div>
           </div>
           <div class="fg" id="fg_companyAccred">
-            <label>
-              <span>Inspection Body</span>
-              <span class="pill-toggle enabled" id="pill_companyAccred" onclick="toggleFieldPill('companyAccred')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Inspection Body</span>
+              <span class="micro-toggle on" id="pill_companyAccred" onclick="toggleFieldPill('companyAccred')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <input type="text" id="in_companyAccred" oninput="debouncedSync()">
           </div>
         </div>
         <div class="row cols-2">
           <div class="fg" id="fg_standards">
-            <label>
-              <span>Applicable Technical Standards</span>
-              <span class="pill-toggle enabled" id="pill_standards" onclick="toggleFieldPill('standards')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Applicable Standards</span>
+              <span class="micro-toggle on" id="pill_standards" onclick="toggleFieldPill('standards')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <input type="text" id="in_standards" oninput="debouncedSync()">
           </div>
           <div class="fg" id="fg_sopRef">
-            <label>
-              <span>Inspection SOP Reference</span>
-              <span class="pill-toggle enabled" id="pill_sopRef" onclick="toggleFieldPill('sopRef')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Inspection SOP Reference</span>
+              <span class="micro-toggle on" id="pill_sopRef" onclick="toggleFieldPill('sopRef')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <input type="text" id="in_sopRef" oninput="debouncedSync()">
           </div>
         </div>
@@ -627,40 +699,40 @@
         <h3>2. Employer, Client &amp; Premises Details</h3>
         <div class="row cols-2">
           <div class="fg" id="fg_employer">
-            <label>
-              <span>Employer / Client (Use '++' for new line)</span>
-              <span class="pill-toggle enabled" id="pill_employer" onclick="toggleFieldPill('employer')">✓ Enabled</span>
-            </label>
-            <textarea id="in_employer" rows="2" oninput="debouncedSync()"></textarea>
+            <div class="fg-hdr">
+              <span class="fg-title">Employer / Client</span>
+              <span class="micro-toggle on" id="pill_employer" onclick="toggleFieldPill('employer')"><span class="toggle-dot"></span>ON</span>
+            </div>
+            <textarea id="in_employer" rows="2" placeholder="Company Name and Address (use ++ for line break)" oninput="debouncedSync()"></textarea>
           </div>
           <div class="fg" id="fg_premises">
-            <label>
-              <span>Premises Where Examination Carried Out</span>
-              <span class="pill-toggle enabled" id="pill_premises" onclick="toggleFieldPill('premises')">✓ Enabled</span>
-            </label>
-            <textarea id="in_premises" rows="2" oninput="debouncedSync()"></textarea>
+            <div class="fg-hdr">
+              <span class="fg-title">Premises / Location</span>
+              <span class="micro-toggle on" id="pill_premises" onclick="toggleFieldPill('premises')"><span class="toggle-dot"></span>ON</span>
+            </div>
+            <textarea id="in_premises" rows="2" placeholder="Facility / Rig Name and Location" oninput="debouncedSync()"></textarea>
           </div>
         </div>
         <div class="row cols-3">
           <div class="fg" id="fg_poRef">
-            <label>
-              <span>Purchase Order Ref</span>
-              <span class="pill-toggle enabled" id="pill_poRef" onclick="toggleFieldPill('poRef')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Purchase Order Ref</span>
+              <span class="micro-toggle on" id="pill_poRef" onclick="toggleFieldPill('poRef')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <input type="text" id="in_poRef" oninput="debouncedSync()">
           </div>
           <div class="fg" id="fg_subLocation">
-            <label>
-              <span>Sub-Location / Area</span>
-              <span class="pill-toggle enabled" id="pill_subLocation" onclick="toggleFieldPill('subLocation')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Sub-Location / Area</span>
+              <span class="micro-toggle on" id="pill_subLocation" onclick="toggleFieldPill('subLocation')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <input type="text" id="in_subLocation" oninput="debouncedSync()">
           </div>
           <div class="fg" id="fg_colourCode">
-            <label>
-              <span>Applied Colour Code</span>
-              <span class="pill-toggle enabled" id="pill_colourCode" onclick="toggleFieldPill('colourCode')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Colour Code</span>
+              <span class="micro-toggle on" id="pill_colourCode" onclick="toggleFieldPill('colourCode')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <input type="text" id="in_colourCode" oninput="debouncedSync()">
           </div>
         </div>
@@ -670,73 +742,73 @@
         <h3>3. Equipment Specification &amp; Safe Working Load</h3>
         <div class="row cols-3">
           <div class="fg" style="grid-column: span 2;" id="fg_description">
-            <label>
-              <span>Equipment Description (Use '++' for line breaks)</span>
-              <span class="pill-toggle enabled" id="pill_description" onclick="toggleFieldPill('description')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Equipment Description</span>
+              <span class="micro-toggle on" id="pill_description" onclick="toggleFieldPill('description')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <div class="voice-input-wrapper">
-              <input type="text" id="in_description" oninput="debouncedSync()">
+              <input type="text" id="in_description" placeholder="Description (use ++ for line break)" oninput="debouncedSync()">
               <button class="btn-mic" title="Hold to Speak" onpointerdown="startVoice(this, 'in_description')" onpointerup="stopVoice(this)">🎙</button>
             </div>
           </div>
           <div class="fg" id="fg_swl">
-            <label>
-              <span>SWL / WLL</span>
-              <span class="pill-toggle enabled" id="pill_swl" onclick="toggleFieldPill('swl')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">SWL / WLL</span>
+              <span class="micro-toggle on" id="pill_swl" onclick="toggleFieldPill('swl')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <input type="text" id="in_swl" style="font-weight:bold; color:var(--report-accent);" oninput="debouncedSync()">
           </div>
         </div>
         <div class="row cols-4">
           <div class="fg" id="fg_manufacturer">
-            <label>
-              <span>Manufacturer</span>
-              <span class="pill-toggle enabled" id="pill_manufacturer" onclick="toggleFieldPill('manufacturer')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Manufacturer</span>
+              <span class="micro-toggle on" id="pill_manufacturer" onclick="toggleFieldPill('manufacturer')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <input type="text" id="in_manufacturer" oninput="debouncedSync()">
           </div>
           <div class="fg" id="fg_model">
-            <label>
-              <span>Model</span>
-              <span class="pill-toggle enabled" id="pill_model" onclick="toggleFieldPill('model')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Model</span>
+              <span class="micro-toggle on" id="pill_model" onclick="toggleFieldPill('model')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <input type="text" id="in_model" oninput="debouncedSync()">
           </div>
           <div class="fg" id="fg_serial">
-            <label>
-              <span>Serial Number (Manual Input)</span>
-              <span class="pill-toggle enabled" id="pill_serial" onclick="toggleFieldPill('serial')">✓ Enabled</span>
-            </label>
-            <input type="text" id="in_serial" class="mono" placeholder="Enter Serial No..." oninput="debouncedSync()">
+            <div class="fg-hdr">
+              <span class="fg-title">Serial Number</span>
+              <span class="micro-toggle on" id="pill_serial" onclick="toggleFieldPill('serial')"><span class="toggle-dot"></span>ON</span>
+            </div>
+            <input type="text" id="in_serial" class="mono" placeholder="Input Serial..." oninput="debouncedSync()">
           </div>
           <div class="fg" id="fg_plantId">
-            <label>
-              <span>Plant / Asset ID</span>
-              <span class="pill-toggle enabled" id="pill_plantId" onclick="toggleFieldPill('plantId')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Plant / Asset ID</span>
+              <span class="micro-toggle on" id="pill_plantId" onclick="toggleFieldPill('plantId')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <input type="text" id="in_plantId" class="mono" oninput="debouncedSync()">
           </div>
         </div>
         <div class="row cols-3" style="margin-top:4px;">
           <div class="fg" id="fg_mfgYear">
-            <label>
-              <span>Year of Manufacture</span>
-              <span class="pill-toggle enabled" id="pill_mfgYear" onclick="toggleFieldPill('mfgYear')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Year of Mfg</span>
+              <span class="micro-toggle on" id="pill_mfgYear" onclick="toggleFieldPill('mfgYear')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <input type="text" id="in_mfgYear" oninput="debouncedSync()">
           </div>
           <div class="fg" id="fg_lastExamDate">
-            <label>
-              <span>Last Exam Date</span>
-              <span class="pill-toggle enabled" id="pill_lastExamDate" onclick="toggleFieldPill('lastExamDate')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Last Exam Date</span>
+              <span class="micro-toggle on" id="pill_lastExamDate" onclick="toggleFieldPill('lastExamDate')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <input type="date" id="in_lastExamDate" oninput="debouncedSync()">
           </div>
           <div class="fg" id="fg_markingsLegible">
-            <label>
-              <span>Markings Legible?</span>
-              <span class="pill-toggle enabled" id="pill_markingsLegible" onclick="toggleFieldPill('markingsLegible')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Markings Legible</span>
+              <span class="micro-toggle on" id="pill_markingsLegible" onclick="toggleFieldPill('markingsLegible')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <select id="in_markingsLegible" onchange="debouncedSync()"><option value="YES">YES</option><option value="NO">NO</option><option value="RESTAMPED">RESTAMPED</option></select>
           </div>
         </div>
@@ -745,54 +817,54 @@
       <div class="card">
         <h3>4. Reason for Thorough Examination (Questionnaire)</h3>
         <div class="row cols-2">
-          <div style="background:#f8fafc; padding:8px; border:1px solid #e2e8f0; border-radius:4px; color:#0f172a;">
-            <div style="font-weight:800; font-size:9.5px; margin-bottom:6px;">INITIAL INSTALLATION:</div>
+          <div style="background:#0f172a; padding:8px; border:1px solid #1e293b; border-radius:4px;">
+            <div style="font-weight:800; font-size:var(--ui-font-xs); margin-bottom:6px; color:#38bdf8;">INITIAL INSTALLATION:</div>
             <div class="fg" id="fg_q_firstExam">
-              <label>
-                <span>First examination after installation?</span>
-                <span class="pill-toggle enabled" id="pill_q_firstExam" onclick="toggleFieldPill('q_firstExam')">✓ Enabled</span>
-              </label>
+              <div class="fg-hdr">
+                <span class="fg-title">First Examination?</span>
+                <span class="micro-toggle on" id="pill_q_firstExam" onclick="toggleFieldPill('q_firstExam')"><span class="toggle-dot"></span>ON</span>
+              </div>
               <select id="in_q_firstExam" onchange="handleQuestionnaireChange()"><option value="NO">NO</option><option value="YES">YES</option></select>
             </div>
             <div class="fg" style="margin-top:6px;" id="fg_q_installedCorrectly">
-              <label>
-                <span>Has equipment been installed correctly?</span>
-                <span class="pill-toggle enabled" id="pill_q_installedCorrectly" onclick="toggleFieldPill('q_installedCorrectly')">✓ Enabled</span>
-              </label>
+              <div class="fg-hdr">
+                <span class="fg-title">Installed Correctly?</span>
+                <span class="micro-toggle on" id="pill_q_installedCorrectly" onclick="toggleFieldPill('q_installedCorrectly')"><span class="toggle-dot"></span>ON</span>
+              </div>
               <select id="in_q_installedCorrectly" onchange="debouncedSync()"><option value="N/A">N/A</option><option value="YES">YES</option></select>
             </div>
           </div>
-          <div style="background:#f8fafc; padding:8px; border:1px solid #e2e8f0; border-radius:4px; color:#0f172a;">
-            <div style="font-weight:800; font-size:9.5px; margin-bottom:6px;">EXAMINATION INTERVAL (MUTUALLY EXCLUSIVE):</div>
+          <div style="background:#0f172a; padding:8px; border:1px solid #1e293b; border-radius:4px;">
+            <div style="font-weight:800; font-size:var(--ui-font-xs); margin-bottom:6px; color:#38bdf8;">EXAMINATION INTERVAL:</div>
             <div class="row cols-2">
               <div class="fg" id="fg_q_int6m">
-                <label>
-                  <span>Within 6 months?</span>
-                  <span class="pill-toggle enabled" id="pill_q_int6m" onclick="toggleFieldPill('q_int6m')">✓ Enabled</span>
-                </label>
+                <div class="fg-hdr">
+                  <span class="fg-title">6 Months</span>
+                  <span class="micro-toggle on" id="pill_q_int6m" onclick="toggleFieldPill('q_int6m')"><span class="toggle-dot"></span>ON</span>
+                </div>
                 <select id="in_q_int6m" onchange="handleIntervalChange(6)"><option value="YES">YES</option><option value="NO">NO</option></select>
               </div>
               <div class="fg" id="fg_q_int12m">
-                <label>
-                  <span>Within 12 months?</span>
-                  <span class="pill-toggle enabled" id="pill_q_int12m" onclick="toggleFieldPill('q_int12m')">✓ Enabled</span>
-                </label>
+                <div class="fg-hdr">
+                  <span class="fg-title">12 Months</span>
+                  <span class="micro-toggle on" id="pill_q_int12m" onclick="toggleFieldPill('q_int12m')"><span class="toggle-dot"></span>ON</span>
+                </div>
                 <select id="in_q_int12m" onchange="handleIntervalChange(12)"><option value="NO">NO</option><option value="YES">YES</option></select>
               </div>
             </div>
             <div class="row cols-2" style="margin-top:4px;">
               <div class="fg" id="fg_q_scheme">
-                <label>
-                  <span>Under scheme?</span>
-                  <span class="pill-toggle enabled" id="pill_q_scheme" onclick="toggleFieldPill('q_scheme')">✓ Enabled</span>
-                </label>
+                <div class="fg-hdr">
+                  <span class="fg-title">Scheme</span>
+                  <span class="micro-toggle on" id="pill_q_scheme" onclick="toggleFieldPill('q_scheme')"><span class="toggle-dot"></span>ON</span>
+                </div>
                 <select id="in_q_scheme" onchange="debouncedSync()"><option value="NO">NO</option><option value="YES">YES</option></select>
               </div>
               <div class="fg" id="fg_q_exceptional">
-                <label>
-                  <span>Exceptional event?</span>
-                  <span class="pill-toggle enabled" id="pill_q_exceptional" onclick="toggleFieldPill('q_exceptional')">✓ Enabled</span>
-                </label>
+                <div class="fg-hdr">
+                  <span class="fg-title">Exceptional</span>
+                  <span class="micro-toggle on" id="pill_q_exceptional" onclick="toggleFieldPill('q_exceptional')"><span class="toggle-dot"></span>ON</span>
+                </div>
                 <select id="in_q_exceptional" onchange="debouncedSync()"><option value="NO">NO</option><option value="YES">YES</option></select>
               </div>
             </div>
@@ -803,58 +875,58 @@
       <div class="card">
         <h3>5. Defect Particulars, Safety Determination &amp; Dates</h3>
         <div class="fg" style="margin-bottom:6px;" id="fg_defectDesc">
-          <label>
-            <span>Defect Description (or NONE - Use '++' for new line)</span>
-            <span class="pill-toggle enabled" id="pill_defectDesc" onclick="toggleFieldPill('defectDesc')">✓ Enabled</span>
-          </label>
+          <div class="fg-hdr">
+            <span class="fg-title">Defect Description (or NONE)</span>
+            <span class="micro-toggle on" id="pill_defectDesc" onclick="toggleFieldPill('defectDesc')"><span class="toggle-dot"></span>ON</span>
+          </div>
           <div class="voice-input-wrapper">
-            <textarea id="in_defectDesc" rows="2" oninput="debouncedSync()"></textarea>
+            <textarea id="in_defectDesc" rows="2" placeholder="Description of defects (use ++ for line break)" oninput="debouncedSync()"></textarea>
             <button class="btn-mic" title="Hold to Speak" onpointerdown="startVoice(this, 'in_defectDesc')" onpointerup="stopVoice(this)">🎙</button>
           </div>
         </div>
         <div class="row cols-3">
           <div class="fg" id="fg_dangerImm">
-            <label>
-              <span>Imminent Danger?</span>
-              <span class="pill-toggle enabled" id="pill_dangerImm" onclick="toggleFieldPill('dangerImm')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Imminent Danger?</span>
+              <span class="micro-toggle on" id="pill_dangerImm" onclick="toggleFieldPill('dangerImm')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <select id="in_dangerImm" onchange="debouncedSync()"><option value="NO">NO</option><option value="YES">YES</option></select>
           </div>
           <div class="fg" id="fg_dangerTime">
-            <label>
-              <span>Danger Timeline</span>
-              <span class="pill-toggle disabled" id="pill_dangerTime" onclick="toggleFieldPill('dangerTime')">✕ Disabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Danger Timeline</span>
+              <span class="micro-toggle off" id="pill_dangerTime" onclick="toggleFieldPill('dangerTime')"><span class="toggle-dot"></span>OFF</span>
+            </div>
             <input type="text" id="in_dangerTimeText" value="N/A" oninput="debouncedSync()">
           </div>
           <div class="fg" id="fg_isSafe">
-            <label>
-              <span>Safe to Operate?</span>
-              <span class="pill-toggle enabled" id="pill_isSafe" onclick="toggleFieldPill('isSafe')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Safe to Operate?</span>
+              <span class="micro-toggle on" id="pill_isSafe" onclick="toggleFieldPill('isSafe')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <select id="in_isSafe" onchange="debouncedSync()"><option value="YES">YES</option><option value="NO">NO</option></select>
           </div>
         </div>
         <div class="fg" style="margin-top:4px;" id="fg_remedies">
-          <label>
-            <span>Required Remedial Action / Repairs</span>
-            <span class="pill-toggle enabled" id="pill_remedies" onclick="toggleFieldPill('remedies')">✓ Enabled</span>
-          </label>
+          <div class="fg-hdr">
+            <span class="fg-title">Required Remedial Action</span>
+            <span class="micro-toggle on" id="pill_remedies" onclick="toggleFieldPill('remedies')"><span class="toggle-dot"></span>ON</span>
+          </div>
           <input type="text" id="in_remedies" oninput="debouncedSync()">
         </div>
         <div class="row cols-2" style="margin-top:6px;">
           <div class="fg" id="fg_examDate">
-            <label>
-              <span>Examination Date</span>
-              <span class="pill-toggle enabled" id="pill_examDate" onclick="toggleFieldPill('examDate')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Examination Date</span>
+              <span class="micro-toggle on" id="pill_examDate" onclick="toggleFieldPill('examDate')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <input type="date" id="in_examDate" onchange="handleExamDateChange()">
           </div>
           <div class="fg" id="fg_nextExamDate">
-            <label>
-              <span>Next Due Date (Auto / Editable Picker)</span>
-              <span class="pill-toggle enabled" id="pill_nextExamDate" onclick="toggleFieldPill('nextExamDate')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Next Due Date (Auto / Editable)</span>
+              <span class="micro-toggle on" id="pill_nextExamDate" onclick="toggleFieldPill('nextExamDate')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <input type="date" id="in_nextExamDate" onchange="debouncedSync()">
           </div>
         </div>
@@ -864,25 +936,23 @@
         <h3>6. Signatures (Live Pad vs. Image Upload)</h3>
         <div class="row cols-2">
           <div class="fg" id="fg_examinerName">
-            <label>
-              <span>Inspector Name &amp; Qualifications</span>
-              <span class="pill-toggle enabled" id="pill_examinerName" onclick="toggleFieldPill('examinerName')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Inspector Name &amp; Qualifications</span>
+              <span class="micro-toggle on" id="pill_examinerName" onclick="toggleFieldPill('examinerName')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <input type="text" id="in_examinerName" placeholder="Full Name & Qualifications" oninput="debouncedSync()">
-            <label style="margin-top:4px;">Upload Signature PNG (Overrides Live)</label>
+            <label style="margin-top:4px; font-size:var(--ui-font-xs); color:#94a3b8;">Upload PNG Signature (Overrides Draw)</label>
             <input type="file" accept="image/*" onchange="handleSignatureUpload(event, 'inspector')">
-            <label style="margin-top:4px;">Draw Live Signature</label>
             <div class="sig-box"><canvas id="pad1" class="sig-pad"></canvas><span class="sig-clear" onclick="clearPad(1)">Clear</span></div>
           </div>
           <div class="fg" id="fg_authName">
-            <label>
-              <span>Authenticator Name &amp; Title</span>
-              <span class="pill-toggle enabled" id="pill_authName" onclick="toggleFieldPill('authName')">✓ Enabled</span>
-            </label>
+            <div class="fg-hdr">
+              <span class="fg-title">Authenticator Name &amp; Title</span>
+              <span class="micro-toggle on" id="pill_authName" onclick="toggleFieldPill('authName')"><span class="toggle-dot"></span>ON</span>
+            </div>
             <input type="text" id="in_authName" placeholder="Authority Name & Title" oninput="debouncedSync()">
-            <label style="margin-top:4px;">Upload Signature PNG (Overrides Live)</label>
+            <label style="margin-top:4px; font-size:var(--ui-font-xs); color:#94a3b8;">Upload PNG Signature (Overrides Draw)</label>
             <input type="file" accept="image/*" onchange="handleSignatureUpload(event, 'authenticator')">
-            <label style="margin-top:4px;">Draw Live Signature</label>
             <div class="sig-box"><canvas id="pad2" class="sig-pad"></canvas><span class="sig-clear" onclick="clearPad(2)">Clear</span></div>
           </div>
         </div>
@@ -894,16 +964,31 @@
       <div class="card">
         <h3>
           <span>Mechanical Controls &amp; Discard Audit</span>
-          <span class="pill-toggle disabled" id="pill_puwerPage" onclick="togglePuwerPage()">✕ Annexure Page: Disabled</span>
+          <span class="micro-toggle off" id="pill_puwerPage" onclick="togglePuwerPage()"><span class="toggle-dot"></span>ANNEXURE: OFF</span>
         </h3>
         <div class="row cols-2">
-          <div class="fg" id="fg_p_a2b"><label><span>Anti-Two-Block (A2B)</span><span class="pill-toggle enabled" id="pill_p_a2b" onclick="toggleFieldPill('p_a2b')">✓ Enabled</span></label><input type="text" id="in_p_a2b" value="PASS - Functional" oninput="debouncedSync()"></div>
-          <div class="fg" id="fg_p_rci"><label><span>Rated Capacity Indicator (RCI/SLI)</span><span class="pill-toggle enabled" id="pill_p_rci" onclick="toggleFieldPill('p_rci')">✓ Enabled</span></label><input type="text" id="in_p_rci" value="PASS - Calibrated" oninput="debouncedSync()"></div>
+          <div class="fg" id="fg_p_a2b">
+            <div class="fg-hdr"><span class="fg-title">Anti-Two-Block (A2B)</span><span class="micro-toggle on" id="pill_p_a2b" onclick="toggleFieldPill('p_a2b')"><span class="toggle-dot"></span>ON</span></div>
+            <input type="text" id="in_p_a2b" value="PASS - Functional" oninput="debouncedSync()">
+          </div>
+          <div class="fg" id="fg_p_rci">
+            <div class="fg-hdr"><span class="fg-title">Rated Capacity Indicator</span><span class="micro-toggle on" id="pill_p_rci" onclick="toggleFieldPill('p_rci')"><span class="toggle-dot"></span>ON</span></div>
+            <input type="text" id="in_p_rci" value="PASS - Calibrated" oninput="debouncedSync()">
+          </div>
         </div>
         <div class="row cols-3">
-          <div class="fg" id="fg_p_estop"><label><span>Emergency Stop Buttons</span><span class="pill-toggle enabled" id="pill_p_estop" onclick="toggleFieldPill('p_estop')">✓ Enabled</span></label><input type="text" id="in_p_estop" value="PASS - Positive Break" oninput="debouncedSync()"></div>
-          <div class="fg" id="fg_p_valves"><label><span>Counterbalance Valves</span><span class="pill-toggle enabled" id="pill_p_valves" onclick="toggleFieldPill('p_valves')">✓ Enabled</span></label><input type="text" id="in_p_valves" value="PASS - Zero Drift" oninput="debouncedSync()"></div>
-          <div class="fg" id="fg_p_rope"><label><span>Wire Rope Wear (ISO 4309)</span><span class="pill-toggle enabled" id="pill_p_rope" onclick="toggleFieldPill('p_rope')">✓ Enabled</span></label><input type="text" id="in_p_rope" value="Diameter 100% (Compliant)" oninput="debouncedSync()"></div>
+          <div class="fg" id="fg_p_estop">
+            <div class="fg-hdr"><span class="fg-title">Emergency Stops</span><span class="micro-toggle on" id="pill_p_estop" onclick="toggleFieldPill('p_estop')"><span class="toggle-dot"></span>ON</span></div>
+            <input type="text" id="in_p_estop" value="PASS - Positive Break" oninput="debouncedSync()">
+          </div>
+          <div class="fg" id="fg_p_valves">
+            <div class="fg-hdr"><span class="fg-title">Counterbalance Valves</span><span class="micro-toggle on" id="pill_p_valves" onclick="toggleFieldPill('p_valves')"><span class="toggle-dot"></span>ON</span></div>
+            <input type="text" id="in_p_valves" value="PASS - Zero Drift" oninput="debouncedSync()">
+          </div>
+          <div class="fg" id="fg_p_rope">
+            <div class="fg-hdr"><span class="fg-title">Wire Rope Wear</span><span class="micro-toggle on" id="pill_p_rope" onclick="toggleFieldPill('p_rope')"><span class="toggle-dot"></span>ON</span></div>
+            <input type="text" id="in_p_rope" value="Diameter 100% (Compliant)" oninput="debouncedSync()">
+          </div>
         </div>
       </div>
     </div>
@@ -913,25 +998,25 @@
       <div class="card">
         <h3>1. Multi-Leg Rigging Geometry Calculator</h3>
         <div class="row cols-3">
-          <div class="fg"><label>Load Weight (Tonnes)</label><input type="number" id="calc_w" value="10" oninput="runSlingCalc()"></div>
-          <div class="fg"><label>Number of Legs (n)</label><input type="number" id="calc_n" value="2" oninput="runSlingCalc()"></div>
-          <div class="fg"><label>Angle from Horizontal (&deg;)</label><input type="number" id="calc_deg" value="60" oninput="runSlingCalc()"></div>
+          <div class="fg"><div class="fg-hdr"><span class="fg-title">Load Weight (Tonnes)</span></div><input type="number" id="calc_w" value="10" oninput="runSlingCalc()"></div>
+          <div class="fg"><div class="fg-hdr"><span class="fg-title">Legs (n)</span></div><input type="number" id="calc_n" value="2" oninput="runSlingCalc()"></div>
+          <div class="fg"><div class="fg-hdr"><span class="fg-title">Angle (&deg;)</span></div><input type="number" id="calc_deg" value="60" oninput="runSlingCalc()"></div>
         </div>
-        <div style="background:#0f172a; color:#fff; padding:8px; border-radius:4px; margin-top:4px;">
+        <div style="background:#06090e; color:#fff; padding:8px; border-radius:4px; margin-top:4px; border:1px solid #1e293b;">
           Tension: <strong id="res_tension" style="color:#38bdf8;">5.77 T / Leg</strong> | Factor: <strong id="res_mult">1.15x</strong>
-          <div id="res_angle_warn" style="font-size:9.5px; color:#ef4444; margin-top:2px; display:none;">WARNING: Angle &lt; 45° derates capacity!</div>
+          <div id="res_angle_warn" style="font-size:var(--ui-font-xs); color:#ef4444; margin-top:2px; display:none;">WARNING: Angle &lt; 45° derates capacity!</div>
         </div>
       </div>
 
       <div class="card">
         <h3>2. ISO 4309 Multi-Variable Wire Rope Discard Engine</h3>
         <div class="row cols-4">
-          <div class="fg"><label>Nominal Dia (mm)</label><input type="number" id="calc_nom_rope" value="26.0" oninput="runRopeCalc()"></div>
-          <div class="fg"><label>Measured Dia (mm)</label><input type="number" id="calc_meas_rope" value="24.1" oninput="runRopeCalc()"></div>
-          <div class="fg"><label>Broken Wires (6d)</label><input type="number" id="calc_bw_6d" value="2" oninput="runRopeCalc()"></div>
-          <div class="fg"><label>Construction Limit</label><select id="calc_rope_type" onchange="runRopeCalc()"><option value="6">Rotation-Resistant (6%)</option><option value="10">Standard Stranded (10%)</option></select></div>
+          <div class="fg"><div class="fg-hdr"><span class="fg-title">Nominal Dia (mm)</span></div><input type="number" id="calc_nom_rope" value="26.0" oninput="runRopeCalc()"></div>
+          <div class="fg"><div class="fg-hdr"><span class="fg-title">Measured Dia (mm)</span></div><input type="number" id="calc_meas_rope" value="24.1" oninput="runRopeCalc()"></div>
+          <div class="fg"><div class="fg-hdr"><span class="fg-title">Broken Wires (6d)</span></div><input type="number" id="calc_bw_6d" value="2" oninput="runRopeCalc()"></div>
+          <div class="fg"><div class="fg-hdr"><span class="fg-title">Construction Limit</span></div><select id="calc_rope_type" onchange="runRopeCalc()"><option value="6">Rotation-Resistant (6%)</option><option value="10">Standard Stranded (10%)</option></select></div>
         </div>
-        <div style="background:#0f172a; color:#fff; padding:8px; border-radius:4px; margin-top:4px;">
+        <div style="background:#06090e; color:#fff; padding:8px; border-radius:4px; margin-top:4px; border:1px solid #1e293b;">
           Reduction: <strong id="res_reduction" style="color:#38bdf8;">-7.31%</strong> | Status: <strong id="res_rope_status" style="color:#ef4444;">DISCARD REQUIRED</strong>
         </div>
       </div>
@@ -966,29 +1051,28 @@
         <h3>Institutional Overlays &amp; Signatures</h3>
         <div class="row cols-3">
           <div class="fg">
-            <label>Header Company Banner (PNG)</label>
+            <div class="fg-hdr"><span class="fg-title">Header Banner (PNG)</span></div>
             <input type="file" accept="image/*" onchange="uploadAsset(event, 'headerBanner')">
-            <button class="btn btn-danger" style="margin-top:4px; font-size:9px;" onclick="clearAsset('headerBanner')">Remove</button>
+            <button class="btn btn-danger" style="margin-top:4px; font-size:var(--ui-font-xs);" onclick="clearAsset('headerBanner')">Remove</button>
           </div>
           <div class="fg">
-            <label>Footer Address Band (PNG)</label>
+            <div class="fg-hdr"><span class="fg-title">Footer Band (PNG)</span></div>
             <input type="file" accept="image/*" onchange="uploadAsset(event, 'footerBanner')">
-            <button class="btn btn-danger" style="margin-top:4px; font-size:9px;" onclick="clearAsset('footerBanner')">Remove</button>
+            <button class="btn btn-danger" style="margin-top:4px; font-size:var(--ui-font-xs);" onclick="clearAsset('footerBanner')">Remove</button>
           </div>
           <div class="fg">
-            <label>Company Official Stamp (PNG)</label>
+            <div class="fg-hdr"><span class="fg-title">Official Stamp (PNG)</span></div>
             <input type="file" accept="image/*" onchange="uploadAsset(event, 'stamp')">
-            <button class="btn btn-danger" style="margin-top:4px; font-size:9px;" onclick="clearAsset('stamp')">Remove</button>
+            <button class="btn btn-danger" style="margin-top:4px; font-size:var(--ui-font-xs);" onclick="clearAsset('stamp')">Remove</button>
           </div>
         </div>
       </div>
 
       <div class="card">
         <h3>WhatsApp Verification QR Dispatch Engine</h3>
-        <p style="font-size:9.5px; color:#475569; margin-bottom:6px;">Encodes an instant WhatsApp verification link linking the Report Number and Serial directly into chat body.</p>
         <div class="row cols-2">
-          <div class="fg"><label>WhatsApp Phone Number (with Country Code)</label><input type="text" id="waPhone" value="+201000000000" oninput="debouncedSync()"></div>
-          <div class="fg"><label>Message Header / Prefix</label><input type="text" id="waMsg" value="Verification Inquiry for Report No:" oninput="debouncedSync()"></div>
+          <div class="fg"><div class="fg-hdr"><span class="fg-title">WhatsApp Phone (+CountryCode)</span></div><input type="text" id="waPhone" value="+201000000000" oninput="debouncedSync()"></div>
+          <div class="fg"><div class="fg-hdr"><span class="fg-title">Message Prefix</span></div><input type="text" id="waMsg" value="Verification Inquiry for Report No:" oninput="debouncedSync()"></div>
         </div>
       </div>
     </div>
@@ -998,7 +1082,7 @@
       <div class="card">
         <h3>
           <span>Custom Verification Checklist</span>
-          <span class="pill-toggle disabled" id="pill_checklistToggle" onclick="toggleChecklistPage()">✕ Checklist: Disabled</span>
+          <span class="micro-toggle off" id="pill_checklistToggle" onclick="toggleChecklistPage()"><span class="toggle-dot"></span>CHECKLIST: OFF</span>
         </h3>
         <div id="checklistItemList" style="margin-bottom:8px;"></div>
         <button class="btn btn-accent" onclick="addChecklistItem()">+ Add Checklist Row</button>
@@ -1018,7 +1102,7 @@
       <div class="card">
         <h3>
           <span>Master Batch Queue (Interactive Spreadsheet Grid)</span>
-          <span style="font-size:9px; font-weight:normal; color:#64748b;">Click 🔓 to lock/unlock columns for "+ Add New"</span>
+          <span style="font-size:var(--ui-font-xs); font-weight:normal; color:#64748b;">Click 🔓 to lock/unlock columns for "+ Add New"</span>
         </h3>
         
         <!-- Batch Date Patch Toolbar -->
@@ -1032,7 +1116,7 @@
             <option value="6">Force 6 Months</option>
             <option value="12">Force 12 Months</option>
           </select>
-          <button type="button" class="btn btn-accent" onclick="applyBatchExamDate()">Apply Exam Date to Selected Rows</button>
+          <button type="button" class="btn btn-accent" onclick="applyBatchExamDate()">Apply Exam Date to Selected</button>
         </div>
 
         <div class="range-toolbar">
@@ -1064,7 +1148,7 @@
           </table>
         </div>
         <!-- Virtual Pagination Controls -->
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; font-size:10px; color:#0f172a;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; font-size:var(--ui-font-sm); color:#0f172a;">
           <div id="batchPaginationInfo">Showing records 1 - 50</div>
           <div style="display:flex; gap:4px;">
             <button class="btn" style="padding:2px 6px;" onclick="changeBatchPage(-1)">&larr; Prev Page</button>
@@ -1097,7 +1181,6 @@
   let batchPage = 0;
   const batchPageSize = 50;
 
-  // Complete field inventory for individual toggle controls
   const ALL_LIFTING_TOGGLES = [
     'reportNo', 'jobRef', 'companyAccred', 'standards', 'sopRef',
     'employer', 'premises', 'poRef', 'subLocation', 'colourCode',
@@ -1313,9 +1396,16 @@
     return maxNum > 0 ? prefix + (maxNum + 1) : prefix + (1000 + list.length + 1);
   }
 
-  /* Typography & Density Handlers */
-  function updateAppFont(val) { document.documentElement.style.setProperty('--app-font-family', val); }
-  function updateAppSize(val) { document.documentElement.style.setProperty('--app-font-size', val); }
+  /* True Relative Sizing Execution */
+  function updateAppFont(val) {
+    document.documentElement.style.setProperty('--app-font-family', val);
+  }
+  
+  function updateAppSize(val) {
+    document.documentElement.style.setProperty('--app-font-size', val);
+    // Everything derived (--ui-font-xs, --ui-font-sm, --ui-font-md, --ui-font-lg, --ui-input-h, --ui-hdr-h) recalculates automatically!
+  }
+  
   function updateReportFont(val) { document.documentElement.style.setProperty('--report-font-family', val); debouncedSync(); }
   function updateReportSize(val) { document.documentElement.style.setProperty('--report-font-size', val); debouncedSync(); }
   function updateReportDensity(val) {
@@ -1347,7 +1437,7 @@
     debouncedSync();
   }
 
-  /* Universal Field Pill Toggle System */
+  /* Universal Field Micro-Toggle System */
   function toggleFieldPill(key) {
     const r = liftingBatch[activeIdx];
     if (!r.fieldToggles) r.fieldToggles = {};
@@ -1382,8 +1472,8 @@
       const fg = document.getElementById('fg_' + key);
       
       if (pill) {
-        pill.className = 'pill-toggle ' + (isEnabled ? 'enabled' : 'disabled');
-        pill.textContent = isEnabled ? '✓ Enabled' : '✕ Disabled';
+        pill.className = 'micro-toggle ' + (isEnabled ? 'on' : 'off');
+        pill.innerHTML = `<span class="toggle-dot"></span>${isEnabled ? 'ON' : 'OFF'}`;
       }
       if (fg) {
         const input = fg.querySelector('input, select, textarea');
@@ -1394,15 +1484,15 @@
     const puwerPill = document.getElementById('pill_puwerPage');
     if (puwerPill) {
       const isP = r.includePuwer === true;
-      puwerPill.className = 'pill-toggle ' + (isP ? 'enabled' : 'disabled');
-      puwerPill.textContent = isP ? '✓ Annexure Page: Enabled' : '✕ Annexure Page: Disabled';
+      puwerPill.className = 'micro-toggle ' + (isP ? 'on' : 'off');
+      puwerPill.innerHTML = `<span class="toggle-dot"></span>ANNEXURE: ${isP ? 'ON' : 'OFF'}`;
     }
 
     const checkPill = document.getElementById('pill_checklistToggle');
     if (checkPill) {
       const isC = r.includeChecklist === true;
-      checkPill.className = 'pill-toggle ' + (isC ? 'enabled' : 'disabled');
-      checkPill.textContent = isC ? '✓ Checklist: Enabled' : '✕ Checklist: Disabled';
+      checkPill.className = 'micro-toggle ' + (isC ? 'on' : 'off');
+      checkPill.innerHTML = `<span class="toggle-dot"></span>CHECKLIST: ${isC ? 'ON' : 'OFF'}`;
     }
   }
 
@@ -1521,22 +1611,22 @@
     if (m === 'MPI') {
       c.innerHTML = `
         <div class="row cols-3">
-          <div class="fg"><label>Magnetic Yoke Serial</label><input type="text" value="${ndtBatch[activeIdx].yokeSerial||''}" oninput="ndtBatch[activeIdx].yokeSerial=this.value; debouncedSync();"></div>
-          <div class="fg"><label>Current Type</label><input type="text" value="${ndtBatch[activeIdx].magCurrent||''}" oninput="ndtBatch[activeIdx].magCurrent=this.value; debouncedSync();"></div>
-          <div class="fg"><label>Particle Media</label><input type="text" value="${ndtBatch[activeIdx].inkType||''}" oninput="ndtBatch[activeIdx].inkType=this.value; debouncedSync();"></div>
+          <div class="fg"><div class="fg-hdr"><span class="fg-title">Magnetic Yoke Serial</span></div><input type="text" value="${ndtBatch[activeIdx].yokeSerial||''}" oninput="ndtBatch[activeIdx].yokeSerial=this.value; debouncedSync();"></div>
+          <div class="fg"><div class="fg-hdr"><span class="fg-title">Current Type</span></div><input type="text" value="${ndtBatch[activeIdx].magCurrent||''}" oninput="ndtBatch[activeIdx].magCurrent=this.value; debouncedSync();"></div>
+          <div class="fg"><div class="fg-hdr"><span class="fg-title">Particle Media</span></div><input type="text" value="${ndtBatch[activeIdx].inkType||''}" oninput="ndtBatch[activeIdx].inkType=this.value; debouncedSync();"></div>
         </div>`;
     } else if (m === 'PT') {
       c.innerHTML = `
         <div class="row cols-3">
-          <div class="fg"><label>Penetrant Class</label><input type="text" value="${ndtBatch[activeIdx].penetrantType||''}" oninput="ndtBatch[activeIdx].penetrantType=this.value; debouncedSync();"></div>
-          <div class="fg"><label>Brand / Batch</label><input type="text" value="${ndtBatch[activeIdx].penetrantBrand||''}" oninput="ndtBatch[activeIdx].penetrantBrand=this.value; debouncedSync();"></div>
-          <div class="fg"><label>Dwell Time</label><input type="text" value="${ndtBatch[activeIdx].dwellTime||''}" oninput="ndtBatch[activeIdx].dwellTime=this.value; debouncedSync();"></div>
+          <div class="fg"><div class="fg-hdr"><span class="fg-title">Penetrant Class</span></div><input type="text" value="${ndtBatch[activeIdx].penetrantType||''}" oninput="ndtBatch[activeIdx].penetrantType=this.value; debouncedSync();"></div>
+          <div class="fg"><div class="fg-hdr"><span class="fg-title">Brand / Batch</span></div><input type="text" value="${ndtBatch[activeIdx].penetrantBrand||''}" oninput="ndtBatch[activeIdx].penetrantBrand=this.value; debouncedSync();"></div>
+          <div class="fg"><div class="fg-hdr"><span class="fg-title">Dwell Time</span></div><input type="text" value="${ndtBatch[activeIdx].dwellTime||''}" oninput="ndtBatch[activeIdx].dwellTime=this.value; debouncedSync();"></div>
         </div>`;
     } else {
       c.innerHTML = `
         <div class="row cols-2">
-          <div class="fg"><label>Test Machine / Gauge</label><input type="text" value="${ndtBatch[activeIdx].utUnit||'Calibrated Detector'}" oninput="ndtBatch[activeIdx].utUnit=this.value; debouncedSync();"></div>
-          <div class="fg"><label>Probe Specification</label><input type="text" value="${ndtBatch[activeIdx].probeFreq||'Standard Transducer'}" oninput="ndtBatch[activeIdx].probeFreq=this.value; debouncedSync();"></div>
+          <div class="fg"><div class="fg-hdr"><span class="fg-title">Test Machine / Gauge</span></div><input type="text" value="${ndtBatch[activeIdx].utUnit||'Calibrated Detector'}" oninput="ndtBatch[activeIdx].utUnit=this.value; debouncedSync();"></div>
+          <div class="fg"><div class="fg-hdr"><span class="fg-title">Probe Specification</span></div><input type="text" value="${ndtBatch[activeIdx].probeFreq||'Standard Transducer'}" oninput="ndtBatch[activeIdx].probeFreq=this.value; debouncedSync();"></div>
         </div>`;
     }
   }
@@ -1733,7 +1823,17 @@
       const isSafe = r.isSafe === 'YES' && !isImm;
       const tick = c => c ? `<span class="tick-box">&#10003;</span>` : `<span class="tick-box">&nbsp;</span>`;
 
-      // Adaptive Standards & SOP Row
+      // 1. Header Block
+      const showJob = tg.jobRef !== false;
+      const showPo = tg.poRef !== false;
+      let jobPoStr = '';
+      if (showJob && r.jobRef) jobPoStr += r.jobRef;
+      if (showPo && r.poRef) jobPoStr += (jobPoStr ? ' | ' : '') + r.poRef;
+
+      const showSub = tg.subLocation !== false;
+      let premisesStr = r.premises || '';
+      if (showSub && r.subLocation) premisesStr += (premisesStr ? ' | Sub-Location: ' : '') + r.subLocation;
+
       const showStd = tg.standards !== false;
       const showSop = tg.sopRef !== false;
       let standardsRowHtml = '';
@@ -1745,7 +1845,7 @@
         standardsRowHtml = `<tr><td colspan="3"><span class="lbl">Inspection SOP Reference</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('sopRef', this.innerText)">${r.sopRef || ''}</span></td></tr>`;
       }
 
-      // Adaptive Equipment Specification Rows
+      // 2. Specifications Block
       const showDesc = tg.description !== false;
       const showSwl = tg.swl !== false;
       let descSwlRowHtml = '';
@@ -1780,7 +1880,7 @@
         { key: 'markingsLegible', lbl: 'Marking Status', val: r.markingsLegible || 'YES' }
       ]);
 
-      // Danger timeline determination block
+      // 3. Defects & Operational Fitness Determination Block
       const showDangerTime = tg.dangerTime === true;
       const dangerHtml = showDangerTime
         ? `<div>Existing or Imminent danger? <strong>YES ${tick(isImm)} &nbsp; NO ${tick(!isImm)}</strong></div><div style="margin-top:2px;">Date Danger Develops: <strong>${r.dangerTimeText || 'N/A'}</strong></div>`
@@ -1797,7 +1897,7 @@
         riskRowHtml = `<tr><td colspan="2"><span class="lbl">Remedial Action Required</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('remedies', this.innerText)">${r.remedies || 'None'}</span></td></tr>`;
       }
 
-      // Contiguous Signatures & Instant WhatsApp Verification Grid
+      // 4. Contiguous Signatures & Instant WhatsApp Verification Grid
       const showInsp = tg.examinerName !== false;
       const showAuth = tg.authName !== false;
       const inspSrc = (r.inspectorSigMode === 'UPLOAD' && r.inspectorSigUpload) ? r.inspectorSigUpload : r.inspectorSigLive;
@@ -1874,9 +1974,9 @@
               <tr>
                 <td><span class="lbl">Employer / Client</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('employer', this.innerText)">${formatWithNewlines(r.employer)}</span></td>
                 <td><span class="lbl">Report No</span><span class="val mono" contenteditable="true" onblur="handleLiveInlineEdit('reportNo', this.innerText)">${r.reportNo || ''}</span></td>
-                <td><span class="lbl">Job / P.O. Ref</span><span class="val mono" contenteditable="true" onblur="handleLiveInlineEdit('jobRef', this.innerText)">${r.jobRef || ''}${tg.poRef!==false && r.poRef ? ' | ' + r.poRef : ''}</span></td>
+                <td><span class="lbl">Job / P.O. Ref</span><span class="val mono" contenteditable="true" onblur="handleLiveInlineEdit('jobRef', this.innerText)">${jobPoStr}</span></td>
               </tr>
-              <tr><td colspan="3"><span class="lbl">Premises Where Examination Made</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('premises', this.innerText)">${r.premises || ''}${tg.subLocation!==false && r.subLocation ? ' | Sub-Location: ' + r.subLocation : ''}</span></td></tr>
+              <tr><td colspan="3"><span class="lbl">Premises Where Examination Made</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('premises', this.innerText)">${premisesStr}</span></td></tr>
               ${standardsRowHtml}
             </table>
 
@@ -1968,7 +2068,7 @@
         let checklistTableHtml = '';
         if (showChecklist) {
           checklistTableHtml = `
-            <table class="ctbl" style="margin-top:4px;">
+            <table class="ctbl" style="margin-top:6px;">
               <colgroup><col style="width:60%"><col style="width:15%"><col style="width:25%"></colgroup>
               <tr><td colspan="3" class="csec">Custom Technical Verification Checklist</td></tr>
               <tr style="background:#f1f5f9; font-weight:700;">
@@ -2323,7 +2423,6 @@
     selected.forEach(s => {
       const clone = JSON.parse(JSON.stringify(s));
       clone.reportNo = getNextReportNumber();
-      // Reset serial so technician must input it
       clone.serial = "";
       clone.selected = false;
       const idx = list.indexOf(s);
@@ -2412,7 +2511,6 @@
         swl: columnLocks.swl ? (active.swl || "") : "",
         manufacturer: columnLocks.manufacturer ? (active.manufacturer || "") : "",
         model: columnLocks.model ? (active.model || "") : "",
-        // Serial must be manually inputted, not auto-generated
         serial: columnLocks.serial ? (active.serial || "") : "",
         plantId: columnLocks.plantId ? (active.plantId || "") : "",
         mfgYear: columnLocks.mfgYear ? (active.mfgYear || "") : "",
@@ -2553,7 +2651,7 @@
     const isL = currentEngine === 'LIFTING';
     const list = isL ? liftingBatch : ndtBatch;
     let items = list.filter(r => r.selected === true);
-    if (!items.length) items = list; // Exports whole sheet if none selected
+    if (!items.length) items = list;
 
     const columns = isL ? LIFTING_COLUMNS : [
       { key: "reportNo", label: "Report No" },
