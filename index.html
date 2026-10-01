@@ -26,11 +26,11 @@
     --app-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     --app-font-size: 11px;
 
-    /* Report & Certificate Scope */
+    /* Report & Certificate Typography Scope */
     --report-font-family: Arial, Helvetica, sans-serif;
     --report-font-size: 7.1pt;
-    --report-line-height: 1.15;
-    --report-cell-padding: 2.2px 3.8px;
+    --report-line-height: 1.18;
+    --report-cell-padding: 2.2px 4px;
     --report-accent: #0284c7;
   }
 
@@ -373,7 +373,7 @@
     justify-content: center;
     overflow: hidden;
     position: relative;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
     font-size: 6.5pt;
     color: #64748b;
   }
@@ -381,8 +381,8 @@
 
   .reserved-footer-banner {
     width: 100%;
-    min-height: 30px;
-    max-height: 42px;
+    min-height: 28px;
+    max-height: 38px;
     border: 1px dashed #cbd5e1;
     background: #f8fafc;
     display: flex;
@@ -390,16 +390,18 @@
     justify-content: center;
     overflow: hidden;
     position: relative;
-    margin-top: 4px;
-    font-size: 6pt;
+    margin-top: 3px;
+    font-size: 5.8pt;
     color: #64748b;
   }
   .reserved-footer-banner img { width: 100%; height: 100%; object-fit: contain; }
 
-  .ctbl { width: 100%; border-collapse: collapse; margin-bottom: 2px; table-layout: fixed; }
+  /* Contiguous Bordered Table System */
+  .ctbl { width: 100%; border-collapse: collapse; margin-top: -1px; table-layout: fixed; }
+  .ctbl:first-of-type { margin-top: 0; }
   .ctbl th, .ctbl td { border: 1px solid #000; padding: var(--report-cell-padding); vertical-align: top; text-align: left; word-break: break-word; }
-  .csec { background-color: #0b1120; color: #ffffff; font-weight: 800; font-size: 6.3pt; text-transform: uppercase; letter-spacing: 0.35px; padding: 2px 3.5px; }
-  .lbl { font-size: 5pt; font-weight: 700; text-transform: uppercase; color: #334155; display: block; margin-bottom: 0.2px; }
+  .csec { background-color: #0b1120; color: #ffffff; font-weight: 800; font-size: 6.3pt; text-transform: uppercase; letter-spacing: 0.35px; padding: 2.2px 4px; }
+  .lbl { font-size: 5pt; font-weight: 700; text-transform: uppercase; color: #334155; display: block; margin-bottom: 0.2px; line-height: 1.1; }
   .val { font-size: var(--report-font-size); font-weight: 600; color: #000; outline: none; transition: background 0.15s; word-break: break-word; line-height: 1.25; }
   .val[contenteditable="true"]:hover { background: rgba(2, 132, 199, 0.08); }
   .val[contenteditable="true"]:focus { background: rgba(2, 132, 199, 0.15); border-bottom: 1.5px solid var(--report-accent); }
@@ -439,7 +441,12 @@
     color: #0f172a;
   }
   .range-toolbar label { font-size: 9.5px; font-weight: 700; color: #334155; }
-  .range-toolbar input[type="number"] { width: 55px; padding: 4px 6px; border: 1px solid #94a3b8; border-radius: 2px; font-weight: 700; }
+  .range-toolbar input[type="number"], .range-toolbar input[type="date"] {
+    padding: 3px 5px;
+    border: 1px solid #94a3b8;
+    border-radius: 2px;
+    font-weight: 700;
+  }
 
   .sheet-wrap { overflow: auto; max-height: 440px; border: 1px solid var(--border-light); background: #fff; border-radius: 4px; color: #0f172a; }
   table.sheet { width: 100%; border-collapse: collapse; font-size: 10px; white-space: nowrap; }
@@ -697,10 +704,10 @@
           </div>
           <div class="fg" id="fg_serial">
             <label>
-              <span>Serial Number</span>
+              <span>Serial Number (Manual Input)</span>
               <span class="pill-toggle enabled" id="pill_serial" onclick="toggleFieldPill('serial')">✓ Enabled</span>
             </label>
-            <input type="text" id="in_serial" class="mono" oninput="debouncedSync()">
+            <input type="text" id="in_serial" class="mono" placeholder="Enter Serial No..." oninput="debouncedSync()">
           </div>
           <div class="fg" id="fg_plantId">
             <label>
@@ -756,21 +763,21 @@
             </div>
           </div>
           <div style="background:#f8fafc; padding:8px; border:1px solid #e2e8f0; border-radius:4px; color:#0f172a;">
-            <div style="font-weight:800; font-size:9.5px; margin-bottom:6px;">EXAMINATION INTERVAL:</div>
+            <div style="font-weight:800; font-size:9.5px; margin-bottom:6px;">EXAMINATION INTERVAL (MUTUALLY EXCLUSIVE):</div>
             <div class="row cols-2">
               <div class="fg" id="fg_q_int6m">
                 <label>
                   <span>Within 6 months?</span>
                   <span class="pill-toggle enabled" id="pill_q_int6m" onclick="toggleFieldPill('q_int6m')">✓ Enabled</span>
                 </label>
-                <select id="in_q_int6m" onchange="debouncedSync()"><option value="YES">YES</option><option value="NO">NO</option></select>
+                <select id="in_q_int6m" onchange="handleIntervalChange(6)"><option value="YES">YES</option><option value="NO">NO</option></select>
               </div>
               <div class="fg" id="fg_q_int12m">
                 <label>
                   <span>Within 12 months?</span>
                   <span class="pill-toggle enabled" id="pill_q_int12m" onclick="toggleFieldPill('q_int12m')">✓ Enabled</span>
                 </label>
-                <select id="in_q_int12m" onchange="debouncedSync()"><option value="NO">NO</option><option value="YES">YES</option></select>
+                <select id="in_q_int12m" onchange="handleIntervalChange(12)"><option value="NO">NO</option><option value="YES">YES</option></select>
               </div>
             </div>
             <div class="row cols-2" style="margin-top:4px;">
@@ -794,7 +801,7 @@
       </div>
 
       <div class="card">
-        <h3>5. Defect Particulars, Safety Determination &amp; Operability</h3>
+        <h3>5. Defect Particulars, Safety Determination &amp; Dates</h3>
         <div class="fg" style="margin-bottom:6px;" id="fg_defectDesc">
           <label>
             <span>Defect Description (or NONE - Use '++' for new line)</span>
@@ -834,6 +841,22 @@
             <span class="pill-toggle enabled" id="pill_remedies" onclick="toggleFieldPill('remedies')">✓ Enabled</span>
           </label>
           <input type="text" id="in_remedies" oninput="debouncedSync()">
+        </div>
+        <div class="row cols-2" style="margin-top:6px;">
+          <div class="fg" id="fg_examDate">
+            <label>
+              <span>Examination Date</span>
+              <span class="pill-toggle enabled" id="pill_examDate" onclick="toggleFieldPill('examDate')">✓ Enabled</span>
+            </label>
+            <input type="date" id="in_examDate" onchange="handleExamDateChange()">
+          </div>
+          <div class="fg" id="fg_nextExamDate">
+            <label>
+              <span>Next Due Date (Auto / Editable Picker)</span>
+              <span class="pill-toggle enabled" id="pill_nextExamDate" onclick="toggleFieldPill('nextExamDate')">✓ Enabled</span>
+            </label>
+            <input type="date" id="in_nextExamDate" onchange="debouncedSync()">
+          </div>
         </div>
       </div>
 
@@ -997,6 +1020,21 @@
           <span>Master Batch Queue (Interactive Spreadsheet Grid)</span>
           <span style="font-size:9px; font-weight:normal; color:#64748b;">Click 🔓 to lock/unlock columns for "+ Add New"</span>
         </h3>
+        
+        <!-- Batch Date Patch Toolbar -->
+        <div class="range-toolbar" style="background:#0f172a; color:#fff; border-color:#334155; margin-bottom:8px;">
+          <span style="font-weight:800; color:#38bdf8;">📅 Batch Date Patch:</span>
+          <label style="color:#cbd5e1;">Exam Date:</label>
+          <input type="date" id="batchExamDatePicker" style="background:#1e293b; color:#fff; border:1px solid #475569;">
+          <label style="color:#cbd5e1;">Interval Rule:</label>
+          <select id="batchIntervalSelect" style="background:#1e293b; color:#fff; border:1px solid #475569;">
+            <option value="keep">Keep Current Row Rule</option>
+            <option value="6">Force 6 Months</option>
+            <option value="12">Force 12 Months</option>
+          </select>
+          <button type="button" class="btn btn-accent" onclick="applyBatchExamDate()">Apply Exam Date to Selected Rows</button>
+        </div>
+
         <div class="range-toolbar">
           <span>Range Select:</span>
           <label for="rangeFrom">From #</label>
@@ -1067,6 +1105,7 @@
     'mfgYear', 'lastExamDate', 'markingsLegible',
     'q_firstExam', 'q_installedCorrectly', 'q_int6m', 'q_int12m', 'q_scheme', 'q_exceptional',
     'defectDesc', 'dangerImm', 'dangerTime', 'isSafe', 'remedies',
+    'examDate', 'nextExamDate',
     'examinerName', 'authName',
     'p_a2b', 'p_rci', 'p_estop', 'p_valves', 'p_rope'
   ];
@@ -1163,6 +1202,101 @@
   function formatWithNewlines(text) {
     if (!text) return '';
     return text.toString().replace(/\+\+/g, '<br>').replace(/\r?\n/g, '<br>');
+  }
+
+  /* Safe Calendar Calculation: Period - 1 Day (LEEA Standard) */
+  function calculateNextDate(baseDateStr, months) {
+    if (!baseDateStr) return '';
+    const parts = baseDateStr.split('-');
+    if (parts.length !== 3) return '';
+    const y = parseInt(parts[0], 10);
+    const m = parseInt(parts[1], 10) - 1;
+    const d = parseInt(parts[2], 10);
+    const dt = new Date(y, m, d);
+    if (isNaN(dt.getTime())) return '';
+    dt.setMonth(dt.getMonth() + months);
+    dt.setDate(dt.getDate() - 1);
+    const year = dt.getFullYear();
+    const month = String(dt.getMonth() + 1).padStart(2, '0');
+    const day = String(dt.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  /* Mutual Exclusivity and Automatic Next Date Calculator */
+  function handleIntervalChange(changedType) {
+    const in6 = document.getElementById('in_q_int6m');
+    const in12 = document.getElementById('in_q_int12m');
+    const examInput = document.getElementById('in_examDate');
+    const nextInput = document.getElementById('in_nextExamDate');
+
+    if (changedType === 6 && in6.value === 'YES') {
+      in12.value = 'NO';
+      if (examInput.value) {
+        nextInput.value = calculateNextDate(examInput.value, 6);
+      }
+    } else if (changedType === 12 && in12.value === 'YES') {
+      in6.value = 'NO';
+      if (examInput.value) {
+        nextInput.value = calculateNextDate(examInput.value, 12);
+      }
+    }
+    debouncedSync();
+  }
+
+  function handleExamDateChange() {
+    const in6 = document.getElementById('in_q_int6m');
+    const in12 = document.getElementById('in_q_int12m');
+    const examInput = document.getElementById('in_examDate');
+    const nextInput = document.getElementById('in_nextExamDate');
+
+    if (in6.value === 'YES') {
+      nextInput.value = calculateNextDate(examInput.value, 6);
+    } else if (in12.value === 'YES') {
+      nextInput.value = calculateNextDate(examInput.value, 12);
+    }
+    debouncedSync();
+  }
+
+  /* Batch Date Patch Tool Execution */
+  function applyBatchExamDate() {
+    const picker = document.getElementById('batchExamDatePicker');
+    const newDate = picker.value;
+    if (!newDate) {
+      alert("Please select a date from the date picker first.");
+      return;
+    }
+    const intervalRule = document.getElementById('batchIntervalSelect').value;
+    const list = currentEngine === 'LIFTING' ? liftingBatch : ndtBatch;
+    const selectedRows = list.filter(r => r.selected === true);
+
+    if (!selectedRows.length) {
+      alert("No rows selected. Please select at least one row in the batch queue.");
+      return;
+    }
+
+    selectedRows.forEach(r => {
+      r.examDate = newDate;
+      if (currentEngine === 'LIFTING') {
+        if (intervalRule === '6') {
+          r.q_int6m = 'YES';
+          r.q_int12m = 'NO';
+        } else if (intervalRule === '12') {
+          r.q_int6m = 'NO';
+          r.q_int12m = 'YES';
+        }
+
+        if (r.q_int6m === 'YES') {
+          r.nextExamDate = calculateNextDate(newDate, 6);
+        } else if (r.q_int12m === 'YES') {
+          r.nextExamDate = calculateNextDate(newDate, 12);
+        }
+      }
+    });
+
+    loadActiveRecord();
+    renderSheet();
+    debouncedSync();
+    alert(`Successfully updated Exam Date to ${newDate} for ${selectedRows.length} selected row(s).`);
   }
 
   function getNextReportNumber(prefix = 'RTE-2026-') {
@@ -1604,7 +1738,7 @@
       const showSop = tg.sopRef !== false;
       let standardsRowHtml = '';
       if (showStd && showSop) {
-        standardsRowHtml = `<tr><td colspan="2" style="width:75%;"><span class="lbl">Applicable Technical Standards</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('standards', this.innerText)">${r.standards || ''}</span></td><td style="width:25%;"><span class="lbl">Inspection SOP Reference</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('sopRef', this.innerText)">${r.sopRef || ''}</span></td></tr>`;
+        standardsRowHtml = `<tr><td colspan="2"><span class="lbl">Applicable Technical Standards</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('standards', this.innerText)">${r.standards || ''}</span></td><td><span class="lbl">Inspection SOP Reference</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('sopRef', this.innerText)">${r.sopRef || ''}</span></td></tr>`;
       } else if (showStd) {
         standardsRowHtml = `<tr><td colspan="3"><span class="lbl">Applicable Technical Standards</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('standards', this.innerText)">${r.standards || ''}</span></td></tr>`;
       } else if (showSop) {
@@ -1623,7 +1757,6 @@
         descSwlRowHtml = `<tr><td colspan="4"><span class="lbl">SWL / WLL</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('swl', this.innerText)" style="font-size:8.5pt; font-weight:900; color:var(--report-accent);">${r.swl || ''}</span></td></tr>`;
       }
 
-      // Adaptive 4-Column Identification Rows
       function renderDynamicCells(cellArray) {
         const active = cellArray.filter(c => tg[c.key] !== false);
         if (!active.length) return '';
@@ -1647,55 +1780,76 @@
         { key: 'markingsLegible', lbl: 'Marking Status', val: r.markingsLegible || 'YES' }
       ]);
 
-      // Danger timeline line in Determination section
+      // Danger timeline determination block
       const showDangerTime = tg.dangerTime === true;
       const dangerHtml = showDangerTime
         ? `<div>Existing or Imminent danger? <strong>YES ${tick(isImm)} &nbsp; NO ${tick(!isImm)}</strong></div><div style="margin-top:2px;">Date Danger Develops: <strong>${r.dangerTimeText || 'N/A'}</strong></div>`
         : `<div>Existing or Imminent danger? <strong>YES ${tick(isImm)} &nbsp; NO ${tick(!isImm)}</strong></div>`;
 
-      // Adaptive Remedies vs Danger column
       const showRemedies = tg.remedies !== false;
       const showDanger = tg.dangerImm !== false;
       let riskRowHtml = '';
       if (showDanger && showRemedies) {
-        riskRowHtml = `<tr><td style="width:50%;"><span class="lbl">Danger Status</span>${dangerHtml}</td><td style="width:50%;"><span class="lbl">Remedial Action Required</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('remedies', this.innerText)">${r.remedies || 'None'}</span></td></tr>`;
+        riskRowHtml = `<tr><td><span class="lbl">Danger Status</span>${dangerHtml}</td><td><span class="lbl">Remedial Action Required</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('remedies', this.innerText)">${r.remedies || 'None'}</span></td></tr>`;
       } else if (showDanger) {
         riskRowHtml = `<tr><td colspan="2"><span class="lbl">Danger Status</span>${dangerHtml}</td></tr>`;
       } else if (showRemedies) {
         riskRowHtml = `<tr><td colspan="2"><span class="lbl">Remedial Action Required</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('remedies', this.innerText)">${r.remedies || 'None'}</span></td></tr>`;
       }
 
-      // Adaptive Signatures
+      // Contiguous Signatures & Instant WhatsApp Verification Grid
       const showInsp = tg.examinerName !== false;
       const showAuth = tg.authName !== false;
       const inspSrc = (r.inspectorSigMode === 'UPLOAD' && r.inspectorSigUpload) ? r.inspectorSigUpload : r.inspectorSigLive;
       const authSrc = (r.authSigMode === 'UPLOAD' && r.authSigUpload) ? r.authSigUpload : r.authSigLive;
 
-      let sigRowHtml = '';
+      let sigBlockHtml = '';
       if (showInsp && showAuth) {
-        sigRowHtml = `<tr>
-          <td style="width:50%;">
-            <span class="lbl">Competent Person</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('examinerName', this.innerText)">${r.examinerName || ''}</span>
-            <div style="height:24px; display:flex; align-items:center;">${inspSrc ? `<img src="${inspSrc}" style="max-height:24px;">` : `<span style="font-style:italic; color:#64748b; font-size:6pt;">Signature on File</span>`}</div>
-          </td>
-          <td style="width:50%;">
-            <span class="lbl">Authenticating Authority</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('authName', this.innerText)">${r.authName || ''}</span>
-            <div style="height:24px; display:flex; align-items:center;">${authSrc ? `<img src="${authSrc}" style="max-height:24px;">` : `<span style="font-style:italic; color:#64748b; font-size:6pt;">Signature on File</span>`}</div>
-          </td>
-        </tr>`;
-      } else if (showInsp) {
-        sigRowHtml = `<tr><td colspan="2">
-          <span class="lbl">Competent Person</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('examinerName', this.innerText)">${r.examinerName || ''}</span>
-          <div style="height:24px; display:flex; align-items:center;">${inspSrc ? `<img src="${inspSrc}" style="max-height:24px;">` : `<span style="font-style:italic; color:#64748b; font-size:6pt;">Signature on File</span>`}</div>
-        </td></tr>`;
-      } else if (showAuth) {
-        sigRowHtml = `<tr><td colspan="2">
-          <span class="lbl">Authenticating Authority</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('authName', this.innerText)">${r.authName || ''}</span>
-          <div style="height:24px; display:flex; align-items:center;">${authSrc ? `<img src="${authSrc}" style="max-height:24px;">` : `<span style="font-style:italic; color:#64748b; font-size:6pt;">Signature on File</span>`}</div>
-        </td></tr>`;
+        sigBlockHtml = `
+          <table class="ctbl">
+            <colgroup><col style="width:38%"><col style="width:38%"><col style="width:24%"></colgroup>
+            <tr>
+              <td>
+                <span class="lbl">Competent Person / Inspector</span>
+                <span class="val" contenteditable="true" onblur="handleLiveInlineEdit('examinerName', this.innerText)">${r.examinerName || ''}</span>
+                <div style="height:24px; display:flex; align-items:center; margin-top:2px;">
+                  ${inspSrc ? `<img src="${inspSrc}" style="max-height:24px;">` : `<span style="font-style:italic; color:#64748b; font-size:6pt;">Signature on File</span>`}
+                </div>
+              </td>
+              <td>
+                <span class="lbl">Authenticating Authority</span>
+                <span class="val" contenteditable="true" onblur="handleLiveInlineEdit('authName', this.innerText)">${r.authName || ''}</span>
+                <div style="height:24px; display:flex; align-items:center; margin-top:2px;">
+                  ${authSrc ? `<img src="${authSrc}" style="max-height:24px;">` : `<span style="font-style:italic; color:#64748b; font-size:6pt;">Signature on File</span>`}
+                </div>
+              </td>
+              <td style="text-align:center; vertical-align:middle; padding:3px;">
+                <svg id="waQrSvg" width="36" height="36" viewBox="0 0 25 25"></svg>
+                <div style="font-size:4.6pt; font-weight:700; color:#334155; margin-top:1px;">WhatsApp Verify</div>
+              </td>
+            </tr>
+          </table>
+        `;
+      } else {
+        const colW = (showInsp || showAuth) ? '76%' : '100%';
+        sigBlockHtml = `
+          <table class="ctbl">
+            <colgroup><col style="width:${colW}"><col style="width:24%"></colgroup>
+            <tr>
+              <td>
+                ${showInsp ? `<span class="lbl">Competent Person</span><span class="val">${r.examinerName || ''}</span><div style="height:24px;">${inspSrc ? `<img src="${inspSrc}" style="max-height:24px;">` : ''}</div>` : ''}
+                ${showAuth ? `<span class="lbl">Authenticating Authority</span><span class="val">${r.authName || ''}</span><div style="height:24px;">${authSrc ? `<img src="${authSrc}" style="max-height:24px;">` : ''}</div>` : ''}
+              </td>
+              <td style="text-align:center; vertical-align:middle; padding:3px;">
+                <svg id="waQrSvg" width="36" height="36" viewBox="0 0 25 25"></svg>
+                <div style="font-size:4.6pt; font-weight:700; color:#334155; margin-top:1px;">WhatsApp Verify</div>
+              </td>
+            </tr>
+          </table>
+        `;
       }
 
-      // Overlays
+      // Floating overlays
       const sPos = r.stampPos || { x: 70, y: 76 };
       const iPos = r.inspectorSigPos || { x: 18, y: 88 };
       const aPos = r.authSigPos || { x: 68, y: 88 };
@@ -1713,33 +1867,40 @@
           ${overlays}
           <div>
             ${headerBannerHtml}
+            
+            <!-- Contiguous Table 1: Identification & Location -->
             <table class="ctbl">
+              <colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup>
               <tr>
-                <td style="width:50%;"><span class="lbl">Employer / Client</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('employer', this.innerText)">${formatWithNewlines(r.employer)}</span></td>
-                <td style="width:25%;"><span class="lbl">Report No</span><span class="val mono" contenteditable="true" onblur="handleLiveInlineEdit('reportNo', this.innerText)">${r.reportNo || ''}</span></td>
-                <td style="width:25%;"><span class="lbl">Job / P.O. Ref</span><span class="val mono" contenteditable="true" onblur="handleLiveInlineEdit('jobRef', this.innerText)">${r.jobRef || ''}${tg.poRef!==false && r.poRef ? ' | ' + r.poRef : ''}</span></td>
+                <td><span class="lbl">Employer / Client</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('employer', this.innerText)">${formatWithNewlines(r.employer)}</span></td>
+                <td><span class="lbl">Report No</span><span class="val mono" contenteditable="true" onblur="handleLiveInlineEdit('reportNo', this.innerText)">${r.reportNo || ''}</span></td>
+                <td><span class="lbl">Job / P.O. Ref</span><span class="val mono" contenteditable="true" onblur="handleLiveInlineEdit('jobRef', this.innerText)">${r.jobRef || ''}${tg.poRef!==false && r.poRef ? ' | ' + r.poRef : ''}</span></td>
               </tr>
               <tr><td colspan="3"><span class="lbl">Premises Where Examination Made</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('premises', this.innerText)">${r.premises || ''}${tg.subLocation!==false && r.subLocation ? ' | Sub-Location: ' + r.subLocation : ''}</span></td></tr>
               ${standardsRowHtml}
             </table>
 
+            <!-- Contiguous Table 2: Specifications & Safe Working Load -->
             <table class="ctbl">
+              <colgroup><col style="width:25%"><col style="width:25%"><col style="width:25%"><col style="width:25%"></colgroup>
               <tr><td colspan="4" class="csec">Equipment Specification &amp; Safe Working Load</td></tr>
               ${descSwlRowHtml}
               ${identRow1}
               ${identRow2}
             </table>
 
+            <!-- Contiguous Table 3: Reason for Thorough Examination -->
             <table class="ctbl">
+              <colgroup><col style="width:50%"><col style="width:50%"></colgroup>
               <tr><td colspan="2" class="csec">Reason for Thorough Examination</td></tr>
               <tr>
-                <td style="width:50%; padding:2.5px 4px;">
-                  <div style="font-weight:800; font-size:6pt; margin-bottom:2px;">Initial Installation:</div>
+                <td>
+                  <div style="font-weight:800; font-size:5.8pt; margin-bottom:2px;">Initial Installation:</div>
                   <div style="display:flex; justify-content:space-between; margin-bottom:2px;"><span>First examination?</span><span>YES ${tick(r.q_firstExam==='YES')}&nbsp;NO ${tick(r.q_firstExam!=='YES')}</span></div>
                   <div style="display:flex; justify-content:space-between;"><span>Installed correctly?</span><span>YES ${tick(r.q_installedCorrectly==='YES')}&nbsp;NO ${tick(r.q_installedCorrectly==='NO')}</span></div>
                 </td>
-                <td style="width:50%; padding:2.5px 4px;">
-                  <div style="font-weight:800; font-size:6pt; margin-bottom:2px;">Trigger Interval:</div>
+                <td>
+                  <div style="font-weight:800; font-size:5.8pt; margin-bottom:2px;">Trigger Interval:</div>
                   <div style="display:flex; justify-content:space-between; margin-bottom:1px;"><span>Interval of 6 months?</span><span>YES ${tick(r.q_int6m==='YES')}&nbsp;NO ${tick(r.q_int6m!=='YES')}</span></div>
                   <div style="display:flex; justify-content:space-between; margin-bottom:1px;"><span>Interval of 12 months?</span><span>YES ${tick(r.q_int12m==='YES')}&nbsp;NO ${tick(r.q_int12m!=='YES')}</span></div>
                   <div style="display:flex; justify-content:space-between; margin-bottom:1px;"><span>Under examination scheme?</span><span>YES ${tick(r.q_scheme==='YES')}&nbsp;NO ${tick(r.q_scheme!=='YES')}</span></div>
@@ -1748,16 +1909,20 @@
               </tr>
             </table>
 
+            <!-- Contiguous Table 4: Proof Testing & Calibration Traceability -->
             <table class="ctbl">
+              <colgroup><col style="width:40%"><col style="width:30%"><col style="width:30%"></colgroup>
               <tr><td colspan="3" class="csec">Proof Testing &amp; Calibration Traceability</td></tr>
               <tr>
-                <td style="width:40%;"><span class="lbl">Particulars of Tests Applied</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('proofLoadApplied', this.innerText)">${r.proofLoadApplied || 'Visual & Dimensional Audit'}</span></td>
-                <td style="width:30%;"><span class="lbl">Last Proof Details</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('lastProofDetails', this.innerText)">${r.lastProofDetails || 'N/A'}</span></td>
-                <td style="width:30%;"><span class="lbl">Next Proof Due</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('nextProofDate', this.innerText)">${r.nextProofDate || 'N/A'}</span></td>
+                <td><span class="lbl">Particulars of Tests Applied</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('proofLoadApplied', this.innerText)">${r.proofLoadApplied || 'Visual & Dimensional Audit'}</span></td>
+                <td><span class="lbl">Last Proof Details</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('lastProofDetails', this.innerText)">${r.lastProofDetails || 'N/A'}</span></td>
+                <td><span class="lbl">Next Proof Due</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('nextProofDate', this.innerText)">${r.nextProofDate || 'N/A'}</span></td>
               </tr>
             </table>
 
+            <!-- Contiguous Table 5: Defect Particulars & Operability Determination -->
             <table class="ctbl">
+              <colgroup><col style="width:50%"><col style="width:50%"></colgroup>
               <tr><td colspan="2" class="csec">Defect Particulars &amp; Operability Verdict</td></tr>
               ${tg.defectDesc !== false ? `<tr><td colspan="2"><span class="lbl">Defect Description</span><span class="val" contenteditable="true" onblur="handleLiveInlineEdit('defectDesc', this.innerText)">${formatWithNewlines(r.defectDesc)}</span></td></tr>` : ''}
               ${riskRowHtml}
@@ -1767,16 +1932,9 @@
               </tr>
             </table>
 
-            <!-- Connected Signatures & Instant Verification Envelope -->
-            <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:2px;">
-              <table class="ctbl" style="margin-bottom:0; width:74%;">
-                ${sigRowHtml}
-              </table>
-              <div style="width:24%; text-align:center; border:1px solid #111; padding:3px; background:#fff;">
-                <svg id="waQrSvg" width="34" height="34" viewBox="0 0 25 25"></svg>
-                <div style="font-size:4.5pt; font-weight:700; margin-top:1px;">WhatsApp Verification</div>
-              </div>
-            </div>
+            <!-- Contiguous Table 6: Signatures & Instant Verification Envelope -->
+            ${sigBlockHtml}
+
             ${footerBannerHtml}
           </div>
         </div>
@@ -1791,12 +1949,13 @@
         if (showPuwer) {
           puwerTableHtml = `
             <table class="ctbl" style="margin-top:4px;">
+              <colgroup><col style="width:25%"><col style="width:25%"><col style="width:25%"><col style="width:25%"></colgroup>
               <tr><td colspan="4" class="csec">PUWER Mechanical Safety Controls Audit</td></tr>
               <tr>
-                <td style="width:25%;"><span class="lbl">Anti-Two-Block (A2B)</span><span class="val">${r.p_a2b || 'PASS - Functional'}</span></td>
-                <td style="width:25%;"><span class="lbl">Rated Capacity Indicator</span><span class="val">${r.p_rci || 'PASS - Calibrated'}</span></td>
-                <td style="width:25%;"><span class="lbl">Emergency Stop Buttons</span><span class="val">${r.p_estop || 'PASS - Positive Break'}</span></td>
-                <td style="width:25%;"><span class="lbl">Counterbalance Valves</span><span class="val">${r.p_valves || 'PASS - Zero Drift'}</span></td>
+                <td><span class="lbl">Anti-Two-Block (A2B)</span><span class="val">${r.p_a2b || 'PASS - Functional'}</span></td>
+                <td><span class="lbl">Rated Capacity Indicator</span><span class="val">${r.p_rci || 'PASS - Calibrated'}</span></td>
+                <td><span class="lbl">Emergency Stop Buttons</span><span class="val">${r.p_estop || 'PASS - Positive Break'}</span></td>
+                <td><span class="lbl">Counterbalance Valves</span><span class="val">${r.p_valves || 'PASS - Zero Drift'}</span></td>
               </tr>
               <tr>
                 <td colspan="2"><span class="lbl">Wire Rope Wear &amp; Discard (ISO 4309)</span><span class="val">${r.p_rope || 'Diameter 100% (Compliant)'}</span></td>
@@ -1809,12 +1968,13 @@
         let checklistTableHtml = '';
         if (showChecklist) {
           checklistTableHtml = `
-            <table class="ctbl" style="margin-top:6px;">
+            <table class="ctbl" style="margin-top:4px;">
+              <colgroup><col style="width:60%"><col style="width:15%"><col style="width:25%"></colgroup>
               <tr><td colspan="3" class="csec">Custom Technical Verification Checklist</td></tr>
               <tr style="background:#f1f5f9; font-weight:700;">
-                <td style="width:60%;">Verification Inspection Item</td>
-                <td style="width:15%;">Status</td>
-                <td style="width:25%;">Findings / Remarks</td>
+                <td>Verification Inspection Item</td>
+                <td>Status</td>
+                <td>Findings / Remarks</td>
               </tr>
               ${r.checklist.map(c => `
                 <tr>
@@ -1832,12 +1992,13 @@
             <div>
               ${headerBannerHtml}
               <table class="ctbl">
+                <colgroup><col style="width:70%"><col style="width:30%"></colgroup>
                 <tr>
-                  <td style="width:70%;">
+                  <td>
                     <div style="font-size:9pt; font-weight:900; text-transform:uppercase;">ANNEXURE: MECHANICAL SAFETY &amp; TECHNICAL AUDIT</div>
                     <div style="font-size:6pt; color:#64748b;">Accompanying Statutory Examination Report: ${r.reportNo || ''}</div>
                   </td>
-                  <td style="width:30%; text-align:right;">
+                  <td style="text-align:right;">
                     <span class="lbl">Asset Tag / Serial</span>
                     <span class="val mono">${r.serial || ''} / ${r.plantId || ''}</span>
                   </td>
@@ -1847,7 +2008,7 @@
               ${checklistTableHtml}
             </div>
             <div>
-              <div style="font-size:5.5pt; color:#64748b; text-align:center; padding:4px 0; border-top:1px solid #cbd5e1;">
+              <div style="font-size:5.5pt; color:#64748b; text-align:center; padding:4px 0; border-top:1px solid #cbd5e1; margin-top:6px;">
                 Page 2 of 2 — Mechanical Equipment Verification Audit &amp; Technical Checklist Records.
               </div>
               ${footerBannerHtml}
@@ -1873,31 +2034,33 @@
           <div>
             ${headerBannerHtml}
             <table class="ctbl">
+              <colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup>
               <tr>
-                <td style="width:50%;"><span class="lbl">Client</span><span class="val">${r.client || ''}</span></td>
-                <td style="width:25%;"><span class="lbl">Report No</span><span class="val mono">${r.reportNo || ''}</span></td>
-                <td style="width:25%;"><span class="lbl">Method</span><span class="val" style="font-weight:900; color:var(--report-accent);">${r.method || ''}</span></td>
+                <td><span class="lbl">Client</span><span class="val">${r.client || ''}</span></td>
+                <td><span class="lbl">Report No</span><span class="val mono">${r.reportNo || ''}</span></td>
+                <td><span class="lbl">Method</span><span class="val" style="font-weight:900; color:var(--report-accent);">${r.method || ''}</span></td>
               </tr>
               <tr><td colspan="3"><span class="lbl">Item &amp; Material</span><span class="val">${r.itemDesc || ''} | ${r.material || ''}</span></td></tr>
               <tr><td colspan="3"><span class="lbl">Specification</span><span class="val">${r.testSpec || ''}</span></td></tr>
             </table>
-            <table class="ctbl" style="margin-top:3px;">
+            <table class="ctbl">
+              <colgroup><col style="width:25%"><col style="width:25%"><col style="width:35%"><col style="width:15%"></colgroup>
               <tr><td colspan="4" class="csec">Joint Examination Findings</td></tr>
               <tr style="background:#f1f5f9; font-weight:700;"><td>Joint #</td><td>Area</td><td>Findings</td><td>Result</td></tr>
               ${(r.indications||[]).map(ind => `<tr><td>${ind.joint}</td><td>${ind.area}</td><td>${ind.finding}</td><td style="font-weight:bold; color:${ind.result==='PASS'?'#16a34a':'#dc2626'};">${ind.result}</td></tr>`).join('')}
             </table>
-            <table class="ctbl" style="margin-top:3px;">
+            <table class="ctbl">
+              <colgroup><col style="width:50%"><col style="width:50%"></colgroup>
               <tr>
                 <td class="verdict-box"><span class="lbl">TEST DETERMINATION</span><div class="verdict-big ${(r.result&&r.result.includes('PASS'))?'pass-text':'fail-text'}">${r.result || 'PASS'}</div></td>
                 <td><span class="lbl">Remarks</span><span class="val">${r.remarks || ''}</span></td>
               </tr>
             </table>
-          </div>
-          <div>
             <table class="ctbl">
+              <colgroup><col style="width:50%"><col style="width:50%"></colgroup>
               <tr>
-                <td style="width:50%;"><span class="lbl">Tested By</span><span class="val">${r.inspectorName || ''}</span></td>
-                <td style="width:50%;"><span class="lbl">Witnessed By</span><span class="val">${r.witnessName || ''}</span></td>
+                <td><span class="lbl">Tested By</span><span class="val">${r.inspectorName || ''}</span></td>
+                <td><span class="lbl">Witnessed By</span><span class="val">${r.witnessName || ''}</span></td>
               </tr>
             </table>
             ${footerBannerHtml}
@@ -1956,6 +2119,8 @@
       r.dangerTimeText = document.getElementById('in_dangerTimeText').value;
       r.isSafe = document.getElementById('in_isSafe').value;
       r.remedies = document.getElementById('in_remedies').value;
+      r.examDate = document.getElementById('in_examDate').value;
+      r.nextExamDate = document.getElementById('in_nextExamDate').value;
       r.examinerName = document.getElementById('in_examinerName').value;
       r.authName = document.getElementById('in_authName').value;
     }
@@ -2158,7 +2323,8 @@
     selected.forEach(s => {
       const clone = JSON.parse(JSON.stringify(s));
       clone.reportNo = getNextReportNumber();
-      if (clone.serial) clone.serial = `SN-${Math.floor(10000 + Math.random() * 90000)}`;
+      // Reset serial so technician must input it
+      clone.serial = "";
       clone.selected = false;
       const idx = list.indexOf(s);
       list.splice(idx + 1, 0, clone);
@@ -2180,7 +2346,7 @@
           standards: "", sopRef: "", fieldToggles: { dangerTime: false },
           includePuwer: false, includeChecklist: false,
           employer: "", premises: "", subLocation: "", colourCode: "", envLimits: "-20°C to +45°C",
-          description: "", swl: "", manufacturer: "", model: "", serial: "SN-00001", plantId: "",
+          description: "", swl: "", manufacturer: "", model: "", serial: "", plantId: "",
           mfgYear: "", lastExamDate: "", markingsLegible: "YES", q_firstExam: "NO", q_installedCorrectly: "N/A",
           q_int6m: "YES", q_int12m: "NO", q_scheme: "NO", q_exceptional: "NO", proofLoadApplied: "",
           lastProofDetails: "", nextProofDate: "", defectDesc: "NONE.", dangerImm: "NO", dangerTimeText: "N/A",
@@ -2220,7 +2386,7 @@
     }
   }
 
-  /* "+ Add New": Strictly Obeys Column Locks + Sequential Numbering */
+  /* "+ Add New": Strictly Obeys Column Locks + Sequential Numbering + Empty Serial */
   function addBatchRecord() {
     syncCurrentData();
     const list = currentEngine === 'LIFTING' ? liftingBatch : ndtBatch;
@@ -2246,7 +2412,8 @@
         swl: columnLocks.swl ? (active.swl || "") : "",
         manufacturer: columnLocks.manufacturer ? (active.manufacturer || "") : "",
         model: columnLocks.model ? (active.model || "") : "",
-        serial: columnLocks.serial ? (active.serial || "") : `SN-${Math.floor(10000 + Math.random() * 90000)}`,
+        // Serial must be manually inputted, not auto-generated
+        serial: columnLocks.serial ? (active.serial || "") : "",
         plantId: columnLocks.plantId ? (active.plantId || "") : "",
         mfgYear: columnLocks.mfgYear ? (active.mfgYear || "") : "",
         lastExamDate: columnLocks.lastExamDate ? (active.lastExamDate || "") : "",
@@ -2277,6 +2444,7 @@
         p_rope: "Diameter 100% (Compliant)",
         checklist: [],
         photos: Array(12).fill(null),
+        disabledFields: {},
         inspectorSigLive: null,
         inspectorSigUpload: null,
         inspectorSigMode: 'LIVE',
@@ -2289,6 +2457,13 @@
         authSigPos: { x: 68, y: 88 },
         selected: false
       };
+      
+      // Auto-calculate next due date if exam date is present
+      if (newRec.examDate) {
+        if (newRec.q_int6m === 'YES') newRec.nextExamDate = calculateNextDate(newRec.examDate, 6);
+        else if (newRec.q_int12m === 'YES') newRec.nextExamDate = calculateNextDate(newRec.examDate, 12);
+      }
+
       list.splice(activeIdx + 1, 0, newRec);
       activeIdx++;
     } else {
@@ -2359,6 +2534,8 @@
       document.getElementById('in_dangerTimeText').value = r.dangerTimeText || 'N/A';
       document.getElementById('in_isSafe').value = r.isSafe || 'YES';
       document.getElementById('in_remedies').value = r.remedies || 'None';
+      document.getElementById('in_examDate').value = r.examDate || '';
+      document.getElementById('in_nextExamDate').value = r.nextExamDate || '';
       document.getElementById('in_examinerName').value = r.examinerName || '';
       document.getElementById('in_authName').value = r.authName || '';
       document.getElementById('lblActiveSerial').textContent = r.serial || '';
@@ -2392,7 +2569,6 @@
       { key: "witnessName", label: "Witness" }
     ];
 
-    // Client-side fallback if CDN is not reached
     if (typeof XLSX === 'undefined') {
       exportSelectedCsv();
       return;
@@ -2412,7 +2588,6 @@
       const wb = XLSX.utils.book_new();
       const ws = XLSX.utils.json_to_sheet(dataRows);
 
-      // Auto-size columns based on header and data length
       const colWidths = columns.map(c => {
         let maxL = c.label.length;
         items.forEach(it => {
@@ -2426,7 +2601,7 @@
       XLSX.utils.book_append_sheet(wb, ws, isL ? 'LOLER_Records' : 'NDT_Records');
       XLSX.writeFile(wb, `${isL ? 'LOLER_Thorough_Examination' : 'NDT_Inspection_Report'}_${Date.now()}.xlsx`);
     } catch (e) {
-      exportSelectedCsv(); // Fallback if binary packing throws
+      exportSelectedCsv();
     }
   }
 
@@ -2435,7 +2610,7 @@
     const isL = currentEngine === 'LIFTING';
     const list = isL ? liftingBatch : ndtBatch;
     let items = list.filter(r => r.selected === true);
-    if (!items.length) items = list; // Exports all if none selected
+    if (!items.length) items = list;
 
     const columns = isL ? LIFTING_COLUMNS : [
       { key: "reportNo", label: "Report No" },
@@ -2517,7 +2692,6 @@
         });
 
         if (!rec.reportNo) rec.reportNo = getNextReportNumber();
-        if (!rec.serial) rec.serial = `SN-${Math.floor(10000 + Math.random() * 90000)}`;
         rec.checklist = [];
         rec.photos = Array(12).fill(null);
         rec.fieldToggles = { dangerTime: false };
