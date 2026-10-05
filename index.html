@@ -595,7 +595,7 @@ function cyclePreviewLayout(){
     store.set('ims_layout',String(currentLayoutIdx));
     
     // Scroll to the top of the workspace so the form stays visible
-    if(ws) ws.scrollTo({top: 0, behavior: 'smooth'});
+    if(ws) ws.scrollTo({top: ws.scrollHeight, behavior: 'smooth'});
 }
 function debouncedSync(){setSaveIndicator('dirty');if(syncTimer)clearTimeout(syncTimer);syncTimer=setTimeout(()=>{requestAnimationFrame(()=>{try{syncCurrentData();renderPreview();runWorkflowChecks();schedulePersist();if(document.getElementById('tab_batch').classList.contains('active'))renderSheet()}catch(e){showPreviewError(e)}})},35)}
 let activeSpeechRec=null;
