@@ -62,7 +62,21 @@ header.app-bar{background:var(--surface);border-bottom:1px solid var(--hairline)
 .btn-mic:active,.btn-mic.recording{background:var(--fail)!important;color:#fff}
 .workspace{display:flex;flex-direction:column;width:100%;flex:1 1 auto;min-height:0}
 .workspace.layout-folded .right-pane{display:none!important}
-@media(min-width:992px){.workspace{overflow:hidden}.workspace.layout-beside{flex-direction:row}.workspace.layout-beside .left-pane{width:45%;height:100%;border-right:1px solid var(--hairline);overflow-y:auto}.workspace.layout-beside .right-pane{width:55%;height:100%;display:flex;overflow-y:auto}.workspace.layout-below{overflow-y:auto}.workspace.layout-below .left-pane{width:100%;height:auto;overflow:visible;border-bottom:2px solid var(--ink)}.workspace.layout-below .right-pane{width:100%;height:auto;min-height:1200px;display:flex;overflow:visible}.workspace.layout-folded{flex-direction:row}.workspace.layout-folded .left-pane{width:100%;height:100%;overflow-y:auto}}
+@media(min-width:992px){.workspace{overflow:hidden}.workspace.layout-beside{flex-direction:row}.workspace.layout-beside .left-pane{width:45%;height:100%;border-right:1px solid var(--hairline);overflow-y:auto}.workspace.layout-beside .right-pane{width:55%;height:100%;display:flex;overflow-y:auto}.workspace.layout-below{overflow-y:auto;flex-direction:column}.workspace.layout-below .left-pane{
+  width:100%;
+  height:auto;
+  overflow:visible;
+  border-bottom:2px solid var(--ink);
+  order:1;
+}
+.workspace.layout-below .right-pane{
+  width:100%;
+  height:auto;
+  min-height:1200px;
+  display:flex;
+  overflow:visible;
+  order:2;
+}.workspace.layout-folded{flex-direction:row}.workspace.layout-folded .left-pane{width:100%;height:100%;overflow-y:auto}}
 @media(max-width:991px){.workspace,.workspace.layout-beside,.workspace.layout-below,.workspace.layout-folded{overflow:visible;height:auto}.left-pane,.right-pane{overflow:visible!important;height:auto!important;width:100%!important}.right-pane{display:flex}.workspace.layout-beside .left-pane{border-bottom:2px solid var(--ink)}}
 .workspace.layout-below .right-pane{padding:24px 16px 40px;background:var(--preview-bg)}
 .workspace.layout-below .a4-page-frame{width:210mm;max-width:100%;min-height:297mm;height:auto;margin:0 auto 24px}
