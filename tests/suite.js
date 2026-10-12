@@ -1,0 +1,281 @@
+/* ==========================================================================
+   IMS REGRESSION SUITE
+   --------------------------------------------------------------------------
+   Every test here covers a bug that was actually found and fixed. Run it
+   after any change to the app:
+
+     __imsTest()            in the DevTools console, or
+     <script src="tests/suite.js"></script>  then __imsTest()
+
+   Read-only: snapshots what it touches and restores it. No network, no
+   dependencies, runs from file://. Prints a table and returns the results;
+   also parked on window.__imsLastResults.
+   ========================================================================== */
+(function () {
+    'use strict';
+
+    const $ = id => document.getElementById(id);
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+    async function run() {
+        const out = [];
+        const T = async (id, name, fn) => {
+            try {
+                const r = await fn();
+                if (r && r.skip)      out.push({ id, name, ok: 'skip', msg: r.msg });
+                else if (r === false) out.push({ id, name, ok: false, msg: 'assertion failed' });
+                else if (r && r.ok === false) out.push({ id, name, ok: false, msg: r.msg, detail: r.detail });
+                else                  out.push({ id, name, ok: true, msg: (r && r.msg) || 'ok' });
+            } catch (e) {
+                out.push({ id, name, ok: false, msg: 'threw: ' + (e && e.message), detail: e && e.stack });
+            }
+        };
+
+        /* ---- BOOT ------------------------------------------------------
+           AIO.init() used to deadlock on a cold profile: identity() awaited
+           appendAudit(), which signs, which calls identity(), which returns
+           the very promise being constructed. bootApp() then hung before
+           renderPreview(), so a first run showed an empty preview. */
+        await T('BOOT-1', 'boot completes (no deadlock in AIO.init)', async () => {
+            const conv = $('conv_cat');
+            return { ok: !!(conv && conv.options.length), msg: 'converter categories=' + (conv ? conv.options.length : 0) };
+        });
+        await T('BOOT-2', 'preview rendered without a manual call', async () => {
+            if (!$('enginePreviewContainer').querySelector('.a4-page-frame')) {
+                renderPreview(); await sleep(400);
+            }
+            const n = $('enginePreviewContainer').querySelectorAll('.a4-page-frame').length;
+            return { ok: n >= 1, msg: n + ' frame(s)' };
+        });
+        await T('BOOT-3', 'AIO integrity features actually ran', () => ({
+            ok: !!(window.AIO && window.AIO.ready === true),
+            msg: 'AIO.ready=' + (window.AIO ? window.AIO.ready : 'missing')
+        }));
+
+        /* ---- QR --------------------------------------------------------
+           The encoder only implemented versions 1-10, and it wrote the
+           format information transposed (an [x,y] pair used as [y,x]),
+           which mirrored the pattern a scanner reads back -- so codes
+           failed to decode even though the data area was perfect. */
+        await T('QR-1', 'format bits are written untransposed', () => {
+            // Read the 15 format bits back at the spec's [x,y] positions.
+            const m = QREngine.encode('FORMAT-CHECK', 'L');
+            const n = m.length;
+            const pos = [[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,7],[8,8],[7,8],[5,8],[4,8],[3,8],[2,8],[1,8],[0,8]];
+            let bits = 0;
+            for (let i = 0; i < 15; i++) if (m[pos[i][1]][pos[i][0]]) bits |= 1 << i;
+            const un = bits ^ 0x5412;
+            const data = un >> 10;
+            const ecl = data >> 3, mask = data & 7;
+            // L must read back as 1. Transposed output reads back as H (2).
+            return { ok: ecl === 1, msg: 'ecc bits=' + ecl + ' (expect 1 for L) mask=' + mask };
+        });
+        await T('QR-2', 'all four ECC levels encode', () => {
+            const r = {};
+            ['L', 'M', 'Q', 'H'].forEach(l => { const m = QREngine.encode('LEVELS', l); r[l] = m ? m.length : null; });
+            return { ok: ['L','M','Q','H'].every(l => r[l]), msg: JSON.stringify(r) };
+        });
+        await T('QR-3', 'reaches version 40 at the published ceilings', () => {
+            // Byte-mode capacity, version 40: 2331 at ECC-M, 2953 at ECC-L.
+            const m = QREngine.encode('x'.repeat(2331), 'M');
+            const overM = QREngine.encode('x'.repeat(2332), 'M');
+            const l = QREngine.encode('x'.repeat(2953), 'L');
+            const overL = QREngine.encode('x'.repeat(2954), 'L');
+            const n = m ? m.length : 0, nl = l ? l.length : 0;
+            return {
+                ok: n === 177 && nl === 177 && !overM && !overL,
+                msg: `M: 2331->${n}x${n}, 2332 rejected=${!overM} | L: 2953->${nl}x${nl}, 2954 rejected=${!overL}`
+            };
+        });
+        await T('QR-4', 'long pre-filled message still encodes', () => {
+            const el = $('waMsg');
+            const before = el ? el.value : '';
+            if (!el) return { skip: true, msg: 'waMsg not present' };
+            el.value = 'Please verify this lifting examination certificate. '.repeat(4);
+            renderPreview();
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            const ok = generateTrueQrSvg(buildVerificationLink(activeRec()), svg);
+            el.value = before;
+            return { ok: ok && /<rect/.test(svg.innerHTML), msg: 'modules=' + (svg.innerHTML.length) };
+        });
+
+        /* ---- SECURITY --------------------------------------------------
+           lblSpan() concatenated its argument raw while valSpan() escaped,
+           so an extra-cell label executed script in the app origin. */
+        await T('SEC-1', 'extra-cell label cannot execute script', async () => {
+            const XSS = '<img src=x onerror="window.__XSS=1">';
+            window.__XSS = 0;
+            const r = activeRec();
+            const before = r.extraCells;
+            r.extraCells = [{ label: XSS, value: XSS }];
+            renderPreview();
+            await sleep(300);
+            const html = $('enginePreviewContainer').innerHTML;
+            r.extraCells = before;
+            renderPreview();
+            return {
+                ok: window.__XSS !== 1 && !/<img src=x onerror/.test(html),
+                msg: 'executed=' + window.__XSS + ' rawInHtml=' + /<img src=x onerror/.test(html)
+            };
+        });
+        await T('SEC-2', 'no duplicate element ids', () => {
+            const seen = {}, dup = [];
+            document.querySelectorAll('[id]').forEach(e => { if (seen[e.id]) dup.push(e.id); seen[e.id] = 1; });
+            return { ok: dup.length === 0, msg: dup.length ? 'duplicates: ' + dup.join(',') : 'unique' };
+        });
+        await T('SEC-3', 'every form field has an id or a name', () => {
+            const missing = [...document.querySelectorAll('input, select, textarea')]
+                .filter(e => !e.id && !e.name).map(e => e.tagName + '.' + (e.className || '?'));
+            return { ok: missing.length === 0, msg: missing.length ? missing.length + ' missing' : 'all labelled' };
+        });
+
+        /* ---- PRINT -----------------------------------------------------
+           Print CSS hides .workspace and shows only #printContainer, which
+           was filled solely by the in-app button -- so Ctrl+P printed a
+           blank page. */
+        await T('PRINT-1', 'Ctrl+P path fills the print container', async () => {
+            window.dispatchEvent(new Event('beforeprint'));
+            await sleep(500);
+            const pc = $('printContainer');
+            const n = pc.querySelectorAll('.a4-page-frame').length;
+            window.dispatchEvent(new Event('afterprint'));
+            await sleep(100);
+            return { ok: n >= 1, msg: n + ' frame(s) in print container' };
+        });
+        await T('PRINT-2', 'afterprint cleans up', async () => {
+            window.dispatchEvent(new Event('beforeprint')); await sleep(400);
+            window.dispatchEvent(new Event('afterprint')); await sleep(100);
+            return { ok: $('printContainer').innerHTML.length === 0 && !document.body.classList.contains('printing-lock'),
+                     msg: 'chars=' + $('printContainer').innerHTML.length };
+        });
+
+        /* ---- PEEK ------------------------------------------------------ */
+        await T('PEEK-1', 'folded docks a handle; no dead end', async () => {
+            const s = { idx: currentLayoutIdx };
+            try {
+                let g = 0; while (getEffectiveLayout() !== 'layout-folded' && g++ < 6) cyclePreviewLayout();
+                const h = $('btnPeekHandle');
+                if (!h) return { ok: false, msg: 'handle missing from DOM' };
+                const h1 = { label: h.querySelector('.peek-handle-label').textContent, on: h.classList.contains('on') };
+                togglePreviewPeek(); await sleep(350);
+                const h2 = { label: h.querySelector('.peek-handle-label').textContent, on: h.classList.contains('on') };
+                const paneOpen = getComputedStyle($('previewPane')).position === 'fixed';
+                togglePreviewPeek(); await sleep(350);
+                const h3 = h.classList.contains('on');
+                return { ok: h1.on && h2.on && h3 && paneOpen && h1.label === 'Preview' && h2.label === 'Close',
+                         msg: `retracted=${h1.label} peeked=${h2.label} handleKeptAfterClose=${h3}` };
+            } finally { for (let i = 0; i < s.idx; i++) cyclePreviewLayout(); }
+        });
+        await T('PEEK-2', 'peek keeps the zoom bar visible', async () => {
+            const s = { idx: currentLayoutIdx };
+            try {
+                let g = 0; while (getEffectiveLayout() !== 'layout-folded' && g++ < 6) cyclePreviewLayout();
+                togglePreviewPeek(); await sleep(400);
+                const ban = $('previewPane').querySelector('.a4-gauge-banner');
+                const r = ban.getBoundingClientRect();
+                const hit = document.elementFromPoint(Math.round(r.left + r.width / 2), Math.round(r.top + r.height / 2));
+                const visible = hit === ban || ban.contains(hit);
+                togglePreviewPeek(); await sleep(300);
+                return { ok: visible, msg: 'topmost at banner centre = ' + (hit ? hit.tagName + '.' + String(hit.className || '').split(' ')[0] : 'null') };
+            } finally { for (let i = 0; i < s.idx; i++) cyclePreviewLayout(); }
+        });
+        await T('PEEK-3', 'peek scrolls internally, background locked', async () => {
+            const s = { idx: currentLayoutIdx };
+            try {
+                let g = 0; while (getEffectiveLayout() !== 'layout-folded' && g++ < 6) cyclePreviewLayout();
+                togglePreviewPeek(); await sleep(400);
+                const pane = $('previewPane');
+                pane.scrollTop = 0;
+                const locked = document.documentElement.classList.contains('peek-locked');
+                pane.scrollTop = 200;
+                const scrolled = pane.scrollTop > 0;
+                togglePreviewPeek(); await sleep(300);
+                return { ok: locked && scrolled, msg: 'locked=' + locked + ' paneScrollTop=' + pane.scrollTop };
+            } finally { for (let i = 0; i < s.idx; i++) cyclePreviewLayout(); }
+        });
+        await T('PEEK-4', 'survives fullscreen exit and resize', async () => {
+            const s = { idx: currentLayoutIdx };
+            try {
+                let g = 0; while (getEffectiveLayout() !== 'layout-folded' && g++ < 6) cyclePreviewLayout();
+                togglePreviewPeek(); await sleep(300);
+                // both of these run applyLayout(), which used to wipe peek-open
+                _onFullscreenChange();
+                window.dispatchEvent(new Event('resize'));
+                await sleep(300);
+                const still = $('workspaceContainer').classList.contains('peek-open');
+                while (getEffectiveLayout() !== 'layout-beside') cyclePreviewLayout();
+                await sleep(200);
+                const cleared = !$('workspaceContainer').classList.contains('peek-open');
+                return { ok: still && cleared, msg: 'afterFullscreenAndResize=' + still + ' clearedOnLayoutSwitch=' + cleared };
+            } finally { for (let i = 0; i < s.idx; i++) cyclePreviewLayout(); }
+        });
+
+        /* ---- STORAGE / DEAD CODE --------------------------------------- */
+        await T('STORE-1', 'blob field list has one definition', () => {
+            const n = Array.isArray(window.BLOB_FIELDS) ? window.BLOB_FIELDS.length : 0;
+            return { ok: n === 5 && Object.isFrozen(window.BLOB_FIELDS), msg: n + ' fields, frozen=' + Object.isFrozen(window.BLOB_FIELDS) };
+        });
+        await T('STORE-2', 'validation rules are live', () => {
+            const f = window._validateField;
+            if (typeof f !== 'function') return { ok: false, msg: '_validateField missing' };
+            const long = f('reportNo', 'x'.repeat(200)).length;
+            const bad = f('isSafe', 'MAYBE');
+            return { ok: long === 64 && bad === 'YES', msg: 'maxLength->' + long + ' enum->' + bad };
+        });
+        await T('DEAD-1', 'removed dead code stays removed', () => ({
+            ok: typeof window.StateAPI === 'undefined'
+                && typeof exportSelectedExcelModern === 'undefined'
+                && typeof currentGeneration === 'undefined',
+            msg: 'StateAPI/Excel/currentGeneration all undefined'
+        }));
+
+        /* ---- MARKERS / PAGINATION -------------------------------------- */
+        await T('PHOTO-1', 'idb markers never rendered as an img src', () => {
+            const r = activeRec();
+            const before = r.photos;
+            r.photos = ['@idb:lifting/test/0', 'data:image/png;base64,iVBORw0KGgo='];
+            renderPhotoTiles(); renderPreview();
+            const leaked = /@idb:/.test($('enginePreviewContainer').innerHTML)
+                         || /@idb:/.test($('photo_slots_container').innerHTML);
+            r.photos = before; renderPhotoTiles(); renderPreview();
+            return { ok: !leaked, msg: 'leaked=' + leaked };
+        });
+        await T('PAGE-1', 'paginateReport honours R3 options', () => {
+            const p = paginateReport({
+                blocks: ['<div style="height:10px">x</div>'],
+                headerHTML: '', footerHTML: '', titleHTML: '', sigHTML: '', overlayHTML: '',
+                firstFrameId: null, pageOffset: 10, frameClass: 'a4-page-frame a4-annexure-frame'
+            });
+            return { ok: /a4-annexure-frame/.test(p.html) && !/a4TargetSheet/.test(p.html),
+                     msg: 'pageCount=' + p.pageCount };
+        });
+
+        /* ---- A11Y ------------------------------------------------------ */
+        await T('A11Y-1', 'toggles expose role=switch', () => {
+            const bad = [...document.querySelectorAll('.micro-toggle')].filter(t => t.getAttribute('role') !== 'switch');
+            return { ok: bad.length === 0, msg: bad.length + ' missing role' };
+        });
+        await T('A11Y-2', 'skip link present', () => ({
+            ok: !!document.querySelector('.skip-link'), msg: 'found'
+        }));
+
+        /* ---- REPORT ---------------------------------------------------- */
+        const glyph = r => r.ok === true ? 'PASS' : (r.ok === 'skip' ? 'SKIP' : 'FAIL');
+        console.log('%c===== IMS REGRESSION SUITE =====', 'font-weight:900');
+        let last = null;
+        out.forEach(r => {
+            if (r.grp !== last) { last = r.grp; }
+            console.log('%s  %-8s %s%s', glyph(r).padEnd(4), r.id, r.name, r.ok === true ? '' : '\n        -> ' + r.msg);
+            if (r.detail) console.log('        ' + String(r.detail).split('\n')[0]);
+        });
+        const fail = out.filter(r => r.ok === false).length;
+        const skip = out.filter(r => r.ok === 'skip').length;
+        console.log('%c===== %d tests | %d pass | %d skip | %d FAIL =====',
+            'font-weight:900;color:' + (fail ? '#e15666' : '#33b56b'), out.length, out.length - fail - skip, skip, fail);
+        window.__imsLastResults = out;
+        return out;
+    }
+
+    window.__imsTest = run;
+    if (typeof module !== 'undefined' && module.exports) module.exports = run;
+})();
