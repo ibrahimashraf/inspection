@@ -3177,7 +3177,11 @@
 					return '<tr>' + cells.map(c => '<td colspan="' + c.s + '">' + c.h + '</td>').join('') + '</tr>';
 				}
 
-				function lblSpan(t, s) { return '<span class="lbl"' + (s ? ' style="' + s + '"' : '') + '>' + t + '</span>'; }
+				// Escapes, to match valSpan. It used to concatenate raw, so any
+				// caller passing user data got script execution in the preview —
+				// extraCells[].label was the live path. Escape here so the 67
+				// literal call sites keep working and no future one can be a hole.
+				function lblSpan(t, s) { return '<span class="lbl"' + (s ? ' style="' + attrEsc(s) + '"' : '') + '>' + sanitizeForReport(t) + '</span>'; }
 				function valRaw(k,h,s,m){return '<span class="val'+(m?' mono':'')+'" data-bind="'+k+'" contenteditable="true" onblur="handleLiveInlineEdit(\''+k+'\', this.innerText)"'+(s?' style="'+s+'"':'')+'>'+h+'</span>'}
 				function valSpan(k, v, s, m) { return valRaw(k, sanitizeForReport(v || ''), s, m); }
 
