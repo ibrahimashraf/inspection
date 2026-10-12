@@ -26,9 +26,8 @@
 		<script src="modules/migrate.js"></script>
 		<script src="modules/storage.js"></script>
 		<script src="modules/photos-idb.js"></script>
-		<script src="modules/state.js"></script>
-		<script src="modules/render-patch.js"></script>
-		<script src="modules/backup.js"></script>
+<script src="modules/state.js"></script>
+<script src="modules/backup.js"></script>
 		<script src="modules/ui.js"></script>
 				<style>
 					/* =================================================================
@@ -4738,7 +4737,7 @@ function deletePhoto(i) {
 							const _annTitle = '<table class="ctbl"><colgroup><col style="width:70%"><col style="width:30%"></colgroup><tr><td><div style="font-size:9pt;font-weight:900;text-transform:uppercase;">ANNEXURE: TECHNICAL AUDIT</div><div style="font-size:6pt;color:#64748b;">Report: <span data-bind="reportNo">' + sanitizeForReport(r.reportNo || '') + '</span></div></td><td style="text-align:right;"><span class="lbl">Serial</span><span class="val mono" data-bind="serial">' + sanitizeForReport(r.serial || '') + '</span></td></tr></table>';
 						out = paginateAnnexure({ blocks: [puwer, chk, photoBlk], titleHTML: _annTitle, headerHTML: HB, footerHTML: FB, pageOffset: _liftPages.pageCount, mainHtml: _liftPages.html });
 						}
-						resetPreviewCache();container.innerHTML=out;
+					container.innerHTML=out;
 						// FIX M7: update page indicator based on actual rendered frames.
 						updateGaugePageStatus(container);
 						if (showQr) paintQr(document.getElementById('waQrSvg'), r);
@@ -4885,7 +4884,7 @@ function deletePhoto(i) {
 							const _annTitle = '<table class="ctbl"><colgroup><col style="width:70%"><col style="width:30%"></colgroup><tr><td><div style="font-size:9pt;font-weight:900;text-transform:uppercase;">ANNEXURE: NDT TECHNICAL VERIFICATION</div><div style="font-size:6pt;color:#64748b;">Report: <span data-bind="reportNo">' + sanitizeForReport(r.reportNo || '') + '</span></div></td><td style="text-align:right;"><span class="lbl">Method</span><span class="val mono" data-bind="method">' + sanitizeForReport(r.method || '') + '</span></td></tr></table>';
 							out = paginateAnnexure({ blocks: [chkBlk, photoBlk], titleHTML: _annTitle, headerHTML: HB, footerHTML: FB, pageOffset: _ndtPages.pageCount, mainHtml: _ndtPages.html });
 						}
-					resetPreviewCache();container.innerHTML=out;
+					container.innerHTML=out;
 						// FIX M7: update page indicator based on actual rendered frames.
 						updateGaugePageStatus(container);
 						if (showQr) paintQr(document.getElementById('waQrSvg'), r);
@@ -5549,12 +5548,11 @@ function deletePhoto(i) {
 
 				document.body.classList.add('printing-lock');
 				const pc = document.getElementById('printContainer');
-				const oi = activeIdx;
-				try {
-					let comb = '';
+					const oi = activeIdx;
+					try {
+						let comb = '';
 					tg.forEach(rec => {
 						activeIdx = list.indexOf(rec);
-						resetPreviewCache();
 						renderPreview();
 						comb += document.getElementById('enginePreviewContainer').innerHTML;
 					});

@@ -250,6 +250,45 @@
                      msg: 'pageCount=' + p.pageCount };
         });
 
+        /* ---- RENDER ---------------------------------------------------
+           There is exactly one renderer: renderPreview() always calls
+           renderPreviewFull(). A second renderPreview with a structure-hash
+           fast path used to live in modules/render-patch.js, but the inline
+           definition shadowed it, so the module was unreachable. These two
+           tests pin the contract that actually applies. */
+        await T('RENDER-1', 'preview re-renders in sync with the record', async () => {
+            const r = activeRec();
+            const was = r.reportNo;
+            const read = () => {
+                const el = $('enginePreviewContainer').querySelector('[data-bind="reportNo"]');
+                return el ? el.textContent : '(no node)';
+            };
+            try {
+                renderPreview(); await sleep(200);
+                r.reportNo = 'SYNC-ONE'; renderPreview(); await sleep(200);
+                r.reportNo = 'SYNC-TWO'; renderPreview(); await sleep(200);
+                return { ok: read() === 'SYNC-TWO', msg: 'dom=' + read() + ' record=' + r.reportNo };
+            } finally { r.reportNo = was; renderPreview(); }
+        });
+        await T('RENDER-2', 'a field pill removes its node from the report', async () => {
+            const r = activeRec();
+            const was = r.fieldToggles && r.fieldToggles.serial;
+            try {
+                r.fieldToggles = r.fieldToggles || {};
+                r.fieldToggles.serial = true;  renderPreview(); await sleep(300);
+                const on = $('enginePreviewContainer').querySelectorAll('[data-bind="serial"]').length;
+                r.fieldToggles.serial = false; renderPreview(); await sleep(300);
+                const off = $('enginePreviewContainer').querySelectorAll('[data-bind="serial"]').length;
+                return { ok: on >= 1 && off === 0, msg: 'pill on=' + on + ' pill off=' + off };
+            } finally {
+                r.fieldToggles.serial = was; renderPreview();
+            }
+        });
+        await T('RENDER-3', 'no unreachable second renderer is loaded', () => ({
+            ok: typeof window.renderPreviewPatch === 'undefined' && typeof window.computeStructureHash === 'undefined',
+            msg: 'renderPreviewPatch/computeStructureHash must not exist'
+        }));
+
         /* ---- A11Y ------------------------------------------------------ */
         await T('A11Y-1', 'toggles expose role=switch', () => {
             const bad = [...document.querySelectorAll('.micro-toggle')].filter(t => t.getAttribute('role') !== 'switch');
