@@ -5554,40 +5554,70 @@ photoBlk = '';
 			renderSheet();
 		}
 
-				/* PRINT / EXPORT */
-				function printSelectedBatch() {
-					syncCurrentData();
-					const list = currentEngine === 'LIFTING' ? liftingBatch : ndtBatch;
-					const chk = list.filter(r => r.selected === true);
-					const tg = chk.length ? chk : [list[activeIdx]];
-					if (!tg.length || !tg[0]) { showToast('Nothing to print.', 'error'); return; }
-					if (tg.length > MAX_PRINT_SPOOL_LIMIT) { showToast('Spool limit.', 'error'); return; }
+			/* PRINT / EXPORT */
+			// Renders the selected records (or the active one) into
+			// #printContainer. Split out of printSelectedBatch so that Ctrl+P and
+			// File > Print get the same content as the in-app button: the print
+			// stylesheet hides .workspace and shows only #printContainer, so
+			// without this a browser-initiated print produced a blank page.
+			function fillPrintContainer() {
+				syncCurrentData();
+				const list = currentEngine === 'LIFTING' ? liftingBatch : ndtBatch;
+				const chk = list.filter(r => r.selected === true);
+				const tg = chk.length ? chk : [list[activeIdx]];
+				if (!tg.length || !tg[0]) { showToast('Nothing to print.', 'error'); return false; }
+				if (tg.length > MAX_PRINT_SPOOL_LIMIT) { showToast('Spool limit.', 'error'); return false; }
 
-										document.body.classList.add('printing-lock');
-					const pc = document.getElementById('printContainer');
-					const oi = activeIdx;
-					try {
-						let comb = '';
-						tg.forEach(rec => {
-							activeIdx = list.indexOf(rec);
-							resetPreviewCache();
-							renderPreview();
-							comb += document.getElementById('enginePreviewContainer').innerHTML;
-						});
-						pc.innerHTML = comb;
-						window.print();
-					} catch (e) {
-						console.error('[print]', e);
-						showToast('Print spool failed: ' + e.message, 'error');
-					} finally {
-						// Always restore, even if a record failed to render.
-						activeIdx = oi;
-						try { loadActiveRecord(); } catch (e) {}
-						pc.innerHTML = '';
-						document.body.classList.remove('printing-lock');
-					}
+				document.body.classList.add('printing-lock');
+				const pc = document.getElementById('printContainer');
+				const oi = activeIdx;
+				try {
+					let comb = '';
+					tg.forEach(rec => {
+						activeIdx = list.indexOf(rec);
+						resetPreviewCache();
+						renderPreview();
+						comb += document.getElementById('enginePreviewContainer').innerHTML;
+					});
+					pc.innerHTML = comb;
+					return true;
+				} catch (e) {
+					console.error('[print]', e);
+					showToast('Print spool failed: ' + e.message, 'error');
+					return false;
+				} finally {
+					// Always restore, even if a record failed to render.
+					activeIdx = oi;
+					try { loadActiveRecord(); } catch (e) {}
+					document.body.classList.remove('printing-lock');
 				}
-				function exportSelectedExcelModern() {
+			}
+			// Ctrl+P and File > Print land here. fillPrintContainer() keeps the
+			// content in place (it must survive until the dialog closes) and is
+			// cleared on afterprint.
+			window.addEventListener('beforeprint', function () {
+				try { fillPrintContainer(); } catch (e) { console.error('[print]', e); }
+			});
+			window.addEventListener('afterprint', function () {
+				const pc = document.getElementById('printContainer');
+				if (pc) pc.innerHTML = '';
+				document.body.classList.remove('printing-lock');
+			});
+
+			function printSelectedBatch() {
+				document.body.classList.add('printing-lock');
+				const pc = document.getElementById('printContainer');
+				try {
+					if (!fillPrintContainer()) return;
+					// beforeprint fires around this call and would refill the
+					// container, which is what we want, but guard anyway.
+					window.print();
+				} finally {
+					pc.innerHTML = '';
+					document.body.classList.remove('printing-lock');
+				}
+			}
+			function exportSelectedExcelModern() {
 					syncCurrentData();
 					const isL = currentEngine === 'LIFTING';
 					const list = isL ? liftingBatch : ndtBatch;
