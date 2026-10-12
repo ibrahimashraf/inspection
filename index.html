@@ -4523,6 +4523,48 @@ function deletePhoto(i) {
 					return { html: out, pageCount: total };
 				}
 				/* PREVIEW RENDERER */
+				/* Annexure blocks, shared by both engines.
+				   renderPreviewFull() had a byte-identical copy of the photo grid
+				   and of the whole annexure pagination in the LIFTING and NDT
+				   branches, so a change to either had to be made twice and the two
+				   copies could drift. These two helpers are the single source. */
+				function buildPhotoBlock(r) {
+					if (r.includePhotos !== true) return '';
+					// Never emit an '@idb:' marker as an <img src> - ERR_FILE_NOT_FOUND.
+					const present = (r.photos || []).map((p, i) => ({ p, i })).filter(x => x.p && x.p.indexOf('@idb:') !== 0);
+					if (!present.length) return '';
+					let rows = '';
+					for (let k = 0; k < present.length; k += 3) {
+						const slice = present.slice(k, k + 3);
+						const cells = slice.map(x => '<td style="text-align:center;vertical-align:top;padding:3px;"><img src="' + x.p + '" style="max-width:100%;max-height:80px;object-fit:contain;display:block;margin:0 auto;"><div style="font-size:5pt;color:#334155;margin-top:1px;font-weight:700;">PHOTO #' + (x.i + 1) + '</div></td>');
+						while (cells.length < 3) cells.push('<td></td>');
+						rows += '<tr>' + cells.join('') + '</tr>';
+					}
+					return '<table class="ctbl" style="margin-top:6px;"><colgroup><col style="width:33.33%"><col style="width:33.33%"><col style="width:33.34%"></colgroup><tr><td colspan="3" class="csec">Photographic Evidence</td></tr>' + rows + '</table>';
+				}
+				// Paginates the annexure blocks, then appends them after the main
+				// report and repoints the main report's "of N" at the grand total.
+				// The main report is paginated first with its own count, so its
+				// counter is patched afterwards -- a single-pass regex on stable
+				// markup.
+				function paginateAnnexure(o) {
+					const pages = paginateReport({
+						blocks: (o.blocks || []).filter(Boolean),
+						headerHTML: o.headerHTML || '',
+						footerHTML: o.footerHTML || '',
+						titleHTML: o.titleHTML || '',
+						sigHTML: '',
+						overlayHTML: '',
+						firstFrameId: null,
+						pageOffset: o.pageOffset || 0,
+						frameClass: 'a4-page-frame a4-annexure-frame'
+					});
+					const grand = (o.pageOffset || 0) + pages.pageCount;
+					return o.mainHtml.replace(
+						/(<span class="dc-l">Page<\/span>\s*\d+\s+of\s+)\d+/g,
+						'$1' + grand
+					) + pages.html;
+				}
 				function renderPreviewFull(container, record){
 					const lp=document.getElementById('qrLinkPreview');if(lp)lp.value=buildVerificationLink(record || activeRec());
 					updateQrBudget();
@@ -4672,21 +4714,7 @@ function deletePhoto(i) {
 						if (r.includeChecklist === true && r.checklist && r.checklist.length) {
 							chk = '<table class="ctbl" style="margin-top:6px;"><colgroup><col style="width:60%"><col style="width:15%"><col style="width:25%"></colgroup><tr><td colspan="3" class="csec">Verification Checklist</td></tr>' + r.checklist.map(x => '<tr><td>' + sanitizeForReport(x.item) + '</td><td style="font-weight:bold;color:' + (x.status === 'PASS' ? '#16a34a' : '#dc2626') + ';">' + sanitizeForReport(x.status) + '</td><td>' + sanitizeForReport(x.note || '') + '</td></tr>').join('') + '</table>';
 						}
-photoBlk = '';
-						if (r.includePhotos === true) {
-         // Never emit an '@idb:' marker as an <img src> - ERR_FILE_NOT_FOUND.
-						const present = (r.photos || []).map((p, i) => ({ p, i })).filter(x => x.p && x.p.indexOf('@idb:') !== 0);
-							if (present.length) {
-								let rows = '';
-								for (let k = 0; k < present.length; k += 3) {
-									const slice = present.slice(k, k + 3);
-									const cells = slice.map(x => '<td style="text-align:center;vertical-align:top;padding:3px;"><img src="' + x.p + '" style="max-width:100%;max-height:80px;object-fit:contain;display:block;margin:0 auto;"><div style="font-size:5pt;color:#334155;margin-top:1px;font-weight:700;">PHOTO #' + (x.i + 1) + '</div></td>');
-									while (cells.length < 3) cells.push('<td></td>');
-									rows += '<tr>' + cells.join('') + '</tr>';
-								}
-								photoBlk = '<table class="ctbl" style="margin-top:6px;"><colgroup><col style="width:33.33%"><col style="width:33.33%"><col style="width:33.34%"></colgroup><tr><td colspan="3" class="csec">Photographic Evidence</td></tr>' + rows + '</table>';
-							}
-						}
+						photoBlk = buildPhotoBlock(r);
 						let ov = '';
 						if (featureToggles.overlays !== false && r.stampUpload) {
 							const s = r.stampPos || { x: 70, y: 76 };
@@ -4707,28 +4735,8 @@ photoBlk = '';
 							// checklist and photos split across as many A4 pages
 							// as they need. A fixed-height frame clipped the
 							// photo grid in print whenever PUWER was also on.
-							const _annBlocks = [puwer, chk, photoBlk].filter(Boolean);
 							const _annTitle = '<table class="ctbl"><colgroup><col style="width:70%"><col style="width:30%"></colgroup><tr><td><div style="font-size:9pt;font-weight:900;text-transform:uppercase;">ANNEXURE: TECHNICAL AUDIT</div><div style="font-size:6pt;color:#64748b;">Report: <span data-bind="reportNo">' + sanitizeForReport(r.reportNo || '') + '</span></div></td><td style="text-align:right;"><span class="lbl">Serial</span><span class="val mono" data-bind="serial">' + sanitizeForReport(r.serial || '') + '</span></td></tr></table>';
-							const _annPages = paginateReport({
-								blocks: _annBlocks,
-								headerHTML: HB,
-								footerHTML: FB,
-								titleHTML: _annTitle,
-								sigHTML: '',
-								overlayHTML: '',
-								firstFrameId: null,
-								pageOffset: _liftPages.pageCount,
-								frameClass: 'a4-page-frame a4-annexure-frame'
-							});
-							// The main report was already rendered with "of N" set
-							// to its own page count. Now that we know the annexure
-							// width, patch the main's page counter to the true
-							// grand total. Cheap single-pass regex on stable markup.
-							const _grand = _liftPages.pageCount + _annPages.pageCount;
-							out = _liftPages.html.replace(
-								/(<span class="dc-l">Page<\/span>\s*\d+\s+of\s+)\d+/g,
-								'$1' + _grand
-							) + _annPages.html;
+						out = paginateAnnexure({ blocks: [puwer, chk, photoBlk], titleHTML: _annTitle, headerHTML: HB, footerHTML: FB, pageOffset: _liftPages.pageCount, mainHtml: _liftPages.html });
 						}
 						resetPreviewCache();container.innerHTML=out;
 						// FIX M7: update page indicator based on actual rendered frames.
@@ -4864,21 +4872,7 @@ photoBlk = '';
 							overlayHTML: ov
 						});
 						let out = _ndtPages.html;
-						photoBlk = '';
-						if (r.includePhotos === true) {
-         // Never emit an '@idb:' marker as an <img src> - ERR_FILE_NOT_FOUND.
-						const present = (r.photos || []).map((p, i) => ({ p, i })).filter(x => x.p && x.p.indexOf('@idb:') !== 0);
-							if (present.length) {
-								let rows = '';
-								for (let k = 0; k < present.length; k += 3) {
-									const slice = present.slice(k, k + 3);
-									const cells = slice.map(x => '<td style="text-align:center;vertical-align:top;padding:3px;"><img src="' + x.p + '" style="max-width:100%;max-height:80px;object-fit:contain;display:block;margin:0 auto;"><div style="font-size:5pt;color:#334155;margin-top:1px;font-weight:700;">PHOTO #' + (x.i + 1) + '</div></td>');
-									while (cells.length < 3) cells.push('<td></td>');
-									rows += '<tr>' + cells.join('') + '</tr>';
-								}
-								photoBlk = '<table class="ctbl" style="margin-top:6px;"><colgroup><col style="width:33.33%"><col style="width:33.33%"><col style="width:33.34%"></colgroup><tr><td colspan="3" class="csec">Photographic Evidence</td></tr>' + rows + '</table>';
-							}
-						}
+							photoBlk = buildPhotoBlock(r);
 						if (annex) {
 							// Same pagination treatment as the LIFTING annexure:
 							// checklist and photo grid each become their own
@@ -4888,26 +4882,10 @@ photoBlk = '';
 							if (r.includeChecklist === true && r.checklist && r.checklist.length) {
 								chkBlk = '<table class="ctbl" style="margin-top:6px;"><colgroup><col style="width:60%"><col style="width:15%"><col style="width:25%"></colgroup><tr style="background:#f1f5f9;font-weight:700;"><td>Item</td><td>Status</td><td>Notes</td></tr>' + r.checklist.map(x => '<tr><td>' + sanitizeForReport(x.item) + '</td><td style="font-weight:bold;color:' + (x.status === 'PASS' ? '#16a34a' : '#dc2626') + ';">' + sanitizeForReport(x.status) + '</td><td>' + sanitizeForReport(x.note || '') + '</td></tr>').join('') + '</table>';
 							}
-							const _annBlocks = [chkBlk, photoBlk].filter(Boolean);
 							const _annTitle = '<table class="ctbl"><colgroup><col style="width:70%"><col style="width:30%"></colgroup><tr><td><div style="font-size:9pt;font-weight:900;text-transform:uppercase;">ANNEXURE: NDT TECHNICAL VERIFICATION</div><div style="font-size:6pt;color:#64748b;">Report: <span data-bind="reportNo">' + sanitizeForReport(r.reportNo || '') + '</span></div></td><td style="text-align:right;"><span class="lbl">Method</span><span class="val mono" data-bind="method">' + sanitizeForReport(r.method || '') + '</span></td></tr></table>';
-							const _annPages = paginateReport({
-								blocks: _annBlocks,
-								headerHTML: HB,
-								footerHTML: FB,
-								titleHTML: _annTitle,
-								sigHTML: '',
-								overlayHTML: '',
-								firstFrameId: null,
-								pageOffset: _ndtPages.pageCount,
-								frameClass: 'a4-page-frame a4-annexure-frame'
-							});
-							const _grand = _ndtPages.pageCount + _annPages.pageCount;
-							out = _ndtPages.html.replace(
-								/(<span class="dc-l">Page<\/span>\s*\d+\s+of\s+)\d+/g,
-								'$1' + _grand
-							) + _annPages.html;
+							out = paginateAnnexure({ blocks: [chkBlk, photoBlk], titleHTML: _annTitle, headerHTML: HB, footerHTML: FB, pageOffset: _ndtPages.pageCount, mainHtml: _ndtPages.html });
 						}
-						resetPreviewCache();container.innerHTML=out;
+					resetPreviewCache();container.innerHTML=out;
 						// FIX M7: update page indicator based on actual rendered frames.
 						updateGaugePageStatus(container);
 						if (showQr) paintQr(document.getElementById('waQrSvg'), r);
