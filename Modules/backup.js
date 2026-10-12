@@ -74,8 +74,7 @@ async function _hydrateForExport(record) {
        so we just shallow-copy. The backup wrapper in index.html inlines
        any markers that reach us. */
     if (Array.isArray(record.photos)) r.photos = record.photos.slice();
-    ['inspectorSigUpload', 'authSigUpload', 'inspSigUpload', 'witSigUpload', 'stampUpload']
-        .forEach(f => hydrateOne(f));
+    window.BLOB_FIELDS.forEach(f => hydrateOne(f));
 
     await Promise.all(tasks);
     delete r._integrityWarning;

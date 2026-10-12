@@ -26,6 +26,17 @@ const STORE_NAME = 'blobs';
 const DB_VERSION = 1;
 const BLOB_PREFIX = 'ims-blob-v1::';
 
+/* Record fields whose values are large data URLs and are therefore parked in
+   IndexedDB instead of localStorage, keyed `<recordId>/<field>`.
+
+   Single source of truth. This list was written out by hand in three places
+   (storage serialize, storage deserialize, backup export), so adding a
+   signature field and missing one copy meant that signature silently
+   vanished from saves or from backups with no error anywhere. */
+window.BLOB_FIELDS = Object.freeze([
+    'inspectorSigUpload', 'authSigUpload', 'inspSigUpload', 'witSigUpload', 'stampUpload'
+]);
+
 let _dbPromise = null;
 let _saveGeneration = 0;
 let _savedGeneration = 0;
@@ -129,7 +140,7 @@ async function _serializeRecord(record, recordId) {
     if (Array.isArray(record.photos)) s.photos = record.photos.slice();
 
 
-    ['inspectorSigUpload', 'authSigUpload', 'inspSigUpload', 'witSigUpload', 'stampUpload'].forEach(field => {
+    window.BLOB_FIELDS.forEach(field => {
         if (typeof record[field] === 'string' && record[field].startsWith('data:')) {
             const key = `${recordId}/${field}`;
             tasks.push(BlobStore.put(key, record[field]).then(() => { s[field] = BLOB_PREFIX + key; }));
@@ -222,8 +233,7 @@ async function _deserializeRecord(s, reportMissing) {
 
     /* Photos-idb hydrates on boot. We shallow-copy only. */
     if (Array.isArray(r.photos)) r.photos = r.photos.slice();
-    ['inspectorSigUpload', 'authSigUpload', 'inspSigUpload', 'witSigUpload', 'stampUpload']
-        .forEach(f => hydrate(f));
+    window.BLOB_FIELDS.forEach(f => hydrate(f));
 
     await Promise.all(tasks);
 
