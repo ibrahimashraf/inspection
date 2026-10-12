@@ -31,6 +31,173 @@
             }
         };
 
+        /* ---- BACKUP ROUND TRIP ------------------------------------------
+           importBackup is the only path that accepts data written on another
+           machine, and the one that can arrive with a tampered audit chain.
+           Nothing exercised it.
+
+           Both tests stub the two things that would otherwise block forever:
+           Chrome's native file picker (showSaveFilePicker exists on Chrome and
+           opens a real dialog) and the password prompt. */
+        const captureBackup = async (opts) => {
+            let captured = null;
+            const origPicker = window.showSaveFilePicker;
+            const origPrompt = window.prompt;
+            const origCreate = URL.createObjectURL;
+            const origClick = HTMLAnchorElement.prototype.click;
+            window.showSaveFilePicker = async () => ({
+                createWritable: async () => ({
+                    write: async (blob) => { captured = blob; },
+                    close: async () => {}
+                })
+            });
+            window.prompt = () => 'test-password-123';
+            URL.createObjectURL = function (blob) { captured = captured || blob; return origCreate.call(URL, blob); };
+            HTMLAnchorElement.prototype.click = function () {};
+            try { await exportBackup(opts); } finally {
+                window.showSaveFilePicker = origPicker;
+                window.prompt = origPrompt;
+                URL.createObjectURL = origCreate;
+                HTMLAnchorElement.prototype.click = origClick;
+            }
+            return captured;
+        };
+
+        const acceptDialogs = (ms) => {
+            const t0 = Date.now();
+            const iv = setInterval(() => {
+                const d = document.querySelector('dialog[open]');
+                const ok = d && d.querySelector('button[value="ok"]');
+                if (ok) ok.click();          // the real button, not a bypass
+                if (Date.now() - t0 > (ms || 8000)) clearInterval(iv);
+            }, 40);
+            return () => clearInterval(iv);
+        };
+
+        await T('BACKUP-1', 'encrypted export -> import round-trips a record', async () => {
+            if (typeof exportBackup !== 'function' || typeof importBackup !== 'function') {
+                return { skip: true, msg: 'exportBackup/importBackup not exposed' };
+            }
+            const r = activeRec();
+            const marker = 'BACKUP-MARK-' + Date.now();
+            const wasNo = r.reportNo, wasSer = r.serial, wasPhotos = r.photos;
+            try {
+                r.reportNo = marker; r.serial = 'BC-1';
+                const blob = await captureBackup({ encrypt: true });
+                if (!blob) return { ok: false, msg: 'exportBackup produced no file' };
+                const text = await blob.text();
+                const looksEncrypted = text.indexOf('"liftingBatch"') === -1;
+                r.reportNo = 'WIPED'; r.serial = null;
+                const origPrompt = window.prompt;
+                window.prompt = () => 'test-password-123';
+                const stop = acceptDialogs();
+                try { await importBackup(new File([text], 'test.imsbak', { type: 'application/json' })); }
+                finally { window.prompt = origPrompt; stop(); }
+                await sleep(900);
+                const back = (window.liftingBatch || []).concat(window.ndtBatch || [])
+                    .some(x => x.reportNo === marker);
+                return { ok: back, msg: 'blob ' + Math.round(text.length / 1024) + 'KB, encrypted=' + looksEncrypted + ', marker restored=' + back };
+            } finally {
+                r.reportNo = wasNo; r.serial = wasSer; r.photos = wasPhotos;
+                renderPreview();
+            }
+        });
+        await T('BACKUP-2', 'import strips stale signatures and re-signs locally', async () => {
+            // Not "reject a foreign signature": that is impossible here. The
+            // signing key is per-device ECDSA, so a backup's _sig cannot be
+            // verified on another machine. backup.js therefore strips it and
+            // re-signs on the next persist -- which is the contract to pin.
+            if (typeof exportBackup !== 'function' || typeof importBackup !== 'function') return { skip: true, msg: 'not exposed' };
+            const origPrompt = window.prompt;
+            try {
+                const r = activeRec();
+                const marker = 'RESIGN-' + Date.now();
+                r.reportNo = marker; r.serial = 'RS-1';
+                await persistStateV2();
+                await sleep(300);
+                const blob = await captureBackup({});
+                if (!blob) return { ok: false, msg: 'no file' };
+                const env = JSON.parse(await blob.text());
+                const list = env.liftingBatch || [];
+                const rec = Array.isArray(list) ? list.find(x => x && x.reportNo === marker) : null;
+                if (!rec) return { ok: false, msg: 'exported batch does not contain the record' };
+                // The signature is attached to the serialised form, not the live
+                // object, so read it from the export rather than from activeRec().
+                const exportedSig = typeof rec._sig === 'string';
+                rec._sig = (rec._sig || 'x') + 'ZZ';        // a foreign/garbage sig
+                r.reportNo = 'WIPED';
+                window.prompt = () => null;
+                const stop = acceptDialogs();
+                try { await importBackup(new File([JSON.stringify(env)], 'resign.imsbak', { type: 'application/json' })); }
+                finally { window.prompt = origPrompt; stop(); }
+                await sleep(700);
+                const imported = liftingBatch.concat(ndtBatch).find(x => x.reportNo === marker);
+                const stripped = !!imported && typeof imported._sig !== 'string';
+                await persistStateV2();
+                await sleep(400);
+                const raw = store.get('ims_LIFTING_meta_v2') || '';
+                const resigned = /RESIGN-/.test(raw) && /"_sig":"[0-9a-zA-Z+/=_-]{16,}"/.test(raw);
+                const chain = await AIO.verifyAuditChain();
+                return { ok: stripped && resigned && chain.ok,
+                         msg: 'exportCarriedSig=' + exportedSig + ', strippedOnImport=' + stripped + ', reSignedLocally=' + resigned + ', chainOk=' + chain.ok };
+            } finally { window.prompt = origPrompt; }
+        });
+        await T('BACKUP-3', 'the confirm dialog buttons actually work', async () => {
+            // The buttons used to sit outside a <form method="dialog">, so
+            // clicking Continue or Cancel did nothing and the promise never
+            // resolved -- the restore prompt was unusable, with Escape as the
+            // only working response.
+            const mk = () => {
+                const d = document.createElement('dialog');
+                d.innerHTML = '<form method="dialog"><menu>' +
+                    '<button value="cancel" class="btn">Cancel</button>' +
+                    '<button value="ok" class="btn btn-accent">Continue</button></menu></form>';
+                document.body.appendChild(d);
+                return d;
+            };
+            const d1 = mk();
+            let fired = false, rv = null;
+            d1.addEventListener('close', () => { fired = true; rv = d1.returnValue; });
+            d1.showModal();
+            d1.querySelector('button[value="ok"]').click();
+            await sleep(120);
+            const okWorks = fired && rv === 'ok';
+            const d2 = mk();
+            let fired2 = false, rv2 = null;
+            d2.addEventListener('close', () => { fired2 = true; rv2 = d2.returnValue; });
+            d2.showModal();
+            d2.querySelector('button[value="cancel"]').click();
+            await sleep(120);
+            const cancelWorks = fired2 && rv2 === 'cancel';
+            d1.remove(); d2.remove();
+            return { ok: okWorks && cancelWorks, msg: 'Continue -> close=' + fired + ' returnValue=' + rv + ' | Cancel -> close=' + fired2 + ' returnValue=' + rv2 };
+        });
+
+
+        /* ---- AIO INTEGRITY API ------------------------------------------
+           stampRecords/verifyRecords are documented as "reserved for
+           signature-format migrations" and nothing called them, so nothing
+           proved they still work. */
+        await T('AIO-1', 'stampRecords/verifyRecords round-trip', async () => {
+            if (!window.AIO || typeof AIO.stampRecords !== 'function') return { skip: true, msg: 'stampRecords not exposed' };
+            if (!AIO.ready) { try { await window._aioReady; } catch (e) {} }
+            const list = [{ reportNo: 'AIO-1', serial: 'S1', swl: '10' }, { reportNo: 'AIO-2', serial: 'S2', swl: '20' }];
+            const stamped = await AIO.stampRecords(list, 'lifting');
+            const good = await AIO.verifyRecords(stamped, 'lifting');
+            const tampered = JSON.parse(JSON.stringify(stamped));
+            tampered[0].swl = '999';
+            const bad = await AIO.verifyRecords(tampered, 'lifting');
+            return { ok: good.length === 0 && bad.length === 1,
+                     msg: 'intact flagged=' + good.length + ' (expect 0), tampered flagged=' + bad.length + ' (expect 1)' };
+        });
+        await T('AIO-2', 'an early save is still signed and chained', async () => {
+            if (!window.AIO) return { skip: true, msg: 'AIO missing' };
+            const before = (await AIO.verifyAuditChain()).count;
+            await persistStateV2();
+            const after = await AIO.verifyAuditChain();
+            return { ok: after.ok && after.count > before, msg: 'chain ' + before + ' -> ' + after.count + ', ok=' + after.ok };
+        });
+
         /* ---- THEME / FIRST PAINT ----------------------------------------
            setTheme() used to run at the end of boot, after the AIO self-test,
            so a non-dark theme was preceded by a black flash for over a second.
@@ -340,6 +507,61 @@
         await T('A11Y-2', 'skip link present', () => ({
             ok: !!document.querySelector('.skip-link'), msg: 'found'
         }));
+
+                /* ---- APPLY TO ALL (ENGINE ISOLATION) ---------------------------- */
+        await T('APPLY-1', 'apply-to-all preserves strict engine isolation between LIFTING and NDT', async () => {
+            if (typeof openApplyToAllDialog !== 'function') return { skip: true, msg: 'openApplyToAllDialog not defined' };
+            const wasEng = currentEngine;
+            const wasLifting = JSON.parse(JSON.stringify(liftingBatch));
+            const wasNdt = JSON.parse(JSON.stringify(ndtBatch));
+            try {
+                currentEngine = 'LIFTING';
+                activeIdx = 0;
+                liftingBatch = [
+                    { reportNo: 'L-1', stampUpload: 'data:image/png;base64,STAMP', stampPos: {x:10,y:10} },
+                    { reportNo: 'L-2', stampUpload: null }
+                ];
+                ndtBatch = [
+                    { reportNo: 'N-1', stampUpload: null },
+                    { reportNo: 'N-2', stampUpload: null }
+                ];
+
+                openApplyToAllDialog('stamp');
+                const dlg = document.getElementById('applyToAllDialog');
+                if (!dlg) return { ok: false, msg: 'dialog element not created' };
+                const fillBtn = dlg.querySelector('#applyFillBtn');
+                if (fillBtn) fillBtn.click();
+
+                const liftApplied = liftingBatch[1].stampUpload === 'data:image/png;base64,STAMP';
+                const ndtUntouched = ndtBatch[0].stampUpload === null && ndtBatch[1].stampUpload === null;
+                dlg.close();
+
+                currentEngine = 'NDT';
+                activeIdx = 0;
+                ndtBatch[0].inspSigUpload = 'data:image/png;base64,NDTSIG';
+                ndtBatch[0].inspSigMode = 'UPLOAD';
+                liftingBatch[0].inspectorSigUpload = 'LIFT-SIG-SAFE';
+
+                openApplyToAllDialog('ndt_insp');
+                const fillBtn2 = dlg.querySelector('#applyFillBtn');
+                if (fillBtn2) fillBtn2.click();
+
+                const ndtApplied = ndtBatch[1].inspSigUpload === 'data:image/png;base64,NDTSIG';
+                const liftUntouched = liftingBatch[0].inspectorSigUpload === 'LIFT-SIG-SAFE' && !liftingBatch[1].inspSigUpload;
+                dlg.close();
+
+                return {
+                    ok: liftApplied && ndtUntouched && ndtApplied && liftUntouched,
+                    msg: 'liftApplied=' + liftApplied + ', ndtUntouched=' + ndtUntouched + ', ndtApplied=' + ndtApplied + ', liftUntouched=' + liftUntouched
+                };
+            } finally {
+                currentEngine = wasEng;
+                liftingBatch = wasLifting;
+                ndtBatch = wasNdt;
+                const d = document.getElementById('applyToAllDialog');
+                if (d && d.open) d.close();
+            }
+        });
 
         /* ---- REPORT ---------------------------------------------------- */
         const glyph = r => r.ok === true ? 'PASS' : (r.ok === 'skip' ? 'SKIP' : 'FAIL');

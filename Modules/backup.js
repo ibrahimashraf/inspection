@@ -26,14 +26,21 @@ function confirmDialog(message) {
         }
         const dialog = document.createElement('dialog');
         dialog.style.cssText = 'background:var(--surface);color:var(--ink);border:1px solid var(--hairline);border-radius:8px;padding:20px;max-width:420px;font-family:inherit;';
+        // The buttons must live in a <form method="dialog">. A bare <button>
+        // inside a <dialog> does not close it and does not set returnValue, so
+        // clicking Continue or Cancel did nothing at all and the promise below
+        // never resolved -- the restore dialog was effectively unusable, with
+        // Escape as the only working response.
         dialog.innerHTML =
             '<p style="margin-bottom:16px;line-height:1.5;">' +
             String(message).replace(/</g, '&lt;') +
             '</p>' +
+            '<form method="dialog">' +
             '<menu style="display:flex;gap:8px;justify-content:flex-end;margin:0;padding:0;">' +
             '<button value="cancel" class="btn">Cancel</button>' +
             '<button value="ok" class="btn btn-accent" autofocus>Continue</button>' +
-            '</menu>';
+            '</menu>' +
+            '</form>';
         dialog.addEventListener('close', () => {
             resolve(dialog.returnValue === 'ok');
             dialog.remove();
@@ -95,6 +102,13 @@ async function exportBackup(opts) {
 
         const lifting = await Promise.all((window.liftingBatch || []).map(_hydrateForExport));
         const ndt     = await Promise.all((window.ndtBatch     || []).map(_hydrateForExport));
+
+        try {
+            const liftingMeta = JSON.parse(store.get('ims_LIFTING_meta_v2') || '[]');
+            const ndtMeta     = JSON.parse(store.get('ims_NDT_meta_v2')     || '[]');
+            lifting.forEach((r, i) => { if (liftingMeta[i] && liftingMeta[i]._sig) r._sig = liftingMeta[i]._sig; });
+            ndt.forEach((r, i) => { if (ndtMeta[i] && ndtMeta[i]._sig) r._sig = ndtMeta[i]._sig; });
+        } catch (e) { console.warn('[backup] attaching serialized sigs failed', e); }
 
         const payload = JSON.stringify({
             header: {
