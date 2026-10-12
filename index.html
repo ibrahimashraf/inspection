@@ -1622,7 +1622,7 @@
 		.footer-copy { font-size: var(--ui-font-xs); color: var(--ink-subtle); }
 
 		/* ── 21. THEMES ─────────────────────────────────────────────── */
-		body.theme-light {
+		body.theme-light, :root.theme-light {
 			color-scheme: light;
 			--bg:            #f6f7f9;
 			--surface:       #ffffff;
@@ -1644,7 +1644,7 @@
 			--del-red:       #b91c1c;
 			--preview-bg:    #d6dae1;
 		}
-		body.theme-sunlight {
+		body.theme-sunlight, :root.theme-sunlight {
 			color-scheme: light;
 			--bg:            #fdf6e0;
 			--surface:       #ffffff;
@@ -1666,7 +1666,7 @@
 			--del-red:       #991b1b;
 			--preview-bg:    #e8dcb8;
 		}
-		body.theme-night {
+		body.theme-night, :root.theme-night {
 			color-scheme: dark;
 			--bg:            #0a0800;
 			--surface:       #12100a;
@@ -1688,7 +1688,7 @@
 			--del-red:       #c93333;
 			--preview-bg:    #050400;
 		}
-		body.theme-cbsafe {
+		body.theme-cbsafe, :root.theme-cbsafe {
 			color-scheme: dark;
 			--bg:            #14161a;
 			--surface:       #1c1f26;
@@ -1710,7 +1710,7 @@
 			--del-red:       #c2410c;
 			--preview-bg:    #0a0c10;
 		}
-		body.theme-hc {
+		body.theme-hc, :root.theme-hc {
 			color-scheme: dark;
 			--bg:            #000000;
 			--surface:       #0a0a0a;
@@ -1732,10 +1732,10 @@
 			--del-red:       #ff0000;
 			--preview-bg:    #000000;
 		}
-		body.theme-hc .csec { background: #ffffff; color: #000000; }
-		body.theme-hc .btn-accent { color: #000 !important; }
-		body.theme-hc .engine-tab-btn.active { color: #000 !important; }
-		body.theme-hc table.sheet th { font-weight: 900; }
+		body.theme-hc .csec, :root.theme-hc .csec { background: #ffffff; color: #000000; }
+		body.theme-hc .btn-accent, :root.theme-hc .btn-accent { color: #000 !important; }
+		body.theme-hc .engine-tab-btn.active, :root.theme-hc .engine-tab-btn.active { color: #000 !important; }
+		body.theme-hc table.sheet th, :root.theme-hc table.sheet th { font-weight: 900; }
 
 		/* Reduced motion — anyone who asks for less, gets none. */
 		@media (prefers-reduced-motion: reduce) {
@@ -1968,9 +1968,22 @@
 				.btn-icon svg + span { margin-left: var(--space-2); }
 					
 					</style>
+			<!-- Apply the saved theme before anything paints. The stylesheet only
+			     knows the dark default, and the real setTheme() call happens at the
+			     end of boot, so a light theme meant a black flash for over a second.
+			     This runs in <head>, before <body> exists, and tags <html>; the
+			     theme rules match :root.theme-* as well as body.theme-*. -->
+			<script>
+				(function () {
+					try {
+						var t = localStorage.getItem('ims_theme');
+						if (t && t !== 'dark') document.documentElement.classList.add('theme-' + t);
+					} catch (e) {}
+				})();
+			</script>
 		</head>
-		<body>
-			<a class="skip-link" href="#previewPane">Skip to certificate preview</a>
+<body>
+  			<a class="skip-link" href="#previewPane">Skip to certificate preview</a>
 
 				<div class="master-switch-bar">
 				<div class="brand-group">
@@ -4126,11 +4139,17 @@ function deletePhoto(i) {
 				function setTheme(name) {
 					if (THEMES.indexOf(name) === -1) name = 'dark';
 					const apply = () => {
-						 document.body.classList.remove(
-							'theme-light', 'theme-midnight', 'theme-forest', 'theme-sunset',
-							'theme-sunlight', 'theme-night', 'theme-cbsafe', 'theme-hc'
-						);
-						if (name !== 'dark') document.body.classList.add('theme-' + name);
+						// <html> carries the class too: the <head> script sets it before
+						// first paint, so it has to be cleared here or a theme switch
+						// would leave the old one winning on :root.
+						const all = ['theme-light', 'theme-midnight', 'theme-forest', 'theme-sunset',
+							'theme-sunlight', 'theme-night', 'theme-cbsafe', 'theme-hc'];
+						document.body.classList.remove.apply(document.body.classList, all);
+						document.documentElement.classList.remove.apply(document.documentElement.classList, all);
+						if (name !== 'dark') {
+							document.body.classList.add('theme-' + name);
+							document.documentElement.classList.add('theme-' + name);
+						}
 						store.set('ims_theme', name);
 						const sel = document.getElementById('themeSelect');
 						if (sel && sel.value !== name) sel.value = name;
@@ -5864,7 +5883,15 @@ function deletePhoto(i) {
 		}
 
 		   async function bootApp() {
-			try { if (window.AIO) await window.AIO.init(); } catch (e) { console.error(e); }
+			// The AIO self-test costs ~0.9-1.4s on every boot (ECDSA keygen, a
+			// sign/verify round trip, an AES round trip and a full audit-chain
+			// verify) and it does not get cheaper on later boots. Awaiting it
+			// here blocked the first render, which is why a cold start took 5s
+			// and every warm start over 2s. Start it now and render immediately;
+			// the first save awaits it (see storage.js) so nothing is persisted
+			// with the audit chain silently skipped.
+			window._aioReady = (window.AIO ? window.AIO.init() : Promise.resolve())
+				.catch(e => { console.error('[aio] self-test failed', e); });
 			try { await restoreStateV2(); } catch (e) { console.error('[boot] restore failed', e); }
 			try { await PhotosIDB.init(); }        catch (e) { console.error('[photos-idb] init',    e); }
 			try { await PhotosIDB.migrateAll(); }  catch (e) { console.error('[photos-idb] migrate', e); }

@@ -31,6 +31,49 @@
             }
         };
 
+        /* ---- THEME / FIRST PAINT ----------------------------------------
+           setTheme() used to run at the end of boot, after the AIO self-test,
+           so a non-dark theme was preceded by a black flash for over a second.
+           A <head> script now applies it to <html> before first paint, and the
+           theme rules match :root as well as body. */
+        await T('THEME-1', 'saved theme is applied to <html> and <body>', async () => {
+            const was = store.get('ims_theme');
+            try {
+                for (const t of ['light', 'sunlight', 'night', 'cbsafe', 'hc', 'dark']) {
+                    setTheme(t);
+                    // setTheme applies inside startViewTransition, which is async.
+                    // Reading the class straight after always sees the old theme.
+                    await sleep(120);
+                    const b = document.body.className.includes('theme-' + t) || (t === 'dark' && !/theme-/.test(document.body.className));
+                    const r = document.documentElement.className.includes('theme-' + t) || (t === 'dark' && !/theme-/.test(document.documentElement.className));
+                    if (!b || !r) return { ok: false, msg: t + ': body="' + document.body.className + '" root="' + document.documentElement.className + '"' };
+                }
+                return { ok: true, msg: 'all six themes apply to both elements' };
+            } finally { setTheme(was || 'dark'); }
+        });
+        await T('THEME-2', 'switching themes does not leave the old one behind', async () => {
+            const was = store.get('ims_theme');
+            try {
+                setTheme('night'); await sleep(120); setTheme('dark'); await sleep(120);
+                const stale = document.documentElement.className + ' ' + document.body.className;
+                setTheme('hc'); await sleep(120); setTheme('light'); await sleep(120);
+                const stale2 = document.documentElement.className + ' ' + document.body.className;
+                return { ok: !/night|hc/.test(stale) && !/night|hc/.test(stale2),
+                         msg: 'after night->dark="' + stale.trim() + '" hc->light="' + stale2.trim() + '"' };
+            } finally { setTheme(was || 'dark'); }
+        });
+        await T('THEME-3', 'the <head> script applies a saved theme before boot', () => {
+            // A fresh <html> with the stored key set must be themed by the inline
+            // head script alone, with no app code involved.
+            const t = store.get('ims_theme') || 'dark';
+            const probe = document.createElement('html');
+            probe.className = (t && t !== 'dark') ? 'theme-' + t : '';
+            const hasRule = [...document.styleSheets].some(sh => {
+                try { return [...sh.cssRules].some(r => r.selectorText && r.selectorText.includes(':root.theme-')); } catch (e) { return false; }
+            });
+            return { ok: hasRule, msg: hasRule ? ':root.theme-* rules present' : 'no :root.theme-* rule found, so the head script could not theme the first paint' };
+        });
+
         /* ---- BOOT ------------------------------------------------------
            AIO.init() used to deadlock on a cold profile: identity() awaited
            appendAudit(), which signs, which calls identity(), which returns

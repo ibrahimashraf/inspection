@@ -303,6 +303,13 @@ async function persistStateV2() {
         //    generation. Placed after all writes and after the generation
         //    counter has been reconciled, so a crash mid-write leaves no
         //    orphan audit entry claiming success.
+        //    The self-test no longer blocks boot, so the first save can arrive
+        //    before it has finished. Wait for it here rather than skipping the
+        //    audit entry -- an unwitnessed save is exactly what this chain
+        //    exists to prevent.
+        if (window._aioReady && typeof window._aioReady.then === 'function') {
+            try { await window._aioReady; } catch (e) { /* self-test already logged */ }
+        }
         if (window.AIO && window.AIO.ready) {
             try {
                 await window.AIO.appendAudit('PERSIST', {
