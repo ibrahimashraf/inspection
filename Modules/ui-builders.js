@@ -1361,7 +1361,7 @@ function deletePhoto(i) {
 
             canvas.width = newW;
             canvas.height = newH;
-            const ctx = canvas.getContext('2d');
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
             ctx.strokeStyle = '#0f172a';
