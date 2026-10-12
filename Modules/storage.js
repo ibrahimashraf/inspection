@@ -124,7 +124,6 @@ function markDirty() {
     if (typeof setSaveIndicator === 'function') setSaveIndicator('dirty');
 }
 function isDirty() { return _saveGeneration !== _savedGeneration; }
-function currentGeneration() { return _saveGeneration; }
 
 /* ==============================================================
    SERIALIZE / DESERIALIZE

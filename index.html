@@ -1998,7 +1998,7 @@
             <option value="hc">High Contrast</option>
         </select>
     </label>
-    <button type="button" class="btn-icon" onclick="exportSelectedCsv()" title="Export CSV">
+    <button type="button" class="btn-icon" id="btnExportCsv" onclick="exportSelectedCsv()" title="Export CSV">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
     </button>
     <button type="button" class="btn-icon btn-icon-success" onclick="printSelectedBatch()" title="Print certificate">
@@ -5181,9 +5181,10 @@ photoBlk = '';
 				const list = currentEngine === 'LIFTING' ? liftingBatch : ndtBatch;
 				const n = list.filter(r => r.selected === true).length;
 				// Export buttons are icons now — update their tooltips instead
-				// of text content.
-				const x = document.getElementById('btnExportXls'), c = document.getElementById('btnExportCsv');
-				if (x) x.title = n > 0 ? 'Export ' + n + ' selected rows (XLSX)' : 'Export all ' + list.length + ' rows (XLSX)';
+				// of text content. There is no XLSX export: the vendored rule is
+				// no CDN, and the xlsx script tag is commented out, so the old
+				// Excel path could only ever fall through to CSV.
+				const c = document.getElementById('btnExportCsv');
 				if (c) c.title = n > 0 ? 'Export ' + n + ' selected rows (CSV)'  : 'Export all ' + list.length + ' rows (CSV)';
 			}
 
@@ -5617,25 +5618,7 @@ photoBlk = '';
 					document.body.classList.remove('printing-lock');
 				}
 			}
-			function exportSelectedExcelModern() {
-					syncCurrentData();
-					const isL = currentEngine === 'LIFTING';
-					const list = isL ? liftingBatch : ndtBatch;
-					let it = list.filter(r => r.selected === true);
-					if (!it.length) it = list;
-					const cols = isL ? LIFTING_COLUMNS : NDT_COLUMNS;
-					if (typeof XLSX === 'undefined') { exportSelectedCsv(); return; }
-					try {
-						const rows = it.map(x => { const o = {}; cols.forEach(c => { o[c.label] = String(x[c.key] || '').replace(/\+\+/g, '\n'); }); return o; });
-						const wb = XLSX.utils.book_new();
-						const ws = XLSX.utils.json_to_sheet(rows);
-						ws['!cols'] = cols.map(() => ({ wch: 20 }));
-						XLSX.utils.book_append_sheet(wb, ws, isL ? 'LOLER' : 'NDT');
-						XLSX.writeFile(wb, (isL ? 'LOLER_' : 'NDT_') + Date.now() + '.xlsx');
-						showToast('Exported ' + it.length + '.', 'success');
-					} catch (e) { exportSelectedCsv(); }
-				}
-				function exportSelectedCsv() {
+			function exportSelectedCsv() {
 					syncCurrentData();
 					const isL = currentEngine === 'LIFTING';
 					const list = isL ? liftingBatch : ndtBatch;
