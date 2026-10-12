@@ -850,7 +850,8 @@
 			align-items: stretch;
 		}
 		.row:last-child { margin-bottom: 0; }
-		.row.qrow { align-items: stretch; }
+		.row.qrow { align-items: stretch; grid-template-columns: 5fr 7fr; }
+		.row.qrow > * { grid-column: auto !important; }
 		.cols-2 > * { grid-column: span 6; }
 		.cols-3 > * { grid-column: span 4; }
 		.cols-4 > * { grid-column: span 3; }
@@ -2217,7 +2218,7 @@
 
 						<div class="card">
 							<h3>3. Reason for Thorough Examination</h3>
-							<div class="row cols-2 qrow">
+							<div class="row qrow">
 								<div class="qpanel">
 									<div class="qpanel-head">INITIAL INSTALLATION:</div>
 									<div class="fg"><div class="fg-hdr"><span class="fg-title">First Examination?</span><span class="micro-toggle on" id="pill_q_firstExam" onclick="toggleFieldPill('q_firstExam')"><span class="toggle-dot"></span>ON</span></div><select id="in_q_firstExam" onchange="handleQuestionnaireChange()"><option>NO</option><option>YES</option></select></div>

@@ -1383,7 +1383,7 @@ function deletePhoto(i) {
             try {
                 const w = srcCanvas.width, h = srcCanvas.height;
                 if (w < 2 || h < 2) return srcCanvas.toDataURL();
-                const ctx = srcCanvas.getContext('2d');
+                const ctx = srcCanvas.getContext('2d', { willReadFrequently: true });
                 const imgData = ctx.getImageData(0, 0, w, h);
                 const d = imgData.data;
                 let minX = w, minY = h, maxX = -1, maxY = -1;
@@ -1419,7 +1419,7 @@ function deletePhoto(i) {
 
         function setupPointerPad(canvas, onEnd, onDrawStart) {
             if (!canvas) return;
-            const ctx = canvas.getContext('2d');
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
             _sizeSigPad(canvas);
 
@@ -1428,10 +1428,11 @@ function deletePhoto(i) {
 
             function toCanvas(e) {
                 const r = canvas.getBoundingClientRect();
-                const scale = canvas.width / Math.max(1, r.width);
+                const scaleX = canvas.width / Math.max(1, r.width);
+                const scaleY = canvas.height / Math.max(1, r.height);
                 return {
-                    x: (e.clientX - r.left) * scale,
-                    y: (e.clientY - r.top)  * scale
+                    x: (e.clientX - r.left) * scaleX,
+                    y: (e.clientY - r.top)  * scaleY
                 };
             }
 
