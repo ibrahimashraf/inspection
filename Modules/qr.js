@@ -195,10 +195,8 @@
 				// dropped. The destination is byte-identical, so the scan is still
 				// the right link -- only the WhatsApp prefill is lost, and that is
 				// logged rather than done silently. Never a truncated message: a
-				// scan that opens the chat with half a sentence is worse than no
-				// prefill at all.
 					var s = String(text);
-					var base = s.split('?text=')[0];
+					var base = s.startsWith('mailto:') ? s.split('?')[0] : s.split('?text=')[0];
 					var urls = base !== s ? [s, base] : [s];
 					var mx = null;
 					for (var u = 0; u < urls.length && !mx; u++) {
@@ -243,7 +241,8 @@
 				// end. Never written anywhere else — the live activeIdx is the
 				// source of truth while an engine is focused.
 				var activeIdxByEngine = { LIFTING: 0, NDT: 0 };
-				if (!window.assets) window.assets = { headerBanner: null, footerBanner: null };
+				if (!window.assets) window.assets = { headerBanner: null, footerBanner: null, logo: null, accreds: [] };
+				if (!window.assets.accreds) window.assets.accreds = [];
 				var assets = window.assets;
 				var syncTimer = null, saveTimer = null;
 				var manualZoom = null;
@@ -254,17 +253,17 @@
 
 				const batchPageSize = 50, MAX_PRINT_SPOOL_LIMIT = 50;
 
-				const ALL_LIFTING_TOGGLES = ['reportNo', 'jobRef', 'companyAccred', 'standards', 'sopRef', 'employer', 'premises', 'poRef', 'subLocation', 'colourCode', 'reportDate', 'description', 'swl', 'quantity', 'manufacturer', 'model', 'serial', 'plantId', 'mfgYear', 'lastExamDate', 'markingsLegible', 'identification', 'q_firstExam', 'q_installedCorrectly', 'q_int6m', 'q_int12m', 'q_scheme', 'q_exceptional', 'examParticulars', 'additionalTesting', 'additionalTestingDetails', 'defectDesc', 'dangerImm', 'dangerTimeText', 'isSafe', 'remedies', 'examDate', 'nextExamDate', 'examinerName', 'authName'];
+				const ALL_LIFTING_TOGGLES = ['reportNo', 'jobRef', 'companyAccred', 'standards', 'sopRef', 'employer', 'premises', 'poRef', 'subLocation', 'colourCode', 'reportDate', 'description', 'swl', 'quantity', 'manufacturer', 'model', 'serial', 'plantId', 'mfgYear', 'lastExamDate', 'markingsLegible', 'q_firstExam', 'q_installedCorrectly', 'q_int6m', 'q_int12m', 'q_scheme', 'q_exceptional', 'examParticulars', 'additionalTesting', 'additionalTestingDetails', 'defectDesc', 'dangerImm', 'dangerTimeText', 'isSafe', 'remedies', 'examDate', 'nextExamDate', 'examinerName', 'authName'];
 				const ALL_NDT_TOGGLES = ['reportNo', 'client', 'location', 'poRef', 'testSpec', 'result', 'itemDesc', 'material', 'remarks', 'certLevel', 'certNo', 'certExpiry', 'visionTest', 'procedureNo', 'acceptCriteria', 'calDue', 'refBlock', 'surfaceCond', 'surfaceTemp', 'lightIntensity', 'couplant', 'coverage', 'inspectorName', 'witnessName'];
 
-				var columnLocks = { jobRef: true, poRef: true, companyAccred: true, standards: true, sopRef: true, employer: true, premises: true, subLocation: true, colourCode: true, reportDate: true, description: false, swl: false, quantity: false, manufacturer: true, model: false, serial: false, plantId: false, mfgYear: true, lastExamDate: false, markingsLegible: true, identification: false, q_firstExam: true, q_installedCorrectly: true, q_int6m: true, q_int12m: true, q_scheme: true, q_exceptional: true, proofLoadApplied: true, examParticulars: true, additionalTesting: true, defectDesc: false, dangerImm: false, isSafe: true, remedies: false, examDate: true, nextExamDate: true, examinerName: true, authName: true, method: true, client: true, location: true, itemDesc: false, material: false, testSpec: true, procedureNo: true, acceptCriteria: true, certLevel: true, certNo: true, certExpiry: true, visionTest: true, calDue: true, refBlock: true, surfaceCond: false, surfaceTemp: false, lightIntensity: false, couplant: false, coverage: false, result: true, remarks: false, inspectorName: true, witnessName: true };
+				var columnLocks = { jobRef: true, poRef: true, companyAccred: true, standards: true, sopRef: true, employer: true, premises: true, subLocation: true, colourCode: true, reportDate: true, description: false, swl: false, quantity: false, manufacturer: true, model: false, serial: false, plantId: false, mfgYear: true, lastExamDate: false, markingsLegible: true, q_firstExam: true, q_installedCorrectly: true, q_int6m: true, q_int12m: true, q_scheme: true, q_exceptional: true, proofLoadApplied: true, examParticulars: true, additionalTesting: true, defectDesc: false, dangerImm: false, isSafe: true, remedies: false, examDate: true, nextExamDate: true, examinerName: true, authName: true, method: true, client: true, location: true, itemDesc: false, material: false, testSpec: true, procedureNo: true, acceptCriteria: true, certLevel: true, certNo: true, certExpiry: true, visionTest: true, calDue: true, refBlock: true, surfaceCond: false, surfaceTemp: false, lightIntensity: false, couplant: false, coverage: false, result: true, remarks: false, inspectorName: true, witnessName: true };
 
 				const LIFTING_COLUMNS = [
 					{ key: "reportNo", label: "Report No" }, { key: "reportDate", label: "Report Date" }, { key: "jobRef", label: "Job Ref" },
 					{ key: "poRef", label: "P.O. Ref" }, { key: "companyAccred", label: "Insp Body" }, { key: "employer", label: "Employer" },
 					{ key: "premises", label: "Premises" }, { key: "subLocation", label: "Sub-Location" }, { key: "colourCode", label: "Colour" },
 					{ key: "description", label: "Description" }, { key: "quantity", label: "Qty" }, { key: "swl", label: "SWL" },
-					{ key: "serial", label: "Serial" }, { key: "plantId", label: "Asset ID" }, { key: "identification", label: "Identification" },
+					{ key: "serial", label: "Serial" }, { key: "plantId", label: "Asset ID" },
 					{ key: "manufacturer", label: "Maker" }, { key: "model", label: "Model" }, { key: "mfgYear", label: "Year" },
 					{ key: "lastExamDate", label: "Last Exam" }, { key: "markingsLegible", label: "Markings" }, { key: "standards", label: "Standards" },
 					{ key: "sopRef", label: "SOP" }, { key: "q_firstExam", label: "First?" }, { key: "q_installedCorrectly", label: "Inst OK?" },
@@ -273,7 +272,6 @@
 					{ key: "additionalTestingDetails", label: "AddTest Details" }, { key: "defectDesc", label: "Defects" },
 					{ key: "dangerImm", label: "Danger?" }, { key: "dangerTimeText", label: "Danger Date" }, { key: "isSafe", label: "Safe?" },
 					{ key: "remedies", label: "Remedy" }, { key: "examDate", label: "Exam Date" }, { key: "nextExamDate", label: "Next Due" },
-					{ key: "verdictLabel", label: "Verdict Label" }, { key: "verdictText", label: "Verdict Text" },
 					{ key: "examinerName", label: "Inspector" }, { key: "authName", label: "Authority" }
 				];
 
@@ -289,7 +287,6 @@
 					{ key: "yokeSerial", label: "Yoke Serial" }, { key: "magCurrent", label: "Mag Current" }, { key: "inkType", label: "Ink/Media" },
 					{ key: "penetrantType", label: "Penetrant Type" }, { key: "penetrantBrand", label: "Penetrant Brand" }, { key: "dwellTime", label: "Dwell Time" },
 					{ key: "utUnit", label: "UT Machine" }, { key: "probeFreq", label: "Probe Freq" },
-					{ key: "verdictLabel", label: "Verdict Label" }, { key: "verdictText", label: "Verdict Text" },
 					{ key: "inspectorName", label: "Inspector" }, { key: "witnessName", label: "Witness" }
 				];
 
@@ -357,11 +354,7 @@
 					try {
 						const l = buildVerificationLink(activeRec());
 						if (qrChannel === 'EMAIL') {
-							const a = document.createElement('a');
-							a.href = l;
-							document.body.appendChild(a);
-							a.click();
-							a.remove();
+							window.location.href = l;
 						} else {
 							const a = document.createElement('a'); a.href = l; a.target = '_blank'; a.rel = 'noopener'; document.body.appendChild(a); a.click(); a.remove();
 						}

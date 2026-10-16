@@ -1,4 +1,106 @@
 				/* PREVIEW RENDERER */
+				function buildInstitutionalOverlays(r) {
+					if (featureToggles.overlays === false) return '';
+					let ov = '';
+					const handlesHTML = 
+						'<div class="overlay-resize-handle handle-nw no-print" data-dir="nw" title="Resize top-left"></div>' +
+						'<div class="overlay-resize-handle handle-n no-print" data-dir="n" title="Resize top"></div>' +
+						'<div class="overlay-resize-handle handle-ne no-print" data-dir="ne" title="Resize top-right"></div>' +
+						'<div class="overlay-resize-handle handle-e no-print" data-dir="e" title="Resize right"></div>' +
+						'<div class="overlay-resize-handle handle-se no-print" data-dir="se" title="Resize bottom-right"></div>' +
+						'<div class="overlay-resize-handle handle-s no-print" data-dir="s" title="Resize bottom"></div>' +
+						'<div class="overlay-resize-handle handle-sw no-print" data-dir="sw" title="Resize bottom-left"></div>' +
+						'<div class="overlay-resize-handle handle-w no-print" data-dir="w" title="Resize left"></div>';
+					// 1. Official Stamp
+					if (r.stampUpload && r.stampEnabled !== false) {
+						const s = r.stampPos || { x: 70, y: 76 };
+						const sw = (r.stampSize && r.stampSize.w) ? r.stampSize.w : 75;
+						const sh = (r.stampSize && r.stampSize.h) ? r.stampSize.h : 75;
+						ov += '<div id="dragStamp" class="draggable-item overlay-box" style="left:' + s.x + '%;top:' + s.y + '%;width:' + sw + 'px;height:' + sh + 'px;">' +
+							'<img src="' + r.stampUpload + '" style="width:100%;height:100%;object-fit:contain;pointer-events:none;">' +
+							handlesHTML +
+						'</div>';
+					}
+					// 2. Company Logo
+					if (assets.logo && assets.logoEnabled !== false) {
+						const lp = assets.logoPos || { x: 4, y: 3 };
+						const lw = (assets.logoSize && assets.logoSize.w) ? assets.logoSize.w : 120;
+						const lh = (assets.logoSize && assets.logoSize.h) ? assets.logoSize.h : 48;
+						ov += '<div id="dragLogo" class="draggable-item overlay-box" style="left:' + lp.x + '%;top:' + lp.y + '%;width:' + lw + 'px;height:' + lh + 'px;">' +
+							'<img src="' + assets.logo + '" style="width:100%;height:100%;object-fit:contain;pointer-events:none;">' +
+							handlesHTML +
+						'</div>';
+					}
+					// 3. Accreditation Badges
+					if (Array.isArray(assets.accreds)) {
+						assets.accreds.forEach((acc, i) => {
+							if (!acc.img || acc.enabled === false) return;
+							const ap = acc.pos || { x: (72 + i * 8), y: 3 };
+							const aw = (acc.size && acc.size.w) ? acc.size.w : 55;
+							const ah = (acc.size && acc.size.h) ? acc.size.h : 36;
+							const elId = 'dragAccred_' + i;
+							ov += '<div id="' + elId + '" class="draggable-item overlay-box" style="left:' + ap.x + '%;top:' + ap.y + '%;width:' + aw + 'px;height:' + ah + 'px;">' +
+								'<img src="' + acc.img + '" alt="' + sanitizeForReport(acc.name || 'Accreditation') + '" style="width:100%;height:100%;object-fit:contain;pointer-events:none;">' +
+								handlesHTML +
+							'</div>';
+						});
+					}
+					return ov;
+				}
+
+				function bindInstitutionalOverlays(r) {
+					const ds = document.getElementById('dragStamp');
+					if (ds) {
+						const allowBleed = r.stampBleed !== false; // defaults to true
+						makeDraggable(ds,
+							(x, y) => { r.stampPos = { x, y }; if (typeof schedulePersist === 'function') schedulePersist(); },
+							(w, h) => { r.stampSize = { w, h }; if (typeof schedulePersist === 'function') schedulePersist(); },
+							!!r.stampLocked,
+							allowBleed
+						);
+					}
+					const dl = document.getElementById('dragLogo');
+					if (dl) {
+						const allowBleed = !!assets.logoBleed; // defaults to false
+						makeDraggable(dl,
+							(x, y) => { assets.logoPos = { x, y }; if (typeof schedulePersist === 'function') schedulePersist(); },
+							(w, h) => { assets.logoSize = { w, h }; if (typeof schedulePersist === 'function') schedulePersist(); },
+							!!assets.logoLocked,
+							allowBleed
+						);
+					}
+					if (Array.isArray(assets.accreds)) {
+						assets.accreds.forEach((acc, i) => {
+							const el = document.getElementById('dragAccred_' + i);
+							if (el) {
+								const allowBleed = !!acc.bleed; // defaults to false
+								makeDraggable(el,
+									(x, y) => { acc.pos = { x, y }; if (typeof schedulePersist === 'function') schedulePersist(); },
+									(w, h) => { acc.size = { w, h }; if (typeof schedulePersist === 'function') schedulePersist(); },
+									!!acc.locked,
+									allowBleed
+								);
+							}
+						});
+					}
+				}
+
+				function toggleOverlayLock(target) {
+					const r = activeRec();
+					if (target === 'stamp') {
+						if (r) r.stampLocked = !r.stampLocked;
+					} else if (target === 'logo') {
+						assets.logoLocked = !assets.logoLocked;
+					} else if (typeof target === 'string' && target.indexOf('accred_') === 0) {
+						const idx = parseInt(target.replace('accred_', ''), 10);
+						if (assets.accreds && assets.accreds[idx]) {
+							assets.accreds[idx].locked = !assets.accreds[idx].locked;
+						}
+					}
+					renderPreview();
+					if (typeof schedulePersist === 'function') schedulePersist();
+				}
+
 				/* Annexure blocks, shared by both engines.
 				   renderPreviewFull() had a byte-identical copy of the photo grid
 				   and of the whole annexure pagination in the LIFTING and NDT
@@ -12,7 +114,7 @@
 					let rows = '';
 					for (let k = 0; k < present.length; k += 3) {
 						const slice = present.slice(k, k + 3);
-						const cells = slice.map(x => '<td style="text-align:center;vertical-align:top;padding:3px;"><img src="' + x.p + '" style="max-width:100%;max-height:80px;object-fit:contain;display:block;margin:0 auto;"><div style="font-size:5pt;color:#334155;margin-top:1px;font-weight:700;">PHOTO #' + (x.i + 1) + '</div></td>');
+						const cells = slice.map(x => '<td style="text-align:center;vertical-align:top;padding:3px;"><img src="' + x.p + '" style="max-width:100%;max-height:80px;object-fit:contain;display:block;margin:0 auto;"><div class="report-caption">PHOTO #' + (x.i + 1) + '</div></td>');
 						while (cells.length < 3) cells.push('<td></td>');
 						rows += '<tr>' + cells.join('') + '</tr>';
 					}
@@ -63,47 +165,72 @@
 						const ft = totalPages;
 
 						let t1 = '';
-						{ const rows = [], c1 = [];
-							if (isOn('companyAccred')) c1.push(lblSpan('Inspection Body') + valSpan('companyAccred', r.companyAccred));
-							if (isOn('reportNo')) c1.push(lblSpan('Report No') + valSpan('reportNo', r.reportNo, '', true));
-							if (isOn('reportDate')) c1.push(lblSpan('Date of Report') + valSpan('reportDate', r.reportDate, '', true));
-							const jpParts = [];
-							if (isOn('jobRef') && r.jobRef) jpParts.push(valRaw('jobRef', sanitizeForReport(r.jobRef), '', true));
-							if (isOn('poRef') && r.poRef) jpParts.push(valRaw('poRef', sanitizeForReport(r.poRef), '', true));
-							if (jpParts.length) c1.push(lblSpan('Job / P.O.') + jpParts.join(' | '));
-							if (c1.length) rows.push(buildColspanRow(c1, 4));
-							const pp = [];
-							if (isOn('premises') && r.premises) pp.push(sanitizeForReport(r.premises));
-							if (isOn('subLocation') && r.subLocation) pp.push('Sub: ' + sanitizeForReport(r.subLocation));
-							if (pp.length) rows.push(buildColspanRow([lblSpan('Premises Where Examination Made') + valRaw('premises', pp.join(' | '))], 4));
+						{ const rows = [];
+							const r0 = [];
+							if (isOn('employer') && r.employer) {
+								r0.push(lblSpan('Employer / Client') + valRaw('employer', sanitizeForReport(r.employer)));
+							}
+							if (isOn('premises') && r.premises) {
+								r0.push(lblSpan('Premises Where Examination Made') + valRaw('premises', sanitizeForReport(r.premises)));
+							}
+							if (r0.length) rows.push(buildColspanRow(r0, 4));
+
+							const r1 = [];
+							if (isOn('companyAccred')) r1.push({ html: lblSpan('Inspection Body') + valSpan('companyAccred', r.companyAccred), span: (isOn('reportNo') || isOn('reportDate')) ? 2 : 4 });
+							if (isOn('reportNo')) r1.push({ html: lblSpan('Report No') + valSpan('reportNo', r.reportNo, '', true), span: 1 });
+							if (isOn('reportDate')) r1.push({ html: lblSpan('Date of Report') + valSpan('reportDate', r.reportDate, '', true), span: 1 });
+							if (r1.length) {
+								rows.push('<tr>' + r1.map(c => '<td' + (c.span > 1 ? ' colspan="' + c.span + '"' : '') + '>' + c.html + '</td>').join('') + '</tr>');
+							}
+
+							const r2 = [];
+							if (isOn('jobRef')) r2.push(lblSpan('Job Reference') + valRaw('jobRef', sanitizeForReport(r.jobRef || ''), '', true));
+							if (isOn('poRef')) r2.push(lblSpan('P.O. Reference') + valRaw('poRef', sanitizeForReport(r.poRef || ''), '', true));
+							if (r2.length) rows.push(buildColspanRow(r2, 4));
+
 							if (rows.length) t1 = '<table class="ctbl"><colgroup><col style="width:25%"><col style="width:25%"><col style="width:25%"><col style="width:25%"></colgroup>' + rows.join('') + '</table>';
 						}
 						let t2 = '';
-						{ const rows = [], ds = [];
-							if (isOn('description')) ds.push(lblSpan('Description') + valRaw('description', sanitizeForReport(r.description)));
-							if (isOn('swl')) ds.push(lblSpan('Safe Working Load(s)') + valSpan('swl', r.swl, 'font-size:8.5pt;font-weight:900;color:var(--report-accent);', true));
-							if (ds.length === 2) rows.push('<tr><td colspan="3">' + ds[0] + '</td><td>' + ds[1] + '</td></tr>');
-							else if (ds.length) rows.push(buildColspanRow(ds, 4));
-							const qc = [];
-							if (isOn('quantity')) qc.push(lblSpan('Quantity') + valSpan('quantity', r.quantity || '1'));
-							if (isOn('identification')) qc.push(lblSpan('Identification') + valSpan('identification', r.identification));
-							if (qc.length) rows.push(buildColspanRow(qc, 4));
+						{ const rows = [];
+							const hasDesc = isOn('description');
+							const hasSwl = isOn('swl');
+							const hasQty = isOn('quantity');
+
+							if (hasDesc && hasSwl && hasQty) {
+								rows.push('<tr><td colspan="2">' + lblSpan('Description') + valRaw('description', sanitizeForReport(r.description)) + '</td>'
+									+ '<td>' + lblSpan('Safe Working Load(s)') + valSpan('swl', r.swl, 'font-size:8.5pt;font-weight:900;color:var(--report-accent);', true) + '</td>'
+									+ '<td>' + lblSpan('Quantity') + valSpan('quantity', r.quantity || '1') + '</td></tr>');
+							} else {
+								const ds = [];
+								if (hasDesc) ds.push(lblSpan('Description') + valRaw('description', sanitizeForReport(r.description)));
+								if (hasSwl) ds.push(lblSpan('Safe Working Load(s)') + valSpan('swl', r.swl, 'font-size:8.5pt;font-weight:900;color:var(--report-accent);', true));
+								if (ds.length === 2) rows.push('<tr><td colspan="3">' + ds[0] + '</td><td>' + ds[1] + '</td></tr>');
+								else if (ds.length) rows.push(buildColspanRow(ds, 4));
+
+								if (hasQty) {
+									rows.push(buildColspanRow([lblSpan('Quantity') + valSpan('quantity', r.quantity || '1')], 4));
+								}
+							}
+
 							const i1 = [];
 							if (isOn('manufacturer')) i1.push(lblSpan('Manufacturer') + valSpan('manufacturer', r.manufacturer));
 							if (isOn('model')) i1.push(lblSpan('Model') + valSpan('model', r.model));
 							if (isOn('serial')) i1.push(lblSpan('Serial No') + valSpan('serial', r.serial, '', true));
 							if (isOn('plantId')) i1.push(lblSpan('Asset ID') + valSpan('plantId', r.plantId, '', true));
 							if (i1.length) rows.push(buildColspanRow(i1, 4));
+
 							const i2 = [];
 							if (isOn('mfgYear')) i2.push(lblSpan('Year of Mfg') + valSpan('mfgYear', r.mfgYear));
 							if (isOn('lastExamDate')) i2.push(lblSpan('Date of Last Thorough Examination') + valSpan('lastExamDate', r.lastExamDate || 'Unknown'));
 							if (isOn('colourCode')) i2.push(lblSpan('Colour Code') + valSpan('colourCode', r.colourCode));
 							if (isOn('markingsLegible')) i2.push(lblSpan('Marking Status') + valSpan('markingsLegible', r.markingsLegible || 'YES'));
 							if (i2.length) rows.push(buildColspanRow(i2, 4));
+
 							const st = [];
 							if (isOn('standards')) st.push(lblSpan('Applicable Technical Standards') + valSpan('standards', r.standards));
 							if (isOn('sopRef')) st.push(lblSpan('Inspection SOP Reference') + valSpan('sopRef', r.sopRef));
 							if (st.length) rows.push(buildColspanRow(st, 4));
+
 							if (rows.length) t2 = '<table class="ctbl"><colgroup><col style="width:25%"><col style="width:25%"><col style="width:25%"><col style="width:25%"></colgroup><tr><td colspan="4" class="csec">Equipment Specification &amp; Governing Standards</td></tr>' + rows.join('') + '</table>';
 						}
 						let t3 = '';
@@ -126,10 +253,13 @@
 							if (isOn('examParticulars')) rows.push('<tr><td colspan="2">' + lblSpan('Particulars of Examination Carried Out') + valRaw('examParticulars', sanitizeForReport(r.examParticulars)) + '</td></tr>');
 							if (isOn('additionalTesting')) {
 								const ay = r.additionalTesting === 'YES';
+								const hasDetails = (r.additionalTestingDetails && r.additionalTestingDetails.trim().length > 0);
 								rows.push('<tr><td colspan="2">' + lblSpan('Has Any Additional Testing Been Carried Out?') +
 									'<div><strong>YES ' + tick(ay) + ' &nbsp; NO ' + tick(!ay) + '</strong></div>' +
-									(ay && isOn('additionalTestingDetails') ? '<div style="margin-top:2px;">' + lblSpan('Particulars of Additional Testing') + valSpan('additionalTestingDetails', r.additionalTestingDetails) + '</div>' : '') +
+									((ay || hasDetails) && isOn('additionalTestingDetails') ? '<div style="margin-top:2px;">' + lblSpan('Particulars of Additional Testing') + valSpan('additionalTestingDetails', r.additionalTestingDetails) + '</div>' : '') +
 									'</td></tr>');
+							} else if (isOn('additionalTestingDetails') && r.additionalTestingDetails && r.additionalTestingDetails.trim().length > 0) {
+								rows.push('<tr><td colspan="2">' + lblSpan('Particulars of Additional Testing') + valSpan('additionalTestingDetails', r.additionalTestingDetails) + '</td></tr>');
 							}
 							if (rows.length) t4 = '<table class="ctbl"><colgroup><col style="width:50%"><col style="width:50%"></colgroup><tr><td colspan="2" class="csec">Particulars of Examination &amp; Additional Testing</td></tr>' + rows.join('') + '</table>';
 						}
@@ -175,28 +305,24 @@
 						const ql = qrChannel === 'EMAIL' ? 'Email Verify' : 'WhatsApp Verify';
 						const iS = (r.inspectorSigMode === 'UPLOAD' && r.inspectorSigUpload) ? r.inspectorSigUpload : r.inspectorSigLive;
 						const aS = (r.authSigMode === 'UPLOAD' && r.authSigUpload) ? r.authSigUpload : r.authSigLive;
-						const qC = '<td class="qr-cell" style="text-align:center;vertical-align:middle;padding:3px;"><svg id="waQrSvg" width="90" height="90" role="img" aria-label="QR"></svg><div style="font-size:4.6pt;font-weight:700;color:#334155;margin-top:1px;">' + ql + '</div></td>';
+						const qC = '<td class="qr-cell" style="text-align:center;vertical-align:middle;padding:3px;"><svg id="waQrSvg" width="90" height="90" role="img" aria-label="QR"></svg><div class="report-caption" style="font-size:4.6pt;margin-top:1px;">' + ql + '</div></td>';
 						let sig = '';
 						if (isOn('examinerName') && isOn('authName')) {
 							sig = showQr ?
-								'<table class="ctbl sig-block"><colgroup><col style="width:38%"><col style="width:38%"><col style="width:24%"></colgroup><tr><td>' + lblSpan('Person Making this Report') + valSpan('examinerName', r.examinerName) + '<div style="height:56px;">' + (iS ? '<img src="' + iS + '" style="max-height:56px;">' : '<i>Signature on File</i>') + '</div></td><td>' + lblSpan('Person Authenticating') + valSpan('authName', r.authName) + '<div style="height:56px;">' + (aS ? '<img src="' + aS + '" style="max-height:56px;">' : '<i>Signature on File</i>') + '</div></td>' + qC + '</tr></table>' :
-								'<table class="ctbl sig-block"><colgroup><col style="width:50%"><col style="width:50%"></colgroup><tr><td>' + lblSpan('Person Making this Report') + valSpan('examinerName', r.examinerName) + '<div style="height:56px;">' + (iS ? '<img src="' + iS + '" style="max-height:56px;">' : '') + '</div></td><td>' + lblSpan('Person Authenticating') + valSpan('authName', r.authName) + '<div style="height:56px;">' + (aS ? '<img src="' + aS + '" style="max-height:56px;">' : '') + '</div></td></tr></table>';
+								'<table class="ctbl sig-block"><colgroup><col style="width:38%"><col style="width:38%"><col style="width:24%"></colgroup><tr><td>' + lblSpan('Person Making this Report') + valSpan('examinerName', r.examinerName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;">' + (iS ? '<img src="' + iS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '<i>Signature on File</i>') + '</div></td><td>' + lblSpan('Person Authenticating') + valSpan('authName', r.authName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;">' + (aS ? '<img src="' + aS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '<i>Signature on File</i>') + '</div></td>' + qC + '</tr></table>' :
+								'<table class="ctbl sig-block"><colgroup><col style="width:50%"><col style="width:50%"></colgroup><tr><td>' + lblSpan('Person Making this Report') + valSpan('examinerName', r.examinerName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;">' + (iS ? '<img src="' + iS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '') + '</div></td><td>' + lblSpan('Person Authenticating') + valSpan('authName', r.authName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;">' + (aS ? '<img src="' + aS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '') + '</div></td></tr></table>';
 						}
 						let puwer = '';
 						if (r.includePuwer === true && r.puwerRows && r.puwerRows.length) {
-							puwer = '<table class="ctbl" style="margin-top:4px;"><colgroup><col style="width:11%"><col style="width:49%"><col style="width:12%"><col style="width:28%"></colgroup><tr><td colspan="4" class="csec">PUWER 1998 — Work Equipment Compliance Audit</td></tr><tr style="background:#f1f5f9;font-weight:700;"><td>Ref</td><td>Requirement</td><td>Result</td><td>Findings</td></tr>' + r.puwerRows.map(x => '<tr><td class="mono">' + sanitizeForReport(x.ref) + '</td><td>' + sanitizeForReport(x.item) + '</td><td style="font-weight:bold;color:' + (x.result === 'PASS' ? '#16a34a' : (x.result === 'FAIL' ? '#dc2626' : '#334155')) + ';">' + sanitizeForReport(x.result) + '</td><td>' + sanitizeForReport(x.note || '') + '</td></tr>').join('') + '</table>';
+							puwer = '<table class="ctbl" style="margin-top:4px;"><colgroup><col style="width:11%"><col style="width:49%"><col style="width:12%"><col style="width:28%"></colgroup><tr><td colspan="4" class="csec">PUWER 1998 — Work Equipment Compliance Audit</td></tr><tr class="report-tbl-head"><td>Ref</td><td>Requirement</td><td>Result</td><td>Findings</td></tr>' + r.puwerRows.map(x => '<tr><td class="mono">' + sanitizeForReport(x.ref) + '</td><td>' + sanitizeForReport(x.item) + '</td><td style="font-weight:bold;color:' + (x.result === 'PASS' ? '#16a34a' : (x.result === 'FAIL' ? '#dc2626' : '#334155')) + ';">' + sanitizeForReport(x.result) + '</td><td>' + sanitizeForReport(x.note || '') + '</td></tr>').join('') + '</table>';
 						}
 						let chk = '';
 						if (r.includeChecklist === true && r.checklist && r.checklist.length) {
 							chk = '<table class="ctbl" style="margin-top:6px;"><colgroup><col style="width:60%"><col style="width:15%"><col style="width:25%"></colgroup><tr><td colspan="3" class="csec">Verification Checklist</td></tr>' + r.checklist.map(x => '<tr><td>' + sanitizeForReport(x.item) + '</td><td style="font-weight:bold;color:' + (x.status === 'PASS' ? '#16a34a' : '#dc2626') + ';">' + sanitizeForReport(x.status) + '</td><td>' + sanitizeForReport(x.note || '') + '</td></tr>').join('') + '</table>';
 						}
 						photoBlk = buildPhotoBlock(r);
-						let ov = '';
-						if (featureToggles.overlays !== false && r.stampUpload) {
-							const s = r.stampPos || { x: 70, y: 76 };
-							ov += '<div id="dragStamp" class="draggable-item" style="left:' + s.x + '%;top:' + s.y + '%;width:75px;height:75px;"><img src="' + r.stampUpload + '" style="width:100%;height:100%;object-fit:contain;"></div>';
-						}
-									   const _liftTitle = '<table class="ctbl"><colgroup><col style="width:100%"></colgroup><tr><td style="text-align:center;padding:4px;"><div style="font-size:10pt;font-weight:900;text-transform:uppercase;">Report of Thorough Examination</div><div style="font-size:7pt;color:#334155;">Lifting Operations — Lifting Equipment Regulations 1998 (LOLER)</div></td></tr></table>';
+						const ov = buildInstitutionalOverlays(r);
+									   const _liftTitle = '<table class="ctbl"><colgroup><col style="width:100%"></colgroup><tr><td style="text-align:center;padding:4px;"><div class="report-main-title">Report of Thorough Examination</div><div class="report-main-subtitle">Lifting Operations — Lifting Equipment Regulations 1998 (LOLER)</div></td></tr></table>';
 						const _liftPages = paginateReport({
 							blocks: [t1, t2, t3, t4, t5, t6],
 							headerHTML: HB,
@@ -211,28 +337,30 @@
 							// checklist and photos split across as many A4 pages
 							// as they need. A fixed-height frame clipped the
 							// photo grid in print whenever PUWER was also on.
-							const _annTitle = '<table class="ctbl"><colgroup><col style="width:70%"><col style="width:30%"></colgroup><tr><td><div style="font-size:9pt;font-weight:900;text-transform:uppercase;">ANNEXURE: TECHNICAL AUDIT</div><div style="font-size:6pt;color:#64748b;">Report: <span data-bind="reportNo">' + sanitizeForReport(r.reportNo || '') + '</span></div></td><td style="text-align:right;"><span class="lbl">Serial</span><span class="val mono" data-bind="serial">' + sanitizeForReport(r.serial || '') + '</span></td></tr></table>';
+							const _annTitle = '<table class="ctbl"><colgroup><col style="width:70%"><col style="width:30%"></colgroup><tr><td><div class="report-annex-title">ANNEXURE: TECHNICAL AUDIT</div><div class="report-annex-sub">Report: <span data-bind="reportNo">' + sanitizeForReport(r.reportNo || '') + '</span></div></td><td style="text-align:right;"><span class="lbl">Serial</span><span class="val mono" data-bind="serial">' + sanitizeForReport(r.serial || '') + '</span></td></tr></table>';
 						out = paginateAnnexure({ blocks: [puwer, chk, photoBlk], titleHTML: _annTitle, headerHTML: HB, footerHTML: FB, pageOffset: _liftPages.pageCount, mainHtml: _liftPages.html });
 						}
 					container.innerHTML=out;
+						// Apply active report theme classes
+						if (typeof window.currentReportTheme === 'string') {
+							const sel = document.getElementById('reportThemeSelect');
+							if (sel && sel.value !== window.currentReportTheme) sel.value = window.currentReportTheme;
+							const selTb = document.getElementById('reportThemeSelectToolbar');
+							if (selTb && selTb.value !== window.currentReportTheme) selTb.value = window.currentReportTheme;
+						}
 						// FIX M7: update page indicator based on actual rendered frames.
 						updateGaugePageStatus(container);
 						if (showQr) paintQr(document.getElementById('waQrSvg'), r);
-						const ds = document.getElementById('dragStamp');
-						if (ds) makeDraggable(ds, (x, y) => { r.stampPos = { x, y }; });
+						bindInstitutionalOverlays(r);
 					} else {
 						const r=record||ndtBatch[activeIdx]||{};
-						if (!r.photos) r.photos = Array(12).fill(null);
+						if (!Array.isArray(r.photos)) r.photos = [];
 						if (!r.fieldToggles) r.fieldToggles = {};
 						const isOn = k => r.fieldToggles[k] !== false;
 						const annex = (r.includeChecklist === true && r.checklist && r.checklist.length > 0)
            || (r.includePhotos === true && (r.photos || []).some(p => p));
 						const ft = annex ? 2 : 1;
-						let ov = '';
-						if (featureToggles.overlays !== false && r.stampUpload) {
-							const s = r.stampPos || { x: 70, y: 76 };
-							ov += '<div id="dragStamp" class="draggable-item" style="left:' + s.x + '%;top:' + s.y + '%;width:75px;height:75px;"><img src="' + r.stampUpload + '" style="width:100%;height:100%;object-fit:contain;"></div>';
-						}
+						const ov = buildInstitutionalOverlays(r);
 						const C4 = '<colgroup><col style="width:25%"><col style="width:25%"><col style="width:25%"><col style="width:25%"></colgroup>';
 						const C2 = '<colgroup><col style="width:50%"><col style="width:50%"></colgroup>';
 
@@ -298,7 +426,7 @@
 						}
 						const calT = '<table class="ctbl">' + C4 + '<tr><td colspan="4" class="csec">Equipment, Calibration &amp; Environmental Controls</td></tr>' + cRows + '</table>';
 
-						const findT = '<table class="ctbl">' + C4 + '<tr><td colspan="4" class="csec">Discontinuity / Joint Examination Findings</td></tr><tr style="background:#f1f5f9;font-weight:700;"><td>Joint #</td><td>Area</td><td>Findings</td><td>Result</td></tr>' + (r.indications || []).map(x => '<tr><td>' + sanitizeForReport(x.joint) + '</td><td>' + sanitizeForReport(x.area) + '</td><td>' + sanitizeForReport(x.finding) + '</td><td style="font-weight:bold;color:' + (x.result === 'PASS' ? '#16a34a' : '#dc2626') + ';">' + sanitizeForReport(x.result) + '</td></tr>').join('') + '</table>';
+						const findT = '<table class="ctbl">' + C4 + '<tr><td colspan="4" class="csec">Discontinuity / Joint Examination Findings</td></tr><tr class="report-tbl-head"><td>Joint #</td><td>Area</td><td>Findings</td><td>Result</td></tr>' + (r.indications || []).map(x => '<tr><td>' + sanitizeForReport(x.joint) + '</td><td>' + sanitizeForReport(x.area) + '</td><td>' + sanitizeForReport(x.finding) + '</td><td style="font-weight:bold;color:' + (x.result === 'PASS' ? '#16a34a' : '#dc2626') + ';">' + sanitizeForReport(x.result) + '</td></tr>').join('') + '</table>';
 
 						let eRows = '';
 						{ const cs = [];
@@ -329,16 +457,16 @@
 						const ql = qrChannel === 'EMAIL' ? 'Email Verify' : 'WhatsApp Verify';
 						let sigT = '';
 						{ const cs = [];
-							if (isOn('inspectorName')) cs.push({ s: 1, h: lblSpan('Tested By (Inspector)') + valSpan('inspectorName', r.inspectorName) + '<div style="height:56px;display:flex;align-items:center;margin-top:2px;">' + (iS ? '<img src="' + iS + '" style="max-height:56px;">' : '<span style="font-style:italic;color:#64748b;font-size:6pt;">Signature on File</span>') + '</div>' });
-							if (isOn('witnessName')) cs.push({ s: 1, h: lblSpan('Witnessed By') + valSpan('witnessName', r.witnessName) + '<div style="height:56px;display:flex;align-items:center;margin-top:2px;">' + (wS ? '<img src="' + wS + '" style="max-height:56px;">' : '<span style="font-style:italic;color:#64748b;font-size:6pt;">Signature on File</span>') + '</div>' });
-							if (showQr) cs.push({ s: 1, h: '<div class="qr-cell" style="text-align:center;vertical-align:middle;padding:3px;"><svg id="waQrSvg" width="90" height="90" role="img" aria-label="QR"></svg><div style="font-size:4.6pt;font-weight:700;color:#334155;margin-top:1px;">' + ql + '</div></div>' });
+							if (isOn('inspectorName')) cs.push({ s: 1, h: lblSpan('Tested By (Inspector)') + valSpan('inspectorName', r.inspectorName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;margin-top:2px;">' + (iS ? '<img src="' + iS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '<span style="font-style:italic;color:#64748b;font-size:6pt;">Signature on File</span>') + '</div>' });
+							if (isOn('witnessName')) cs.push({ s: 1, h: lblSpan('Witnessed By') + valSpan('witnessName', r.witnessName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;margin-top:2px;">' + (wS ? '<img src="' + wS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '<span style="font-style:italic;color:#64748b;font-size:6pt;">Signature on File</span>') + '</div>' });
+							if (showQr) cs.push({ s: 1, h: '<div class="qr-cell" style="text-align:center;vertical-align:middle;padding:3px;"><svg id="waQrSvg" width="90" height="90" role="img" aria-label="QR"></svg><div class="report-caption" style="font-size:4.6pt;margin-top:1px;">' + ql + '</div></div>' });
 							if (cs.length) {
 								const tot = cs.length;
 								const cg = tot === 3 ? '<colgroup><col style="width:38%"><col style="width:38%"><col style="width:24%"></colgroup>' : (tot === 2 ? '<colgroup><col style="width:50%"><col style="width:50%"></colgroup>' : '<colgroup><col style="width:100%"></colgroup>');
 								sigT = '<table class="ctbl sig-block">' + cg + '<tr>' + cs.map(c => '<td colspan="' + c.s + '">' + c.h + '</td>').join('') + '</tr></table>';
 							}
 						}
-									   const _ndtTitle = '<table class="ctbl"><colgroup><col style="width:100%"></colgroup><tr><td style="text-align:center;padding:4px;"><div style="font-size:10pt;font-weight:900;text-transform:uppercase;letter-spacing:.4px;">Non-Destructive Testing Report</div><div style="font-size:7pt;color:#334155;">' + sanitizeForReport(r.method || '') + ' Examination — ASME Sec V / ISO 9712 / ISO 17640 Framework</div></td></tr></table>';
+									   const _ndtTitle = '<table class="ctbl"><colgroup><col style="width:100%"></colgroup><tr><td style="text-align:center;padding:4px;"><div class="report-main-title">Non-Destructive Testing Report</div><div class="report-main-subtitle">' + sanitizeForReport(r.method || '') + ' Examination — ASME Sec V / ISO 9712 / ISO 17640 Framework</div></td></tr></table>';
 						const _ndtPages = paginateReport({
 							blocks: [headT, perT, calT, findT, evalT, exT],
 							headerHTML: HB,
@@ -356,17 +484,23 @@
 							// overflow cleanly.
 							let chkBlk = '';
 							if (r.includeChecklist === true && r.checklist && r.checklist.length) {
-								chkBlk = '<table class="ctbl" style="margin-top:6px;"><colgroup><col style="width:60%"><col style="width:15%"><col style="width:25%"></colgroup><tr style="background:#f1f5f9;font-weight:700;"><td>Item</td><td>Status</td><td>Notes</td></tr>' + r.checklist.map(x => '<tr><td>' + sanitizeForReport(x.item) + '</td><td style="font-weight:bold;color:' + (x.status === 'PASS' ? '#16a34a' : '#dc2626') + ';">' + sanitizeForReport(x.status) + '</td><td>' + sanitizeForReport(x.note || '') + '</td></tr>').join('') + '</table>';
+								chkBlk = '<table class="ctbl" style="margin-top:6px;"><colgroup><col style="width:60%"><col style="width:15%"><col style="width:25%"></colgroup><tr class="report-tbl-head"><td>Item</td><td>Status</td><td>Notes</td></tr>' + r.checklist.map(x => '<tr><td>' + sanitizeForReport(x.item) + '</td><td style="font-weight:bold;color:' + (x.status === 'PASS' ? '#16a34a' : '#dc2626') + ';">' + sanitizeForReport(x.status) + '</td><td>' + sanitizeForReport(x.note || '') + '</td></tr>').join('') + '</table>';
 							}
-							const _annTitle = '<table class="ctbl"><colgroup><col style="width:70%"><col style="width:30%"></colgroup><tr><td><div style="font-size:9pt;font-weight:900;text-transform:uppercase;">ANNEXURE: NDT TECHNICAL VERIFICATION</div><div style="font-size:6pt;color:#64748b;">Report: <span data-bind="reportNo">' + sanitizeForReport(r.reportNo || '') + '</span></div></td><td style="text-align:right;"><span class="lbl">Method</span><span class="val mono" data-bind="method">' + sanitizeForReport(r.method || '') + '</span></td></tr></table>';
+							const _annTitle = '<table class="ctbl"><colgroup><col style="width:70%"><col style="width:30%"></colgroup><tr><td><div class="report-annex-title">ANNEXURE: NDT TECHNICAL VERIFICATION</div><div class="report-annex-sub">Report: <span data-bind="reportNo">' + sanitizeForReport(r.reportNo || '') + '</span></div></td><td style="text-align:right;"><span class="lbl">Method</span><span class="val mono" data-bind="method">' + sanitizeForReport(r.method || '') + '</span></td></tr></table>';
 							out = paginateAnnexure({ blocks: [chkBlk, photoBlk], titleHTML: _annTitle, headerHTML: HB, footerHTML: FB, pageOffset: _ndtPages.pageCount, mainHtml: _ndtPages.html });
 						}
 					container.innerHTML=out;
+						// Apply active report theme classes
+						if (typeof window.currentReportTheme === 'string') {
+							const sel = document.getElementById('reportThemeSelect');
+							if (sel && sel.value !== window.currentReportTheme) sel.value = window.currentReportTheme;
+							const selTb = document.getElementById('reportThemeSelectToolbar');
+							if (selTb && selTb.value !== window.currentReportTheme) selTb.value = window.currentReportTheme;
+						}
 						// FIX M7: update page indicator based on actual rendered frames.
 						updateGaugePageStatus(container);
 						if (showQr) paintQr(document.getElementById('waQrSvg'), r);
-						const ds = document.getElementById('dragStamp');
-						if (ds) makeDraggable(ds, (x, y) => { r.stampPos = { x, y }; });
+						bindInstitutionalOverlays(r);
 					}
 				}
 
@@ -374,9 +508,19 @@
 				function updateGaugePageStatus(container) {
 					const el = document.getElementById('gaugeHeightStatus');
 					if (!el) return;
-					const n = container.querySelectorAll('.a4-page-frame').length;
-					const color = n <= 1 ? 'var(--pass)' : 'var(--warn)';
-					el.innerHTML = 'Status: <strong style="color:' + color + ';">' + n + ' PAGE' + (n === 1 ? '' : 'S') + '</strong>';
+					const frames = container.querySelectorAll('.a4-page-frame');
+					const n = frames.length;
+					let hasOverflow = false;
+					frames.forEach(f => {
+						// 295mm ISO A4 height threshold is ~1123px (at 96 DPI)
+						if (f.scrollHeight > 1130) hasOverflow = true;
+					});
+					if (hasOverflow) {
+						el.innerHTML = 'Status: <strong style="color:var(--fail);" title="Content exceeds 295mm single-page height. Review custom rows.">⚠️ OVERFLOW (>295mm)</strong>';
+					} else {
+						const color = n <= 1 ? 'var(--pass)' : 'var(--warn)';
+						el.innerHTML = 'Status: <strong style="color:' + color + ';">' + n + ' PAGE' + (n === 1 ? '' : 'S') + '</strong>';
+					}
 				}
 
 				// ── FIX C2: redraw a signature pad from a stored data URL.

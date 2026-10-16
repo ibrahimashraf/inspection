@@ -1,6 +1,5 @@
 				/* UTILITIES */
 				function activeRec() { return currentEngine === 'LIFTING' ? (liftingBatch[activeIdx] || {}) : (ndtBatch[activeIdx] || {}); }
-				function todayISO() { return new Date().toISOString().slice(0, 10); }
 
 				function showPreviewError(e) {
 					const c = document.getElementById('enginePreviewContainer');
@@ -136,6 +135,18 @@
 							sec('Key Controls & ON / OFF Toggles', '🎛') +
 							p('Every form box has a compact <span style="display:inline-block;padding:1px 5px;background:var(--accent);color:#fff;border-radius:10px;font-size:9px;font-weight:bold;">● ON</span> toggle. Click it anytime to hide or show that section in the final printable report without losing your input.') +
 
+							sec('Designer Asset Dimensions & Guidelines', '🎨') +
+							p('Detailed physical and pixel dimensions for design teams preparing custom institutional overlays:') +
+							'<table style="width:100%;border-collapse:collapse;margin-bottom:12px;font-size:11px;border:1px solid var(--hairline);">' +
+								'<tr style="background:var(--panel);font-weight:700;"><th style="padding:6px;border:1px solid var(--hairline);text-align:left;">Asset</th><th style="padding:6px;border:1px solid var(--hairline);text-align:left;">Aspect Ratio</th><th style="padding:6px;border:1px solid var(--hairline);text-align:left;">Recommended (300 DPI)</th><th style="padding:6px;border:1px solid var(--hairline);text-align:left;">Physical A4 Size</th><th style="padding:6px;border:1px solid var(--hairline);text-align:left;">Format</th></tr>' +
+								'<tr><td style="padding:6px;border:1px solid var(--hairline);font-weight:700;">Header Banner</td><td style="padding:6px;border:1px solid var(--hairline);">~11:1 (wide band)</td><td style="padding:6px;border:1px solid var(--hairline);"><strong>1500 &times; 140 px</strong></td><td style="padding:6px;border:1px solid var(--hairline);">194 &times; 18 mm (max height 70px)</td><td style="padding:6px;border:1px solid var(--hairline);">PNG / SVG / JPEG</td></tr>' +
+								'<tr><td style="padding:6px;border:1px solid var(--hairline);font-weight:700;">Footer Band</td><td style="padding:6px;border:1px solid var(--hairline);">~17:1 (slim band)</td><td style="padding:6px;border:1px solid var(--hairline);"><strong>1500 &times; 90 px</strong></td><td style="padding:6px;border:1px solid var(--hairline);">194 &times; 12 mm (max height 46px)</td><td style="padding:6px;border:1px solid var(--hairline);">PNG / SVG / JPEG</td></tr>' +
+								'<tr><td style="padding:6px;border:1px solid var(--hairline);font-weight:700;">Company Logo</td><td style="padding:6px;border:1px solid var(--hairline);">~2.7:1 to 1:1</td><td style="padding:6px;border:1px solid var(--hairline);"><strong>500 &times; 180 px</strong></td><td style="padding:6px;border:1px solid var(--hairline);">Movable & Resizable (Free or Locked)</td><td style="padding:6px;border:1px solid var(--hairline);">Transparent PNG / SVG</td></tr>' +
+								'<tr><td style="padding:6px;border:1px solid var(--hairline);font-weight:700;">Official Stamp / Seal</td><td style="padding:6px;border:1px solid var(--hairline);">1:1 (square/circle)</td><td style="padding:6px;border:1px solid var(--hairline);"><strong>400 &times; 400 px</strong></td><td style="padding:6px;border:1px solid var(--hairline);">Movable & Resizable (75&times;75 px default)</td><td style="padding:6px;border:1px solid var(--hairline);">Transparent PNG / SVG</td></tr>' +
+								'<tr><td style="padding:6px;border:1px solid var(--hairline);font-weight:700;">Accreditation Badges</td><td style="padding:6px;border:1px solid var(--hairline);">1.5:1 to 1:1</td><td style="padding:6px;border:1px solid var(--hairline);"><strong>300 &times; 200 px</strong></td><td style="padding:6px;border:1px solid var(--hairline);">Movable & Resizable (55&times;36 px default)</td><td style="padding:6px;border:1px solid var(--hairline);">Transparent PNG / SVG</td></tr>' +
+							'</table>' +
+							p('<em>Tip:</em> Use high-contrast transparent PNGs with no solid outer margins for crisp rendering on statutory white paper.') +
+
 							sec('What is this app? (Simple Overview)', '🚀') +
 							p('A standalone, offline-first digital inspection clipboard. Create LOLER & NDT certificates, capture live signatures, attach proof photos, generate instant QR verification links, and export pristine A4 reports.') +
 						'</div>';
@@ -161,35 +172,105 @@
 				/* DOC CONTROL */
 				function readDocControl() {
 					const g = id => document.getElementById(id);
-					if (g('dc_docNo')) docControl.docNo = g('dc_docNo').value;
-					if (g('dc_rev')) docControl.rev = g('dc_rev').value;
-					if (g('dc_revDate')) docControl.revDate = g('dc_revDate').value;
+					const v = (id1, id2, fallback) => {
+						const e1 = g(id1), e2 = g(id2);
+						if (e1 && document.activeElement === e1) return e1.value;
+						if (e2 && document.activeElement === e2) return e2.value;
+						if (e1 && e1.value) return e1.value;
+						if (e2 && e2.value) return e2.value;
+						return fallback;
+					};
+					docControl.docNo = v('in_main_docNo', 'dc_docNo', docControl.docNo || 'QMS-CERT-LOLER-044');
+					docControl.rev = v('in_main_docRev', 'dc_rev', docControl.rev || '03');
+					docControl.revDate = v('in_main_docRevDate', 'dc_revDate', docControl.revDate || '2026-01-15');
 					if (g('dc_reportNoPattern')) docControl.reportNoPattern = g('dc_reportNoPattern').value;
+
+					// Mirror values to both inputs if not currently focused
+					const syncPair = (id1, id2, val) => {
+						const e1 = g(id1), e2 = g(id2);
+						if (e1 && document.activeElement !== e1) e1.value = val || '';
+						if (e2 && document.activeElement !== e2) e2.value = val || '';
+					};
+					syncPair('in_main_docNo', 'dc_docNo', docControl.docNo);
+					syncPair('in_main_docRev', 'dc_rev', docControl.rev);
+					syncPair('in_main_docRevDate', 'dc_revDate', docControl.revDate);
+
 					return docControl;
 				}
 				function toggleDocControl() {
 					docControl.on = !docControl.on;
-					const p = document.getElementById('pill_docControl');
-					if (p) { p.className = 'micro-toggle ' + (docControl.on ? 'on' : 'off'); p.innerHTML = '<span class="toggle-dot"></span>' + (docControl.on ? 'ON' : 'OFF'); }
+					['pill_docControl', 'pill_main_docControl', 'pill_ndt_main_docControl'].forEach(id => {
+						const p = document.getElementById(id);
+						if (p) {
+							p.className = 'micro-toggle ' + (docControl.on ? 'on' : 'off');
+							p.innerHTML = '<span class="toggle-dot"></span>' + (docControl.on ? 'ON' : 'OFF');
+						}
+					});
+					debouncedSync();
+				}
+				function handleDocControlLiveEdit(field, val) {
+					const clean = (val || '');
+					docControl[field] = clean;
+					const g = id => document.getElementById(id);
+					if (field === 'docNo') {
+						if (g('in_main_docNo')) g('in_main_docNo').value = clean;
+						if (g('dc_docNo')) g('dc_docNo').value = clean;
+					} else if (field === 'rev') {
+						if (g('in_main_docRev')) g('in_main_docRev').value = clean;
+						if (g('dc_rev')) g('dc_rev').value = clean;
+					} else if (field === 'revDate') {
+						if (g('in_main_docRevDate')) g('in_main_docRevDate').value = clean;
+						if (g('dc_revDate')) g('dc_revDate').value = clean;
+					}
+					if (typeof schedulePersist === 'function') schedulePersist();
 					debouncedSync();
 				}
 				function docControlStrip(p, t) {
 					const d = readDocControl();
 					if (!d.on) return '';
-					return '<table class="ctbl dc-strip"><colgroup><col style="width:64%"><col style="width:36%"></colgroup><tr><td><span class="dc-l">File:</span> ' + sanitizeForReport(d.docNo) + ' <span class="dc-l">Rev:</span> ' + sanitizeForReport(d.rev) + ' <span class="dc-l">Date:</span> ' + sanitizeForReport(d.revDate) + ' <span class="dc-l">Status:</span> Controlled</td><td style="text-align:right;"><span class="dc-l">Page</span> ' + p + ' of ' + t + '</td></tr></table>';
+					return '<table class="ctbl dc-strip"><colgroup><col style="width:64%"><col style="width:36%"></colgroup><tr><td>' +
+						'<span class="dc-l">File:</span> <span class="val mono" contenteditable="true" onblur="handleDocControlLiveEdit(\'docNo\', this.innerText)" title="Click to edit Document No">' + sanitizeForReport(d.docNo) + '</span> ' +
+						'<span class="dc-l">Rev:</span> <span class="val mono" contenteditable="true" onblur="handleDocControlLiveEdit(\'rev\', this.innerText)" title="Click to edit Revision">' + sanitizeForReport(d.rev) + '</span> ' +
+						'<span class="dc-l">Date:</span> <span class="val mono" contenteditable="true" onblur="handleDocControlLiveEdit(\'revDate\', this.innerText)" title="Click to edit Rev Date">' + sanitizeForReport(d.revDate) + '</span> ' +
+						'<span class="dc-l">Status:</span> Controlled</td><td style="text-align:right;"><span class="dc-l">Page</span> ' + p + ' of ' + t + '</td></tr></table>';
 				}
 
 				/* CORP INFO */
 				function readCorpInfo() {
 					const g = id => document.getElementById(id);
+					const v = (id1, id2, fallback) => {
+						const e1 = g(id1), e2 = g(id2);
+						if (e1 && document.activeElement === e1) return e1.value;
+						if (e2 && document.activeElement === e2) return e2.value;
+						if (e1 && e1.value) return e1.value;
+						if (e2 && e2.value) return e2.value;
+						return fallback;
+					};
 					if (g('ci_body')) corpInfo.body = g('ci_body').value;
 					if (g('ci_accred')) corpInfo.accred = g('ci_accred').value;
 					if (g('ci_addr')) corpInfo.addr = g('ci_addr').value;
 					if (g('ci_phone')) corpInfo.phone = g('ci_phone').value;
 					if (g('ci_email')) corpInfo.email = g('ci_email').value;
 					if (g('ci_web')) corpInfo.web = g('ci_web').value;
-					if (g('ci_footnote')) corpInfo.footnote = g('ci_footnote').value;
+					corpInfo.footnote = v('in_main_footnote', 'ci_footnote', corpInfo.footnote || '');
+
+					const syncPair = (id1, id2, val) => {
+						const e1 = g(id1), e2 = g(id2);
+						if (e1 && document.activeElement !== e1) e1.value = val || '';
+						if (e2 && document.activeElement !== e2) e2.value = val || '';
+					};
+					syncPair('in_main_footnote', 'ci_footnote', corpInfo.footnote);
+
 					return corpInfo;
+				}
+				function handleFootnoteLiveEdit(val) {
+					const clean = (val || '');
+					corpInfo.footnote = clean;
+					const g = id => document.getElementById(id);
+					if (g('in_main_footnote')) g('in_main_footnote').value = clean;
+					if (g('ci_footnote')) g('ci_footnote').value = clean;
+					if (typeof schedulePersist === 'function') schedulePersist();
+					debouncedSync();
 				}
 				function composedHeader() {
 					const c = readCorpInfo();
@@ -197,15 +278,27 @@
 				}
 				function composedFooter() {
 					const c = readCorpInfo();
-					return '<div class="corp-footer">' + sanitizeForReport(c.footnote) + '<br><strong>' + sanitizeForReport(c.body) + '</strong> · ' + sanitizeForReport(c.accred) + '</div>';
+					return '<div class="corp-footer"><span class="val" contenteditable="true" onblur="handleFootnoteLiveEdit(this.innerText)" title="Click to edit accreditation conditions disclaimer">' + sanitizeForReport(c.footnote) + '</span><br><strong>' + sanitizeForReport(c.body) + '</strong> · ' + sanitizeForReport(c.accred) + '</div>';
 				}
 				function resolveHeader() {
-					if (featureToggles.overlays !== false && assets.headerBanner) return '<div class="reserved-header-banner" style="border:none;"><img src="' + assets.headerBanner + '"></div>';
+					if (featureToggles.overlays !== false && assets.headerBanner && assets.headerBannerEnabled !== false) {
+						let hStyle = assets.headerBannerHeight ? ('height:' + assets.headerBannerHeight + 'px;max-height:none;') : '';
+						if (assets.headerBannerBleed) {
+							hStyle += 'margin-left:-8mm;margin-right:-8mm;margin-top:-6mm;width:calc(100% + 16mm);max-width:none;border-radius:0;';
+						}
+						return '<div class="reserved-header-banner" style="border:none;' + hStyle + '"><img src="' + assets.headerBanner + '"></div>';
+					}
 					if (featureToggles.corp !== false) return composedHeader();
 					return '';
 				}
 				function resolveFooter() {
-					if (featureToggles.overlays !== false && assets.footerBanner) return '<div class="reserved-footer-banner" style="border:none;"><img src="' + assets.footerBanner + '"></div>';
+					if (featureToggles.overlays !== false && assets.footerBanner && assets.footerBannerEnabled !== false) {
+						let fStyle = assets.footerBannerHeight ? ('height:' + assets.footerBannerHeight + 'px;max-height:none;') : '';
+						if (assets.footerBannerBleed) {
+							fStyle += 'margin-left:-8mm;margin-right:-8mm;margin-bottom:-6mm;width:calc(100% + 16mm);max-width:none;border-radius:0;';
+						}
+						return '<div class="reserved-footer-banner" style="border:none;' + fStyle + '"><img src="' + assets.footerBanner + '"></div>';
+					}
 					if (featureToggles.corp !== false) return composedFooter();
 					return '';
 				}
@@ -305,8 +398,20 @@
 						p.setAttribute('tabindex', '0');
 						if (!p.hasAttribute('aria-checked')) p.setAttribute('aria-checked', p.classList.contains('on') ? 'true' : 'false');
 					});
+					document.addEventListener('pointerdown', e => {
+						if (!e.target.closest('.overlay-box')) {
+							document.querySelectorAll('.overlay-box.is-selected').forEach(x => x.classList.remove('is-selected'));
+						}
+					});
 					document.addEventListener('keydown', e => {
-						if (e.key === 'Escape' && viewerOpen()) { closePhotoViewer(); return; }
+						if (e.key === 'Escape') {
+							if (viewerOpen()) { closePhotoViewer(); return; }
+							const sel = document.querySelectorAll('.overlay-box.is-selected');
+							if (sel.length) {
+								sel.forEach(x => x.classList.remove('is-selected'));
+								return;
+							}
+						}
 						if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
 							e.preventDefault();
 							persistStateV2().then(() => showToast('Saved.', 'success'));
@@ -366,8 +471,26 @@
 				function openSigViewer(t) { const r = liftingBatch[activeIdx]; const s = t === 'inspector' ? r.inspectorSigUpload : r.authSigUpload; if (!s) return; viewerState = { type: 'sig', photoIndex: -1, sigTarget: t, assetKey: '' }; showViewer(s, 'Signature ≈' + dataUrlKB(s) + 'KB'); }
 				function openNdtSigViewer(t) { const r = ndtBatch[activeIdx]; const s = t === 'insp' ? r.inspSigUpload : r.witSigUpload; if (!s) return; viewerState = { type: 'ndtsig', photoIndex: -1, sigTarget: t, assetKey: '' }; showViewer(s, 'NDT signature ≈' + dataUrlKB(s) + 'KB'); }
 				function openAssetViewer(k) { const s = getAssetSource(k); if (!s) return; viewerState = { type: 'asset', photoIndex: -1, sigTarget: '', assetKey: k }; showViewer(s, assetLabel(k) + ' ≈' + dataUrlKB(s) + 'KB'); }
-				function assetLabel(k) { return k === 'headerBanner' ? 'Header banner' : (k === 'footerBanner' ? 'Footer band' : 'Stamp'); }
-				function getAssetSource(k) { if (k === 'stamp') { const r = activeRec(); return r ? r.stampUpload : null; } return assets[k]; }
+				function assetLabel(k) {
+					if (k === 'headerBanner') return 'Header banner';
+					if (k === 'footerBanner') return 'Footer band';
+					if (k === 'logo') return 'Company logo';
+					if (typeof k === 'string' && k.indexOf('accred_') === 0) {
+						const idx = parseInt(k.replace('accred_', ''), 10);
+						const a = (assets.accreds || [])[idx];
+						return (a && a.name) ? (a.name + ' logo') : 'Accreditation logo';
+					}
+					return 'Stamp';
+				}
+				function getAssetSource(k) {
+					if (k === 'stamp') { const r = activeRec(); return r ? r.stampUpload : null; }
+					if (typeof k === 'string' && k.indexOf('accred_') === 0) {
+						const idx = parseInt(k.replace('accred_', ''), 10);
+						const a = (assets.accreds || [])[idx];
+						return a ? a.img : null;
+					}
+					return assets[k];
+				}
 				function closePhotoViewer() {
 					if (window._photoTrapCleanup) {
 						try { window._photoTrapCleanup(); } catch (e) {}
@@ -398,27 +521,166 @@
 					else if (st.type === 'asset') deleteAssetThumb(st.assetKey);
 				}
 
-				/* ASSET THUMBNAILS */
+				/* ASSET THUMBNAILS & CONTROLS */
+				function isAssetEnabled(k) {
+					if (featureToggles.overlays === false) return false;
+					if (k === 'stamp') { const r = activeRec(); return r.stampEnabled !== false; }
+					if (typeof k === 'string' && k.indexOf('accred_') === 0) {
+						const idx = parseInt(k.replace('accred_', ''), 10);
+						const a = (assets.accreds || [])[idx];
+						return a ? a.enabled !== false : true;
+					}
+					return assets[k + 'Enabled'] !== false;
+				}
+				function isAssetBleed(k) {
+					if (k === 'stamp') { const r = activeRec(); return r.stampBleed !== false; } // Stamp defaults to bleed
+					if (typeof k === 'string' && k.indexOf('accred_') === 0) {
+						const idx = parseInt(k.replace('accred_', ''), 10);
+						const a = (assets.accreds || [])[idx];
+						return a ? !!a.bleed : false;
+					}
+					return !!assets[k + 'Bleed'];
+				}
+				function toggleAssetEnable(k) {
+					if (k === 'stamp') {
+						const r = activeRec();
+						if (r) r.stampEnabled = (r.stampEnabled === false);
+					} else if (typeof k === 'string' && k.indexOf('accred_') === 0) {
+						const idx = parseInt(k.replace('accred_', ''), 10);
+						if (assets.accreds && assets.accreds[idx]) {
+							assets.accreds[idx].enabled = (assets.accreds[idx].enabled === false);
+						}
+					} else {
+						assets[k + 'Enabled'] = (assets[k + 'Enabled'] === false);
+					}
+					renderAssetThumbs();
+					if (typeof schedulePersist === 'function') schedulePersist();
+					debouncedSync();
+				}
+				function toggleAssetBleed(k) {
+					if (k === 'stamp') {
+						const r = activeRec();
+						if (r) r.stampBleed = (r.stampBleed === false);
+					} else if (typeof k === 'string' && k.indexOf('accred_') === 0) {
+						const idx = parseInt(k.replace('accred_', ''), 10);
+						if (assets.accreds && assets.accreds[idx]) {
+							assets.accreds[idx].bleed = !assets.accreds[idx].bleed;
+						}
+					} else {
+						assets[k + 'Bleed'] = !assets[k + 'Bleed'];
+					}
+					renderAssetThumbs();
+					if (typeof schedulePersist === 'function') schedulePersist();
+					debouncedSync();
+				}
 				function renderAssetThumbs() {
-					['headerBanner', 'footerBanner', 'stamp'].forEach(k => {
+					['headerBanner', 'footerBanner', 'logo', 'stamp'].forEach(k => {
 						const w = document.getElementById('assetWrap_' + k), b = document.getElementById('assetBtn_' + k), d = document.getElementById('assetDel_' + k);
 						if (!w || !b || !d) return;
 						const s = getAssetSource(k);
 						if (s) { w.classList.add('has-img'); b.innerHTML = '<img src="' + s + '" alt="' + assetLabel(k) + '">'; d.hidden = false; }
 						else { w.classList.remove('has-img'); b.innerHTML = '<span class="sig-empty">+ ADD IMAGE</span>'; d.hidden = true; }
+
+						const ep = document.getElementById('pill_asset_' + k);
+						if (ep) {
+							const en = isAssetEnabled(k);
+							ep.className = 'micro-toggle' + (en ? ' on' : '');
+							ep.innerHTML = '<span class="toggle-dot"></span>' + (en ? 'ON' : 'OFF');
+						}
+						const bp = document.getElementById('pill_bleed_' + k);
+						if (bp) {
+							const bl = isAssetBleed(k);
+							bp.className = 'micro-toggle' + (bl ? ' on' : '');
+						}
 					});
+					renderAccreditationTiles();
+				}
+				function renderAccreditationTiles() {
+					const c = document.getElementById('accredLogosContainer');
+					if (!c) return;
+					if (!assets.accreds) assets.accreds = [];
+					if (assets.accreds.length === 0) {
+						c.innerHTML = '<div style="font-size:var(--ui-font-xs);color:var(--ink-muted);font-style:italic;padding:4px 0;">No additional accreditation logos uploaded yet. Click below to add one (e.g. LEEA, DNV, ISO, ABS).</div>';
+						return;
+					}
+					c.innerHTML = assets.accreds.map((a, i) => {
+						const has = !!a.img;
+						const k = 'accred_' + i;
+						const en = a.enabled !== false;
+						const bl = !!a.bleed;
+						return '<div class="fg" style="border:1px solid var(--hairline);border-radius:var(--radius-2);padding:6px;background:var(--surface);">' +
+							'<div class="fg-hdr" style="margin-bottom:4px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">' +
+								'<input type="text" value="' + attrEsc(a.name || ('Accreditation #' + (i + 1))) + '" style="font-size:11px;padding:2px 4px;min-height:22px;font-weight:700;flex:1;min-width:70px;" onchange="updateAccredName(' + i + ', this.value)" placeholder="Badge name">' +
+								'<div style="display:flex;gap:3px;align-items:center;margin-left:auto;">' +
+									'<button type="button" class="btn btn-accent" style="padding:1px 5px;font-size:9px;min-height:auto;" onclick="openApplyToAllDialog(\'' + k + '\')" title="Apply this badge to all batch records">⚡</button>' +
+									'<span class="micro-toggle' + (bl ? ' on' : '') + '" onclick="toggleAssetBleed(\'' + k + '\')" title="Allow badge to overlap paper margins"><span class="toggle-dot"></span>BLEED</span>' +
+									'<span class="micro-toggle' + (en ? ' on' : '') + '" onclick="toggleAssetEnable(\'' + k + '\')"><span class="toggle-dot"></span>' + (en ? 'ON' : 'OFF') + '</span>' +
+									'<button type="button" class="thumb-del" style="position:static;display:inline-flex;padding:1px 4px;" onclick="deleteAccredTile(' + i + ')" title="Remove this badge">✕</button>' +
+								'</div>' +
+							'</div>' +
+							'<div class="sig-upload' + (has ? ' has-img' : '') + '" id="assetWrap_' + k + '">' +
+								'<input type="file" id="assetFile_' + k + '" accept="image/*" style="display:none;" tabindex="-1" onchange="uploadAssetFrom(event,\'' + k + '\')">' +
+								'<button type="button" class="sig-upload-btn" id="assetBtn_' + k + '" onclick="assetTileClick(\'' + k + '\')">' +
+								(has ? '<img src="' + a.img + '" alt="' + attrEsc(a.name || 'Accred') + '">' : '<span class="sig-empty">+ ADD BADGE</span>') +
+								'</button>' +
+								'<button type="button" class="thumb-del" id="assetDel_' + k + '" onclick="deleteAssetThumb(\'' + k + '\')"' + (has ? '' : ' hidden') + '>✕</button>' +
+							'</div>' +
+						'</div>';
+					}).join('');
+				}
+				function addAccreditationLogo() {
+					if (!assets.accreds) assets.accreds = [];
+					const id = 'acc_' + Date.now();
+					assets.accreds.push({ id, name: 'Accreditation #' + (assets.accreds.length + 1), img: null });
+					renderAssetThumbs();
+					if (typeof schedulePersist === 'function') schedulePersist();
+					debouncedSync();
+				}
+				function updateAccredName(i, name) {
+					if (assets.accreds && assets.accreds[i]) {
+						assets.accreds[i].name = (name || '').trim();
+						if (typeof schedulePersist === 'function') schedulePersist();
+						debouncedSync();
+					}
+				}
+				function deleteAccredTile(i) {
+					if (assets.accreds && assets.accreds[i]) {
+						assets.accreds.splice(i, 1);
+						renderAssetThumbs();
+						if (typeof schedulePersist === 'function') schedulePersist();
+						debouncedSync();
+						showToast('Accreditation tile removed.', 'info');
+					}
 				}
 				function assetTileClick(k) { if (getAssetSource(k)) openAssetViewer(k); else { const f = document.getElementById('assetFile_' + k); if (f) f.click(); } }
 				async function uploadAssetFrom(evt, type) {
 					const f = evt.target.files[0]; if (!f) return;
 					try {
 						const d = await compressImageUpload(f, 1200, 800, .85);
-						if (type === 'stamp') activeRec().stampUpload = d; else assets[type] = d;
+						if (type === 'stamp') {
+							activeRec().stampUpload = d;
+						} else if (typeof type === 'string' && type.indexOf('accred_') === 0) {
+							const idx = parseInt(type.replace('accred_', ''), 10);
+							if (!assets.accreds) assets.accreds = [];
+							if (assets.accreds[idx]) assets.accreds[idx].img = d;
+						} else {
+							assets[type] = d;
+						}
 						renderAssetThumbs(); debouncedSync(); showToast(assetLabel(type) + ' loaded.', 'success');
 					} catch (e) { showToast('Image error.', 'error'); }
 					evt.target.value = '';
 				}
-				function deleteAssetThumb(k) { if (k === 'stamp') { const r = activeRec(); if (r) r.stampUpload = null; } else assets[k] = null; renderAssetThumbs(); debouncedSync(); showToast(assetLabel(k) + ' removed.', 'info'); }
+				function deleteAssetThumb(k) {
+					if (k === 'stamp') {
+						const r = activeRec(); if (r) r.stampUpload = null;
+					} else if (typeof k === 'string' && k.indexOf('accred_') === 0) {
+						const idx = parseInt(k.replace('accred_', ''), 10);
+						if (assets.accreds && assets.accreds[idx]) assets.accreds[idx].img = null;
+					} else {
+						assets[k] = null;
+					}
+					renderAssetThumbs(); debouncedSync(); showToast(assetLabel(k) + ' removed.', 'info');
+				}
 
 				/* SIGNATURE THUMBNAILS */
 				function renderSigThumbs() {
@@ -470,49 +732,77 @@
 				/* PHOTO GRID */
 				function renderPhotoTiles() {
 					const c = document.getElementById('photo_slots_container'); if (!c) return;
-					const r = activeRec(); if (!r.photos) r.photos = Array(12).fill(null);
+					const r = activeRec();
+					if (!Array.isArray(r.photos)) r.photos = [];
+					const count = r.photos.length;
+					const titleEl = document.getElementById('evidenceHeaderTitle');
+					if (titleEl) titleEl.textContent = 'Evidence Engine (' + count + ' Photo' + (count === 1 ? '' : 's') + ')';
 					// A photo slot can still hold an "@idb:" marker (persist stripped
 					// it mid-flight, or a restored snapshot carried one back).
 					// Rendering that as an <img src> fires ERR_FILE_NOT_FOUND.
 					const shown = r.photos.map(v => typeof v === 'string' && v.indexOf('@idb:') === 0 ? null : v);
 					let h = '';
-					for (let i = 0; i < 12; i++) {
+					for (let i = 0; i < count; i++) {
 						const has = !!shown[i];
 						h += '<div class="fg photo-tile' + (has ? ' has-photo' : '') + '">' +
 							'<div class="fg-hdr"><span class="fg-title">Photo #' + (i + 1) + '</span><span class="photo-state">' + (has ? dataUrlKB(shown[i]) + 'KB' : 'EMPTY') + '</span></div>' +
 							'<div class="photo-wrap">' +
 							'<button type="button" class="photo-thumb" id="photoThumb_' + i + '" onclick="photoTileClick(' + i + ')">' + (has ? '<img src="' + shown[i] + '" alt="ev">' : '<span class="photo-empty">+ ADD</span>') + '</button>' +
-							'<button type="button" class="photo-del" onclick="deletePhoto(' + i + ')"' + (has ? '' : ' hidden') + '>✕</button>' +
+							'<button type="button" class="photo-del" onclick="deletePhoto(' + i + ')" title="Clear photo"' + (has ? '' : ' hidden') + '>✕</button>' +
+							'</div>' +
+							'<div style="display:flex;justify-content:flex-end;align-items:center;margin-top:4px;">' +
+							'<button type="button" class="btn btn-danger" style="padding:2px 8px;font-size:10px;width:100%;" onclick="removePhotoSlot(' + i + ')" title="Delete this photo slot">&times; Remove</button>' +
 							'</div>' +
 							'<input type="file" id="photoFile_' + i + '" accept="image/*" style="display:none;" tabindex="-1" onchange="handlePhotoUpload(event,' + i + ')">' +
 							'</div>';
 					}
+					if (!count) {
+						h = '<div style="grid-column:1/-1;text-align:center;padding:24px 12px;color:var(--ink-muted);font-style:italic;">No photo fields added yet. Click "+ Add Photo Field" above to add upload fields to this certificate.</div>';
+					}
 					c.innerHTML = h;
 				}
+				function addPhotoSlot() {
+					const r = activeRec();
+					if (!Array.isArray(r.photos)) r.photos = [];
+					r.photos.push(null);
+					renderPhotoTiles();
+					debouncedSync();
+				}
+				async function removePhotoSlot(i) {
+					const r = activeRec();
+					if (!Array.isArray(r.photos) || i < 0 || i >= r.photos.length) return;
+					const engine = currentEngine === 'LIFTING' ? 'lifting' : 'ndt';
+					await PhotosIDB.deleteKeyForRecord(engine, r, i).catch(() => {});
+					r.photos.splice(i, 1);
+					if (Array.isArray(r._photoMarkers)) r._photoMarkers.splice(i, 1);
+					renderPhotoTiles();
+					debouncedSync();
+				}
 				function photoTileClick(i) { const r = activeRec(); if (r.photos && r.photos[i]) openPhotoViewer(i); else { const f = document.getElementById('photoFile_' + i); if (f) f.click(); } }
-function deletePhoto(i) {
-    const r = activeRec(); if (!r.photos) return;
-    const engine = currentEngine === 'LIFTING' ? 'lifting' : 'ndt';
-    r.photos[i] = null;
-    PhotosIDB.deleteKeyForRecord(engine, r, i).catch(() => {});
-    renderPhotoTiles(); debouncedSync();
-}
+				function deletePhoto(i) {
+					const r = activeRec(); if (!r.photos) return;
+					const engine = currentEngine === 'LIFTING' ? 'lifting' : 'ndt';
+					r.photos[i] = null;
+					PhotosIDB.deleteKeyForRecord(engine, r, i).catch(() => {});
+					renderPhotoTiles(); debouncedSync();
+				}
 				async function handlePhotoUpload(evt, i) {
-    const f = evt.target.files[0]; if (!f) return;
-    try {
-        const d = await compressImageUpload(f, 800, 800, .72);
-        const r = activeRec(); if (!r.photos) r.photos = Array(12).fill(null);
-        r.photos[i] = d;
-        const engine = currentEngine === 'LIFTING' ? 'lifting' : 'ndt';
-        await PhotosIDB.stageRecordPhotos(engine, r);   // <-- await
-        renderPhotoTiles(); debouncedSync();
-        showToast('Photo #' + (i + 1) + ' ≈' + dataUrlKB(d) + 'KB.', 'success');
-    } catch (e) {
-        console.error('[photos]', e);
-        showToast('Photo save failed. Try again, or free up device storage.', 'error');
-    }
-    evt.target.value = '';
-}
+					const f = evt.target.files[0]; if (!f) return;
+					try {
+						const d = await compressImageUpload(f, 800, 800, .72);
+						const r = activeRec(); if (!r.photos) r.photos = [];
+						while (r.photos.length <= i) r.photos.push(null);
+						r.photos[i] = d;
+						const engine = currentEngine === 'LIFTING' ? 'lifting' : 'ndt';
+						await PhotosIDB.stageRecordPhotos(engine, r);
+						renderPhotoTiles(); debouncedSync();
+						showToast('Photo #' + (i + 1) + ' ≈' + dataUrlKB(d) + 'KB.', 'success');
+					} catch (e) {
+						console.error('[photos]', e);
+						showToast('Photo save failed. Try again, or free up device storage.', 'error');
+					}
+					evt.target.value = '';
+				}
 
 
 				/* BATCH DATE PATCH */
@@ -534,36 +824,27 @@ function deletePhoto(i) {
 					});
 					loadActiveRecord(); renderSheet(); debouncedSync(); showToast('Dates applied.', 'success');
 				}
-				function getNextReportNumber(p) {
-					const defPrefix = (currentEngine === 'LIFTING' ? 'LFT' : 'NDT');
-					const prefix = p ? p.replace(/[-_]$/, '') : defPrefix;
-					const list = currentEngine === 'LIFTING' ? liftingBatch : ndtBatch;
-					const dt = todayISO().replace(/-/g, '');
-					const yr = dt.slice(0, 4);
-
-					let mx = 0;
-					list.forEach(r => {
-						const m = (r.reportNo || '').match(/(\d+)$/);
-						if (m) {
-							const n = parseInt(m[1], 10);
-							if (n > mx) mx = n;
-						}
-					});
-					const seq = mx > 0 ? (mx + 1) : 1;
-					const seqStr = String(seq);
-
-					const pat = (docControl && docControl.reportNoPattern) ? docControl.reportNoPattern : '{PREFIX}-{DATE}-0{SEQ}';
-					return pat
-						.replace(/\{PREFIX\}/g, prefix)
-						.replace(/\{DATE\}/g, dt)
-						.replace(/\{YEAR\}/g, yr)
-						.replace(/\{SEQ\}/g, seqStr);
-				}
 
 				/* STYLE UPDATERS */
-				function updateAppFont(v) { document.documentElement.style.setProperty('--app-font-family', v); store.set('ims_ui_font', v); }
+				function updateAppFont(v) {
+					if (!v) v = "Inter, 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif";
+					document.documentElement.style.setProperty('--app-font-family', v);
+					document.body.style.fontFamily = v;
+					store.set('ims_ui_font', v);
+				}
 				function updateAppSize(v) { document.documentElement.style.setProperty('--app-font-size', v); store.set('ims_ui_size', v); }
-				function updateReportFont(v) { document.documentElement.style.setProperty('--report-font-family', v); store.set('ims_rf', v); debouncedSync(); }
+				function updateReportFont(v) {
+					if (!v || v === 'theme-default') {
+						document.documentElement.removeAttribute('data-report-font-custom');
+						document.documentElement.style.removeProperty('--report-font-family');
+						store.set('ims_rf', '');
+					} else {
+						document.documentElement.setAttribute('data-report-font-custom', 'true');
+						document.documentElement.style.setProperty('--report-font-family', v);
+						store.set('ims_rf', v);
+					}
+					debouncedSync();
+				}
 				function updateReportSize(v) { document.documentElement.style.setProperty('--report-font-size', v); store.set('ims_rs', v); debouncedSync(); }
 				function updateReportDensity(v) {
 					if (v === 'compact') { document.documentElement.style.setProperty('--report-cell-padding', '1.6px 3px'); document.documentElement.style.setProperty('--report-line-height', '1.1'); }
@@ -598,7 +879,9 @@ function deletePhoto(i) {
 				}
 				function resetAppStyling() {
 					['--app-font-family', '--app-font-size', '--report-font-family', '--report-font-size', '--report-cell-padding', '--report-line-height'].forEach(p => document.documentElement.style.removeProperty(p));
-					['ims_ui_font', 'ims_ui_size', 'ims_rf', 'ims_rs', 'ims_rd'].forEach(k => store.del(k));
+					['ims_ui_font', 'ims_ui_size', 'ims_rf', 'ims_rs', 'ims_rd', 'ims_report_theme'].forEach(k => store.del(k));
+					setReportTheme('swiss');
+					setTheme('dark');
 					debouncedSync(); showToast('Styles reset.', 'info');
 				}
 
@@ -748,6 +1031,80 @@ function deletePhoto(i) {
 				}
 			
 				function resetPreviewZoom() { manualZoom = null; applyZoom(); }
+
+				function installTrackpadZoom() {
+					let pendingDelta = 0;
+					let rafId = null;
+
+					const onWheelZoom = function(e) {
+						if (!e.ctrlKey) return;
+						e.preventDefault();
+						pendingDelta += e.deltaY;
+
+						if (!rafId) {
+							rafId = requestAnimationFrame(() => {
+								const cur = getCurrentZoom();
+								// Smooth dampening factor
+								const factor = Math.exp(-pendingDelta * 0.005);
+								let next = cur * factor;
+								next = Math.max(0.1, Math.min(3.0, Math.round(next * 100) / 100));
+								manualZoom = next;
+								applyZoom();
+								pendingDelta = 0;
+								rafId = null;
+							});
+						}
+					};
+
+					// Single listener on window capturing Ctrl+wheel over preview elements
+					window.addEventListener('wheel', function(e) {
+						if (e.ctrlKey && e.target && e.target.closest && (e.target.closest('#previewPane') || e.target.closest('#enginePreviewContainer') || e.target.closest('.a4-page-frame'))) {
+							onWheelZoom(e);
+						}
+					}, { passive: false });
+				}
+
+				window.currentReportTheme = localStorage.getItem('ims_report_theme') || 'swiss';
+				const REPORT_THEME_CLASS_MAP = {
+					'amber': 'offshore',
+					'obsidian': 'obsidian-rep',
+					'holographic': 'laser-ndt',
+					'brutalist': 'monolith',
+					'linear': 'cert-linear',
+					'bloomberg': 'cert-bloomberg',
+					'neumorphic': 'cert-neumorphic',
+					'visionos': 'cert-visionos',
+					'aurora': 'cert-aurora',
+					'neubrutalist': 'cert-neubrutalist',
+					'bento': 'cert-bento',
+					'luxury': 'cert-luxury'
+				};
+
+				function getCanonicalReportTheme(name) {
+					if (!name) return 'swiss';
+					return REPORT_THEME_CLASS_MAP[name] || name;
+				}
+
+				function setReportTheme(themeName) {
+					window.currentReportTheme = themeName || 'swiss';
+					try { localStorage.setItem('ims_report_theme', window.currentReportTheme); } catch (e) {}
+					const select1 = document.getElementById('reportThemeSelect');
+					if (select1 && select1.value !== window.currentReportTheme) select1.value = window.currentReportTheme;
+					const select2 = document.getElementById('reportThemeSelectToolbar');
+					if (select2 && select2.value !== window.currentReportTheme) select2.value = window.currentReportTheme;
+
+					const canonicalClass = 'theme-report-' + getCanonicalReportTheme(window.currentReportTheme);
+
+					document.querySelectorAll('.a4-page-frame').forEach(f => {
+						const toRemove = [];
+						f.classList.forEach(c => {
+							if (c.startsWith('theme-report-')) toRemove.push(c);
+						});
+						toRemove.forEach(c => f.classList.remove(c));
+						f.classList.add(canonicalClass);
+					});
+					if (typeof renderPreview === 'function') renderPreview();
+				}
 
 				// The app bar overlays the top of the peek pane, so the pane has to
 			// begin below it or the zoom bar is hidden behind it. Measured with a
@@ -939,17 +1296,26 @@ function deletePhoto(i) {
 						}
 					} catch (e) {}
 				})();
-				const THEMES = ['dark', 'light', 'sunlight', 'night', 'cbsafe', 'hc'];
+				const THEMES = [
+					'dark', 'light', 'sunlight', 'night', 'cbsafe', 'hc',
+					'bloomberg', 'blueprint', 'metric', 'clay', 'avionics', 'linen', 'eink',
+					'visionos', 'terminal', 'cyberdeck', 'aurora', 'neubrutalist', 'bauhaus',
+					'monolith', 'y2k', 'statutory', 'crimson', 'offshore', 'osha', 'luxury'
+				];
 				function setTheme(name) {
 					if (THEMES.indexOf(name) === -1) name = 'dark';
 					const apply = () => {
 						// <html> carries the class too: the <head> script sets it before
 						// first paint, so it has to be cleared here or a theme switch
 						// would leave the old one winning on :root.
-						const all = ['theme-light', 'theme-midnight', 'theme-forest', 'theme-sunset',
-							'theme-sunlight', 'theme-night', 'theme-cbsafe', 'theme-hc'];
-						document.body.classList.remove.apply(document.body.classList, all);
-						document.documentElement.classList.remove.apply(document.documentElement.classList, all);
+						const toRemoveBody = [];
+						document.body.classList.forEach(c => { if (c.startsWith('theme-')) toRemoveBody.push(c); });
+						toRemoveBody.forEach(c => document.body.classList.remove(c));
+
+						const toRemoveHtml = [];
+						document.documentElement.classList.forEach(c => { if (c.startsWith('theme-')) toRemoveHtml.push(c); });
+						toRemoveHtml.forEach(c => document.documentElement.classList.remove(c));
+
 						if (name !== 'dark') {
 							document.body.classList.add('theme-' + name);
 							document.documentElement.classList.add('theme-' + name);
@@ -963,9 +1329,37 @@ function deletePhoto(i) {
 					// Apply immediately in those cases so the theme always lands.
 					if (document.startViewTransition && document.visibilityState === 'visible') {
 						const t = document.startViewTransition(apply);
-						// A skipped transition rejects BOTH promises. Nothing awaits
-						// ready, so leaving it unhandled surfaced as an
-						// "Transition was skipped" page error on rapid re-theming.
+						t.ready.catch(function () {});
+						t.finished.catch(function () { apply(); });
+					} else apply();
+				}
+
+				const FORM_STYLES = [
+					'linear', 'floating', 'bento', 'material', 'rugged', 'neumorphic',
+					'meter', 'compact-hud', 'cyberdeck', 'glassmorphic', 'synthwave', 'wireframe',
+					'swiss', 'zen', 'brutalist', 'stealth', 'metric', 'linen',
+					'eink', 'terminal-green', 'bauhaus', 'y2k', 'crimson', 'osha'
+				];
+				function setFormStyle(name) {
+					if (!name || FORM_STYLES.indexOf(name) === -1) name = 'linear';
+					const apply = () => {
+						const toRemoveBody = [];
+						document.body.classList.forEach(c => { if (c.startsWith('form-style-')) toRemoveBody.push(c); });
+						toRemoveBody.forEach(c => document.body.classList.remove(c));
+
+						const toRemoveHtml = [];
+						document.documentElement.classList.forEach(c => { if (c.startsWith('form-style-')) toRemoveHtml.push(c); });
+						toRemoveHtml.forEach(c => document.documentElement.classList.remove(c));
+
+						document.body.classList.add('form-style-' + name);
+						document.documentElement.classList.add('form-style-' + name);
+
+						store.set('ims_form_style', name);
+						const sel = document.getElementById('formStyleSelect');
+						if (sel && sel.value !== name) sel.value = name;
+					};
+					if (document.startViewTransition && document.visibilityState === 'visible') {
+						const t = document.startViewTransition(apply);
 						t.ready.catch(function () {});
 						t.finished.catch(function () { apply(); });
 					} else apply();
@@ -1084,24 +1478,238 @@ function deletePhoto(i) {
 				function addChecklistItem() { const r = activeRec(); if (!r.checklist) r.checklist = []; r.checklist.push({ item: 'New Check Point', status: 'PASS', note: '' }); renderChecklistBuilder(); debouncedSync(); }
 
 
-				/* DRAGGABLE STAMP */
-				function makeDraggable(el, onMove) {
+				/* DRAGGABLE & RESIZABLE OVERLAYS */
+				function makeDraggable(el, onMove, onResize, isLocked, allowBleed) {
+					if (!el) return;
 					let sx = 0, sy = 0, il = 0, it = 0;
+					let sw = 0, sh = 0;
+
+					// If locked, disable movement and resizing cursors
+					if (isLocked) {
+						el.style.cursor = 'default';
+						el.classList.add('is-locked');
+						return;
+					} else {
+						el.style.cursor = 'move';
+						el.classList.remove('is-locked');
+					}
+
+					function getParentBounds(p) {
+						if (!p) return { minX: 0, minY: 0, maxX: 0, maxY: 0, padL: 0, padT: 0, padR: 0, padB: 0 };
+						let padL = 0, padT = 0, padR = 0, padB = 0;
+						if (!allowBleed) {
+							const cs = window.getComputedStyle ? window.getComputedStyle(p) : null;
+							if (cs) {
+								padL = parseFloat(cs.paddingLeft) || 0;
+								padT = parseFloat(cs.paddingTop) || 0;
+								padR = parseFloat(cs.paddingRight) || 0;
+								padB = parseFloat(cs.paddingBottom) || 0;
+							}
+						}
+						const minX = padL;
+						const minY = padT;
+						const maxX = Math.max(minX, p.clientWidth - padR - el.offsetWidth);
+						const maxY = Math.max(minY, p.clientHeight - padB - el.offsetHeight);
+						return { minX, minY, maxX, maxY, padL, padT, padR, padB };
+					}
+
+					// Click to select, stays active until click away or Escape
+					el.addEventListener('click', function(ev) {
+						if (isLocked) return;
+						document.querySelectorAll('.overlay-box.is-selected').forEach(x => {
+							if (x !== el) x.classList.remove('is-selected');
+						});
+						el.classList.add('is-selected');
+					});
+
 					el.onpointerdown = function (e) {
+						// Don't drag if clicking controls or resize handle
+						if (e.target.closest('.overlay-handle') || e.target.closest('.overlay-lock-btn') || e.target.closest('.overlay-del-btn')) return;
+						if (!isLocked) {
+							document.querySelectorAll('.overlay-box.is-selected').forEach(x => {
+								if (x !== el) x.classList.remove('is-selected');
+							});
+							el.classList.add('is-selected');
+						}
 						e.preventDefault();
 						sx = e.clientX; sy = e.clientY; il = el.offsetLeft; it = el.offsetTop;
 						el.setPointerCapture(e.pointerId);
 						el.onpointermove = function (ev) {
-							el.style.left = (il + ev.clientX - sx) + 'px';
-							el.style.top = (it + ev.clientY - sy) + 'px';
+							let nx = il + ev.clientX - sx;
+							let ny = it + ev.clientY - sy;
+							const p = el.offsetParent;
+							if (p) {
+								if (!allowBleed) {
+									const b = getParentBounds(p);
+									nx = Math.max(b.minX, Math.min(b.maxX, nx));
+									ny = Math.max(b.minY, Math.min(b.maxY, ny));
+								} else {
+									const maxX = p.clientWidth - el.offsetWidth;
+									const maxY = p.clientHeight - el.offsetHeight;
+									nx = Math.max(0, Math.min(maxX, nx));
+									ny = Math.max(0, Math.min(maxY, ny));
+								}
+							}
+							el.style.left = nx + 'px';
+							el.style.top = ny + 'px';
 						};
 						el.onpointerup = function (ev) {
 							el.onpointermove = null; el.onpointerup = null;
-							el.releasePointerCapture(ev.pointerId);
+							try { el.releasePointerCapture(ev.pointerId); } catch (err) {}
 							const p = el.offsetParent;
-							if (onMove && p) onMove(el.offsetLeft / p.offsetWidth * 100, el.offsetTop / p.offsetHeight * 100);
+							if (onMove && p) {
+								let pctX = (el.offsetLeft / p.offsetWidth * 100);
+								let pctY = (el.offsetTop / p.offsetHeight * 100);
+								if (!allowBleed) {
+									const b = getParentBounds(p);
+									const minPctX = (b.minX / p.offsetWidth * 100);
+									const minPctY = (b.minY / p.offsetHeight * 100);
+									const maxPctX = Math.max(minPctX, (b.maxX / p.offsetWidth * 100));
+									const maxPctY = Math.max(minPctY, (b.maxY / p.offsetHeight * 100));
+									pctX = Math.max(minPctX, Math.min(maxPctX, pctX));
+									pctY = Math.max(minPctY, Math.min(maxPctY, pctY));
+								} else {
+									pctX = Math.max(0, Math.min(95, pctX));
+									pctY = Math.max(0, Math.min(95, pctY));
+								}
+								onMove(Math.round(pctX * 10) / 10, Math.round(pctY * 10) / 10);
+							}
 						};
 					};
+
+					const handles = el.querySelectorAll('.overlay-resize-handle');
+					handles.forEach(handle => {
+						handle.onpointerdown = function (e) {
+							e.preventDefault();
+							e.stopPropagation();
+							sx = e.clientX; sy = e.clientY;
+							sw = el.offsetWidth; sh = el.offsetHeight;
+							il = el.offsetLeft; it = el.offsetTop;
+							const dir = handle.getAttribute('data-dir') || 'se';
+							const img = el.querySelector('img');
+							let ratio = 1;
+							if (img && img.naturalWidth && img.naturalHeight) {
+								ratio = img.naturalWidth / img.naturalHeight;
+							} else if (sw && sh) {
+								ratio = sw / sh;
+							}
+							handle.setPointerCapture(e.pointerId);
+							handle.onpointermove = function (ev) {
+								const dx = ev.clientX - sx;
+								const dy = ev.clientY - sy;
+								let nw = sw, nh = sh, nx = il, ny = it;
+								const isEdge = (dir === 'e' || dir === 'w' || dir === 's' || dir === 'n');
+
+								if (dir === 'e') {
+									nw = Math.max(24, Math.round(sw + dx));
+								} else if (dir === 'w') {
+									nw = Math.max(24, Math.round(sw - dx));
+									nx = il + (sw - nw);
+								} else if (dir === 's') {
+									nh = Math.max(24, Math.round(sh + dy));
+								} else if (dir === 'n') {
+									nh = Math.max(24, Math.round(sh - dy));
+									ny = it + (sh - nh);
+								} else if (dir === 'se') {
+									let targetW = Math.abs(dx) > Math.abs(dy) ? (sw + dx) : ((sh + dy) * ratio);
+									nw = Math.max(24, Math.round(targetW));
+									nh = Math.max(24, Math.round(nw / ratio));
+								} else if (dir === 'sw') {
+									let targetW = Math.abs(dx) > Math.abs(dy) ? (sw - dx) : ((sh + dy) * ratio);
+									nw = Math.max(24, Math.round(targetW));
+									nh = Math.max(24, Math.round(nw / ratio));
+									nx = il + (sw - nw);
+								} else if (dir === 'ne') {
+									let targetW = Math.abs(dx) > Math.abs(dy) ? (sw + dx) : ((sh - dy) * ratio);
+									nw = Math.max(24, Math.round(targetW));
+									nh = Math.max(24, Math.round(nw / ratio));
+									ny = it + (sh - nh);
+								} else if (dir === 'nw') {
+									let targetW = Math.abs(dx) > Math.abs(dy) ? (sw - dx) : ((sh - dy) * ratio);
+									nw = Math.max(24, Math.round(targetW));
+									nh = Math.max(24, Math.round(nw / ratio));
+									nx = il + (sw - nw);
+									ny = it + (sh - nh);
+								}
+
+								const p = el.offsetParent;
+								if (p) {
+									let padL = 0, padT = 0, padR = 0, padB = 0;
+									if (!allowBleed) {
+										const cs = window.getComputedStyle ? window.getComputedStyle(p) : null;
+										if (cs) {
+											padL = parseFloat(cs.paddingLeft) || 0;
+											padT = parseFloat(cs.paddingTop) || 0;
+											padR = parseFloat(cs.paddingRight) || 0;
+											padB = parseFloat(cs.paddingBottom) || 0;
+										}
+									}
+									const boundMinX = padL;
+									const boundMinY = padT;
+									const boundMaxX = p.clientWidth - padR;
+									const boundMaxY = p.clientHeight - padB;
+
+									// Boundary clamping
+									if (isEdge) {
+										if (nx < boundMinX) {
+											const diff = boundMinX - nx;
+											nx = boundMinX;
+											nw = Math.max(24, nw - diff);
+										}
+										if (ny < boundMinY) {
+											const diff = boundMinY - ny;
+											ny = boundMinY;
+											nh = Math.max(24, nh - diff);
+										}
+										if (nx + nw > boundMaxX) {
+											nw = Math.max(24, boundMaxX - nx);
+										}
+										if (ny + nh > boundMaxY) {
+											nh = Math.max(24, boundMaxY - ny);
+										}
+									} else {
+										// Corner clamping while strictly preserving aspect ratio
+										if (nx < boundMinX) {
+											const overflow = boundMinX - nx;
+											nx = boundMinX;
+											nw = Math.max(24, nw - overflow);
+											nh = Math.max(24, Math.round(nw / ratio));
+										}
+										if (ny < boundMinY) {
+											const overflow = boundMinY - ny;
+											ny = boundMinY;
+											nh = Math.max(24, nh - overflow);
+											nw = Math.max(24, Math.round(nh * ratio));
+										}
+										if (nx + nw > boundMaxX) {
+											nw = Math.max(24, boundMaxX - nx);
+											nh = Math.max(24, Math.round(nw / ratio));
+										}
+										if (ny + nh > boundMaxY) {
+											nh = Math.max(24, boundMaxY - ny);
+											nw = Math.max(24, Math.round(nh * ratio));
+										}
+									}
+								}
+
+								el.style.left = nx + 'px';
+								el.style.top = ny + 'px';
+								el.style.width = nw + 'px';
+								el.style.height = nh + 'px';
+							};
+							handle.onpointerup = function (ev) {
+								handle.onpointermove = null; handle.onpointerup = null;
+								try { handle.releasePointerCapture(ev.pointerId); } catch (err) {}
+								const p = el.offsetParent;
+								if (onMove && p) {
+									let pctX = (el.offsetLeft / p.offsetWidth * 100);
+									let pctY = (el.offsetTop / p.offsetHeight * 100);
+									onMove(Math.round(pctX * 10) / 10, Math.round(pctY * 10) / 10);
+								}
+								if (onResize) onResize(Math.round(el.offsetWidth), Math.round(el.offsetHeight));
+							};
+						};
+					});
 				}
 				/* ==============================================================
 				   A4 PAGINATION
@@ -1125,10 +1733,9 @@ function deletePhoto(i) {
 					//   #a4TargetSheet.
 					// frameClass: allows a distinguishing class on annexure
 					//   frames (e.g. .a4-annexure-frame).
-					// pageOffset: shifts page numbering so an annexure that
-					//   follows a 2-page main report starts at "Page 3".
 					const firstFrameId = opts.firstFrameId === undefined ? 'a4TargetSheet' : opts.firstFrameId;
-					const frameClass   = opts.frameClass || 'a4-page-frame';
+					const activeReportTheme = 'theme-report-' + getCanonicalReportTheme(window.currentReportTheme);
+					const frameClass   = (opts.frameClass || 'a4-page-frame') + ' ' + activeReportTheme;
 					const pageOffset   = opts.pageOffset || 0;
 
 					if (blocks.length === 0 && !sigHTML) {
@@ -1248,14 +1855,12 @@ function deletePhoto(i) {
 						r.companyAccred  = g('in_companyAccred').value;
 						r.employer       = g('in_employer').value;
 						r.premises       = g('in_premises').value;
-						r.subLocation    = g('in_subLocation').value;
 						r.colourCode     = g('in_colourCode').value;
 						r.standards      = g('in_standards').value;
 						r.sopRef         = g('in_sopRef').value;
 						r.description    = g('in_description').value;
 						r.swl            = g('in_swl').value;
 						r.quantity       = g('in_quantity').value;
-						r.identification = g('in_identification').value;
 						r.manufacturer   = g('in_manufacturer').value;
 						r.model          = g('in_model').value;
 						r.serial         = g('in_serial').value;
@@ -1279,8 +1884,6 @@ function deletePhoto(i) {
 						r.remedies                 = g('in_remedies').value;
 						r.examDate                 = g('in_examDate').value;
 						r.nextExamDate             = g('in_nextExamDate').value;
-						r.verdictLabel             = g('in_verdictLabel').value;
-						r.verdictText              = g('in_verdictText').value;
 						r.examinerName = g('in_examinerName').value;
 						r.authName     = g('in_authName').value;
 						if (r.examDate && !r.nextExamDate) {
@@ -1312,8 +1915,6 @@ function deletePhoto(i) {
 						r.lightIntensity = g('ndt_in_lightIntensity').value;
 						r.couplant       = g('ndt_in_couplant').value;
 						r.coverage       = g('ndt_in_coverage').value;
-						r.verdictLabel  = g('ndt_in_verdictLabel').value;
-						r.verdictText   = g('ndt_in_verdictText').value;
 						r.inspectorName = g('ndt_in_inspectorName').value;
 						r.witnessName   = g('ndt_in_witnessName').value;
 					}
@@ -1330,155 +1931,197 @@ function deletePhoto(i) {
 					} else {
 						_validateRecordInPlace(ndtBatch[activeIdx]);
 					}
+
+					const curRec = currentEngine === 'LIFTING' ? liftingBatch[activeIdx] : ndtBatch[activeIdx];
+					const activeLbl = g('lblActiveSerial');
+					if (activeLbl && curRec) {
+						activeLbl.textContent = curRec.reportNo || curRec.serial || '—';
+					}
 				}
 
-				/* SIGNATURE PADS */
-				
-				function clearPad(n) {
-					if (n === 1) liftingBatch[activeIdx].inspectorSigLive = null;
-					else if (n === 2) liftingBatch[activeIdx].authSigLive = null;
-					else if (n === 3) { const r = ndtBatch[activeIdx]; if (r) r.inspSigLive = null; }
-					else if (n === 4) { const r = ndtBatch[activeIdx]; if (r) r.witSigLive = null; }
-					redrawPadFromRecord('pad' + n, null);
-					debouncedSync();
+
+
+				function renderBrandTab() {
+					const container = document.getElementById('tab_brand');
+					if (!container || container.dataset.rendered === 'true') return;
+					container.innerHTML = 
+						'<div class="card">' +
+							'<h3><span>Institutional Overlays</span><span class="micro-toggle on" id="pill_overlays" onclick="toggleFeature(\'overlays\')"><span class="toggle-dot"></span>OVERLAYS: ON</span></h3>' +
+							'<div class="row cols-2">' +
+								'<div class="fg">' +
+									'<div class="fg-hdr" style="display:flex;align-items:center;gap:4px;">' +
+										'<span class="fg-title" style="flex:0 0 auto;">Header Banner</span>' +
+										'<button type="button" class="btn btn-accent" style="padding:1px 5px;font-size:9px;min-height:auto;flex-shrink:0;" onclick="openApplyToAllDialog(\'headerBanner\')" title="Apply header banner to all batch records">⚡</button>' +
+										'<div style="display:flex;gap:3px;margin-left:auto;align-items:center;flex-shrink:0;">' +
+											'<span class="micro-toggle" id="pill_bleed_headerBanner" onclick="toggleAssetBleed(\'headerBanner\')" title="Allow header banner to bleed across margins"><span class="toggle-dot"></span>BLEED</span>' +
+											'<span class="micro-toggle on" id="pill_asset_headerBanner" onclick="toggleAssetEnable(\'headerBanner\')"><span class="toggle-dot"></span>ON</span>' +
+										'</div>' +
+									'</div>' +
+									'<div class="sig-upload" id="assetWrap_headerBanner">' +
+										'<input type="file" id="assetFile_headerBanner" accept="image/*" style="display:none;" tabindex="-1" onchange="uploadAssetFrom(event,\'headerBanner\')">' +
+										'<button type="button" class="sig-upload-btn" id="assetBtn_headerBanner" onclick="assetTileClick(\'headerBanner\')"><span class="sig-empty">+ ADD IMAGE</span></button>' +
+										'<button type="button" class="thumb-del" id="assetDel_headerBanner" onclick="deleteAssetThumb(\'headerBanner\')" hidden>✕</button>' +
+									'</div>' +
+								'</div>' +
+								'<div class="fg">' +
+									'<div class="fg-hdr" style="display:flex;align-items:center;gap:4px;">' +
+										'<span class="fg-title" style="flex:0 0 auto;">Footer Band</span>' +
+										'<button type="button" class="btn btn-accent" style="padding:1px 5px;font-size:9px;min-height:auto;flex-shrink:0;" onclick="openApplyToAllDialog(\'footerBanner\')" title="Apply footer band to all batch records">⚡</button>' +
+										'<div style="display:flex;gap:3px;margin-left:auto;align-items:center;flex-shrink:0;">' +
+											'<span class="micro-toggle" id="pill_bleed_footerBanner" onclick="toggleAssetBleed(\'footerBanner\')" title="Allow footer band to bleed across margins"><span class="toggle-dot"></span>BLEED</span>' +
+											'<span class="micro-toggle on" id="pill_asset_footerBanner" onclick="toggleAssetEnable(\'footerBanner\')"><span class="toggle-dot"></span>ON</span>' +
+										'</div>' +
+									'</div>' +
+									'<div class="sig-upload" id="assetWrap_footerBanner">' +
+										'<input type="file" id="assetFile_footerBanner" accept="image/*" style="display:none;" tabindex="-1" onchange="uploadAssetFrom(event,\'footerBanner\')">' +
+										'<button type="button" class="sig-upload-btn" id="assetBtn_footerBanner" onclick="assetTileClick(\'footerBanner\')"><span class="sig-empty">+ ADD IMAGE</span></button>' +
+										'<button type="button" class="thumb-del" id="assetDel_footerBanner" onclick="deleteAssetThumb(\'footerBanner\')" hidden>✕</button>' +
+									'</div>' +
+								'</div>' +
+								'<div class="fg">' +
+									'<div class="fg-hdr" style="display:flex;align-items:center;gap:4px;">' +
+										'<span class="fg-title" style="flex:0 0 auto;">Company Logo</span>' +
+										'<button type="button" class="btn btn-accent" style="padding:1px 5px;font-size:9px;min-height:auto;flex-shrink:0;" onclick="openApplyToAllDialog(\'logo\')" title="Apply logo to all batch records">⚡</button>' +
+										'<div style="display:flex;gap:3px;margin-left:auto;align-items:center;flex-shrink:0;">' +
+											'<span class="micro-toggle" id="pill_bleed_logo" onclick="toggleAssetBleed(\'logo\')" title="Allow logo to overlap paper margins"><span class="toggle-dot"></span>BLEED</span>' +
+											'<span class="micro-toggle on" id="pill_asset_logo" onclick="toggleAssetEnable(\'logo\')"><span class="toggle-dot"></span>ON</span>' +
+										'</div>' +
+									'</div>' +
+									'<div class="sig-upload" id="assetWrap_logo">' +
+										'<input type="file" id="assetFile_logo" accept="image/*" style="display:none;" tabindex="-1" onchange="uploadAssetFrom(event,\'logo\')">' +
+										'<button type="button" class="sig-upload-btn" id="assetBtn_logo" onclick="assetTileClick(\'logo\')"><span class="sig-empty">+ ADD LOGO</span></button>' +
+										'<button type="button" class="thumb-del" id="assetDel_logo" onclick="deleteAssetThumb(\'logo\')" hidden>✕</button>' +
+									'</div>' +
+								'</div>' +
+								'<div class="fg">' +
+									'<div class="fg-hdr" style="display:flex;align-items:center;gap:4px;">' +
+										'<span class="fg-title" style="flex:0 0 auto;">Stamp</span>' +
+										'<button type="button" class="btn btn-accent" style="padding:1px 5px;font-size:9px;min-height:auto;flex-shrink:0;" onclick="openApplyToAllDialog(\'stamp\')" title="Apply active record stamp to all batch records">⚡</button>' +
+										'<div style="display:flex;gap:3px;margin-left:auto;align-items:center;flex-shrink:0;">' +
+											'<span class="micro-toggle on" id="pill_bleed_stamp" onclick="toggleAssetBleed(\'stamp\')" title="Allow stamp to bleed over report edges"><span class="toggle-dot"></span>BLEED</span>' +
+											'<span class="micro-toggle on" id="pill_asset_stamp" onclick="toggleAssetEnable(\'stamp\')"><span class="toggle-dot"></span>ON</span>' +
+										'</div>' +
+									'</div>' +
+									'<div class="sig-upload" id="assetWrap_stamp">' +
+										'<input type="file" id="assetFile_stamp" accept="image/*" style="display:none;" tabindex="-1" onchange="uploadAssetFrom(event,\'stamp\')">' +
+										'<button type="button" class="sig-upload-btn" id="assetBtn_stamp" onclick="assetTileClick(\'stamp\')"><span class="sig-empty">+ ADD IMAGE</span></button>' +
+										'<button type="button" class="thumb-del" id="assetDel_stamp" onclick="deleteAssetThumb(\'stamp\')" hidden>✕</button>' +
+									'</div>' +
+								'</div>' +
+							'</div>' +
+						'</div>' +
+						'<div class="card">' +
+							'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4);flex-wrap:wrap;gap:6px;">' +
+								'<h3 style="margin:0;"><span>Accreditation Badges & Logos</span></h3>' +
+								'<div style="display:inline-flex;gap:6px;align-items:center;">' +
+									'<button type="button" class="btn btn-accent" style="font-size:var(--ui-font-xs);padding:3px 8px;" onclick="openApplyToAllDialog(\'accreds\')" title="Apply current accreditation logos to all batch records">⚡ Apply to All</button>' +
+									'<button type="button" class="btn btn-accent" style="font-size:var(--ui-font-xs);padding:3px 10px;" onclick="addAccreditationLogo()">+ Add Accreditation Logo</button>' +
+								'</div>' +
+							'</div>' +
+							'<div class="row cols-3" id="accredLogosContainer"></div>' +
+						'</div>' +
+						'<div class="card">' +
+							'<h3><span>Corporate Banner Content</span><span class="micro-toggle on" id="pill_corpBanners" onclick="toggleFeature(\'corp\')"><span class="toggle-dot"></span>BANNERS: ON</span></h3>' +
+							'<div class="row cols-2">' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Body Name</span></div><input type="text" id="ci_body" oninput="debouncedSync()"></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Accreditation</span></div><input type="text" id="ci_accred" oninput="debouncedSync()"></div>' +
+							'</div>' +
+							'<div class="row cols-3">' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Phone</span></div><input type="text" id="ci_phone" class="mono" oninput="debouncedSync()"></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Email</span></div><input type="email" id="ci_email" class="mono" oninput="debouncedSync()"></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Web</span></div><input type="text" id="ci_web" class="mono" oninput="debouncedSync()"></div>' +
+							'</div>' +
+							'<div class="row">' +
+								'<div class="fg" style="grid-column:span 12;">' +
+									'<div class="fg-hdr"><span class="fg-title">Address</span></div>' +
+									'<textarea id="ci_addr" rows="2" oninput="debouncedSync()"></textarea>' +
+								'</div>' +
+							'</div>' +
+							'<div class="row">' +
+								'<div class="fg" style="grid-column:span 12;">' +
+									'<div class="fg-hdr"><span class="fg-title">Footer Disclaimer</span></div>' +
+									'<textarea id="ci_footnote" rows="2" oninput="debouncedSync()"></textarea>' +
+								'</div>' +
+							'</div>' +
+						'</div>' +
+						'<div class="card">' +
+							'<h3><span>ISO Document Control</span><span class="micro-toggle on" id="pill_docControl" onclick="toggleDocControl()"><span class="toggle-dot"></span>ON</span></h3>' +
+							'<div class="row cols-4">' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Doc No</span></div><input type="text" id="dc_docNo" class="mono" value="QMS-CERT-LOLER-044" oninput="debouncedSync()"></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Rev</span></div><input type="text" id="dc_rev" class="mono" value="03" oninput="debouncedSync()"></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Rev Date</span></div><input type="date" id="dc_revDate" value="2026-01-15" oninput="debouncedSync()"></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">No. Format</span></div><input type="text" id="dc_reportNoPattern" class="mono" value="{PREFIX}-{DATE}-0{SEQ}" title="Pattern tokens: {PREFIX}, {DATE} (YYYYMMDD), {YEAR}, {SEQ}" oninput="debouncedSync()"></div>' +
+							'</div>' +
+						'</div>' +
+						'<div class="card">' +
+							'<h3><span>QR Dispatch Engine</span><span class="micro-toggle on" id="pill_qrEngine" onclick="toggleFeature(\'qr\')"><span class="toggle-dot"></span>QR: ON</span></h3>' +
+							'<div class="row">' +
+								'<div class="fg" style="grid-column:span 12;">' +
+									'<div class="fg-hdr"><span class="fg-title">Channel</span></div>' +
+									'<div style="display:flex;gap:4px;flex-wrap:wrap;">' +
+										'<button type="button" class="btn btn-accent" id="qr_ch_whatsapp" onclick="setQrChannel(\'WHATSAPP\')">📱 WhatsApp</button>' +
+										'<button type="button" class="btn" id="qr_ch_email" onclick="setQrChannel(\'EMAIL\')">✉ Email</button>' +
+									'</div>' +
+								'</div>' +
+							'</div>' +
+							'<div class="row cols-3">' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Phone</span></div><input type="text" id="waPhone" value="+201000000000" oninput="debouncedSync();updateQrBudget()"></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Email</span></div><input type="email" id="waEmail" value="verify@vanguard-inspection.com" oninput="debouncedSync();updateQrBudget()"></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Prefix</span></div><input type="text" id="waMsg" value="Verification Inquiry for Report No:" oninput="debouncedSync();updateQrBudget()"></div>' +
+							'</div>' +
+							'<div class="row">' +
+								'<div class="fg" style="grid-column:span 12;">' +
+									'<div class="fg-hdr"><span class="fg-title">Dispatch Link</span></div>' +
+									'<input type="text" id="qrLinkPreview" class="mono" readonly>' +
+									'<div id="qrBudget" style="margin-top:4px;font-family:var(--font-data);font-size:var(--ui-font-xs);color:var(--ink-muted);" aria-live="polite"></div>' +
+								'</div>' +
+							'</div>' +
+							'<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
+								'<button class="btn btn-accent" style="width:100%;font-weight:700;" onclick="dispatchVerification()">▶ Test QR</button>' +
+							'</div>' +
+						'</div>';
+					container.dataset.rendered = 'true';
+					if (typeof restorePreferences === 'function') {
+						const g = id => document.getElementById(id);
+						if (g('ci_body')) g('ci_body').value = corpInfo.body || '';
+						if (g('ci_accred')) g('ci_accred').value = corpInfo.accred || '';
+						if (g('ci_addr')) g('ci_addr').value = corpInfo.addr || '';
+						if (g('ci_phone')) g('ci_phone').value = corpInfo.phone || '';
+						if (g('ci_email')) g('ci_email').value = corpInfo.email || '';
+						if (g('ci_web')) g('ci_web').value = corpInfo.web || '';
+						if (g('ci_footnote')) g('ci_footnote').value = corpInfo.footnote || '';
+						if (g('dc_docNo')) g('dc_docNo').value = docControl.docNo || 'QMS-CERT-LOLER-044';
+						if (g('dc_rev')) g('dc_rev').value = docControl.rev || '03';
+						if (g('dc_revDate')) g('dc_revDate').value = docControl.revDate || '2026-01-15';
+						if (g('dc_reportNoPattern')) g('dc_reportNoPattern').value = docControl.reportNoPattern || '{PREFIX}-{DATE}-0{SEQ}';
+					}
+					if (typeof renderAssetThumbs === 'function') renderAssetThumbs();
 				}
-            function _sizeSigPad(canvas) {
-            if (!canvas) return false;
-            const rect = canvas.getBoundingClientRect();
-            if (rect.width < 1 || rect.height < 1) return false;
-            const dpr = window.devicePixelRatio || 1;
-            const newW = Math.max(2, Math.round(rect.width * dpr));
-            const newH = Math.max(2, Math.round(rect.height * dpr));
-            if (canvas.width === newW && canvas.height === newH) return true;
 
-            let snapshot = null;
-            if (canvas.width > 2 && canvas.height > 2) {
-                snapshot = document.createElement('canvas');
-                snapshot.width = canvas.width;
-                snapshot.height = canvas.height;
-                snapshot.getContext('2d').drawImage(canvas, 0, 0);
-            }
+				function renderChecklistTab() {
+					const container = document.getElementById('tab_checklist');
+					if (!container || container.dataset.rendered === 'true') return;
+					container.innerHTML =
+						'<div class="card">' +
+							'<h3><span>Verification Checklist</span><span class="micro-toggle off" id="pill_checklistToggle" onclick="toggleChecklistPage()"><span class="toggle-dot"></span>CHECKLIST: OFF</span></h3>' +
+							'<div id="checklistItemList" style="margin-bottom:8px;"></div>' +
+							'<button class="btn btn-accent" onclick="addChecklistItem()">+ Add Row</button>' +
+						'</div>';
+					container.dataset.rendered = 'true';
+					if (typeof renderChecklistBuilder === 'function') renderChecklistBuilder();
+					if (typeof updateFeaturePills === 'function') updateFeaturePills();
+				}
 
-            canvas.width = newW;
-            canvas.height = newH;
-            const ctx = canvas.getContext('2d', { willReadFrequently: true });
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            ctx.strokeStyle = '#0f172a';
-            ctx.lineWidth = 1.8 * dpr;
+				function renderEvidenceTab() {
+					const container = document.getElementById('tab_evidence');
+					if (!container || container.dataset.rendered === 'true') return;
+					container.innerHTML =
+						'<div class="card">' +
+							'<h3><span id="evidenceHeaderTitle">Evidence Engine (Photos)</span><div style="display:flex;gap:8px;align-items:center;"><button type="button" class="btn btn-accent" style="padding:2px 10px;font-size:var(--ui-font-xs);min-height:auto;" onclick="addPhotoSlot()">+ Add Photo Field</button><span class="micro-toggle off" id="pill_evidencePhotos" onclick="toggleEvidencePage()"><span class="toggle-dot"></span>IN REPORT: OFF</span></div></h3>' +
+							'<div class="photo-grid" id="photo_slots_container"></div>' +
+						'</div>';
+					container.dataset.rendered = 'true';
+					if (typeof renderPhotoTiles === 'function') renderPhotoTiles();
+					if (typeof updateFieldStates === 'function') updateFieldStates();
+				}
 
-            if (snapshot) {
-                ctx.drawImage(snapshot, 0, 0, snapshot.width, snapshot.height, 0, 0, newW, newH);
-            }
-            return true;
-        }
-
-        function sizeAllSigPads() {
-            ['pad1', 'pad2', 'pad3', 'pad4'].forEach(id => {
-                _sizeSigPad(document.getElementById(id));
-            });
-        }
-
-        function _cropTransparentSig(srcCanvas) {
-            try {
-                const w = srcCanvas.width, h = srcCanvas.height;
-                if (w < 2 || h < 2) return srcCanvas.toDataURL();
-                const ctx = srcCanvas.getContext('2d', { willReadFrequently: true });
-                const imgData = ctx.getImageData(0, 0, w, h);
-                const d = imgData.data;
-                let minX = w, minY = h, maxX = -1, maxY = -1;
-                for (let y = 0; y < h; y++) {
-                    const rowOff = y * w * 4;
-                    for (let x = 0; x < w; x++) {
-                        if (d[rowOff + x * 4 + 3] > 15) {
-                            if (x < minX) minX = x;
-                            if (x > maxX) maxX = x;
-                            if (y < minY) minY = y;
-                            if (y > maxY) maxY = y;
-                        }
-                    }
-                }
-                if (maxX < minX || maxY < minY) return srcCanvas.toDataURL();
-                const pad = Math.max(4, Math.round(srcCanvas.width * 0.015));
-                minX = Math.max(0, minX - pad);
-                minY = Math.max(0, minY - pad);
-                maxX = Math.min(w - 1, maxX + pad);
-                maxY = Math.min(h - 1, maxY + pad);
-                const cropW = maxX - minX + 1;
-                const cropH = maxY - minY + 1;
-                const c = document.createElement('canvas');
-                c.width = cropW;
-                c.height = cropH;
-                const cCtx = c.getContext('2d');
-                cCtx.drawImage(srcCanvas, minX, minY, cropW, cropH, 0, 0, cropW, cropH);
-                return c.toDataURL('image/png');
-            } catch (err) {
-                return srcCanvas.toDataURL();
-            }
-        }
-
-        function setupPointerPad(canvas, onEnd, onDrawStart) {
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d', { willReadFrequently: true });
-
-            _sizeSigPad(canvas);
-
-            let drawing = false;
-            let lastX = 0, lastY = 0;
-
-            function toCanvas(e) {
-                const r = canvas.getBoundingClientRect();
-                const scaleX = canvas.width / Math.max(1, r.width);
-                const scaleY = canvas.height / Math.max(1, r.height);
-                return {
-                    x: (e.clientX - r.left) * scaleX,
-                    y: (e.clientY - r.top)  * scaleY
-                };
-            }
-
-            canvas.addEventListener('pointerdown', e => {
-                e.preventDefault();
-                // If the pad was hidden when it was first set up,
-                // it might still be 2x2. Try one more time now that
-                // it's actually visible.
-                if (canvas.width < 3 || canvas.height < 3) {
-                    if (!_sizeSigPad(canvas)) return;
-                }
-                drawing = true;
-                const p = toCanvas(e);
-                lastX = p.x;
-                lastY = p.y;
-                ctx.lineCap = 'round';
-                ctx.lineJoin = 'round';
-                ctx.strokeStyle = '#0f172a';
-                ctx.lineWidth = 1.8 * (window.devicePixelRatio || 1);
-                ctx.beginPath();
-                ctx.moveTo(p.x, p.y);
-                ctx.lineTo(p.x + 0.01, p.y + 0.01);
-                ctx.stroke();
-                try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
-                // draw start
-            });
-
-            canvas.addEventListener('pointermove', e => {
-                if (!drawing) return;
-                e.preventDefault();
-                const p = toCanvas(e);
-                ctx.lineWidth = 1.8 * (window.devicePixelRatio || 1);
-                ctx.beginPath();
-                ctx.moveTo(lastX, lastY);
-                ctx.lineTo(p.x, p.y);
-                ctx.stroke();
-                lastX = p.x;
-                lastY = p.y;
-            });
-
-                       function end(e) {
-                if (!drawing) return;
-                drawing = false;
-                try { canvas.releasePointerCapture(e.pointerId); } catch (err) {}
-                if (onEnd) onEnd(_cropTransparentSig(canvas));
-            }
-            canvas.addEventListener('pointerup', end);
-            canvas.addEventListener('pointercancel', end);
-        }

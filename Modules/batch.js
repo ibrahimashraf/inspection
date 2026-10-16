@@ -254,6 +254,24 @@
 					if (targetKey === 'stamp') {
 						title = 'Apply Stamp to All';
 						previewText = curRec.stampUpload ? ('Stamp Image: ' + dataUrlKB(curRec.stampUpload) + ' KB') : '(No stamp uploaded on current record)';
+					} else if (targetKey === 'logo') {
+						title = 'Apply Company Logo to Batch';
+						previewText = assets.logo ? ('Company Logo: ' + dataUrlKB(assets.logo) + ' KB') : '(No logo uploaded)';
+					} else if (targetKey === 'headerBanner') {
+						title = 'Apply Header Banner to Batch';
+						previewText = assets.headerBanner ? ('Header Banner: ' + dataUrlKB(assets.headerBanner) + ' KB') : '(No header banner uploaded)';
+					} else if (targetKey === 'footerBanner') {
+						title = 'Apply Footer Band to Batch';
+						previewText = assets.footerBanner ? ('Footer Band: ' + dataUrlKB(assets.footerBanner) + ' KB') : '(No footer band uploaded)';
+					} else if (targetKey === 'accreds') {
+						title = 'Apply Accreditation Badges to Batch';
+						const num = (assets.accreds || []).filter(a => !!a.img).length;
+						previewText = num + ' Accreditation badge' + (num === 1 ? '' : 's') + ' uploaded';
+					} else if (typeof targetKey === 'string' && targetKey.indexOf('accred_') === 0) {
+						const idx = parseInt(targetKey.replace('accred_', ''), 10);
+						const a = (assets.accreds || [])[idx];
+						title = 'Apply ' + (a && a.name ? a.name : 'Badge') + ' to Batch';
+						previewText = (a && a.img) ? ('Badge Image: ' + dataUrlKB(a.img) + ' KB') : '(No image uploaded)';
 					} else if (targetKey === 'inspector') {
 						title = 'Apply Inspector Signature to All';
 						previewText = 'Name: ' + (curRec.examinerName || '—') + '\nSignature: ' + (curRec.inspectorSigUpload ? 'Uploaded (' + dataUrlKB(curRec.inspectorSigUpload) + 'KB)' : (curRec.inspectorSigLive ? 'Drawn signature' : 'None'));
@@ -307,8 +325,15 @@
 					if (targetKey === 'stamp') {
 						batch.forEach(r => {
 							r.stampUpload = curRec.stampUpload;
+							r.stampEnabled = curRec.stampEnabled !== false;
+							r.stampBleed = curRec.stampBleed !== false;
 							if (curRec.stampPos) r.stampPos = { x: curRec.stampPos.x, y: curRec.stampPos.y };
+							if (curRec.stampSize) r.stampSize = { w: curRec.stampSize.w, h: curRec.stampSize.h };
+							r.stampLocked = !!curRec.stampLocked;
 						});
+					} else if (targetKey === 'logo' || targetKey === 'headerBanner' || targetKey === 'footerBanner' || targetKey === 'accreds' || (typeof targetKey === 'string' && targetKey.indexOf('accred_') === 0)) {
+						// Global branding assets apply uniformly across all records and engines
+						if (typeof schedulePersist === 'function') schedulePersist();
 					} else if (targetKey === 'inspector') {
 						batch.forEach(r => {
 							r.examinerName = curRec.examinerName;
@@ -443,7 +468,6 @@
 				setVal('in_description', r.description);
 				setVal('in_swl', r.swl);
 				setVal('in_quantity', r.quantity || '1');
-				setVal('in_identification', r.identification);
 				setVal('in_manufacturer', r.manufacturer);
 				setVal('in_model', r.model);
 				setVal('in_serial', r.serial);
@@ -472,11 +496,9 @@
 						: (r.q_int12m === 'YES' ? calculateNextDate(r.examDate, 12) : '');
 				}
 				setVal('in_nextExamDate', r.nextExamDate);
-				setVal('in_verdictLabel', r.verdictLabel || 'STATUTORY FITNESS DETERMINATION');
-				setVal('in_verdictText', r.verdictText);
 				setVal('in_examinerName', r.examinerName);
 				setVal('in_authName', r.authName);
-				setTxt('lblActiveSerial', r.serial);
+				setTxt('lblActiveSerial', r.reportNo || r.serial || '—');
 
 				updateFieldStates();
 				renderExtraCellBuilder();
@@ -488,7 +510,7 @@
 				redrawPadFromRecord('pad2', r.authSigLive);
 			} else {
 				const r = ndtBatch[activeIdx]; if (!r) return;
-				if (!r.photos) r.photos = Array(12).fill(null);
+				if (!Array.isArray(r.photos)) r.photos = [];
 				if (!r.checklist) r.checklist = [];
 				if (!r.extraCells) r.extraCells = [];
 				if (!r.fieldToggles) r.fieldToggles = {};
@@ -515,8 +537,6 @@
 				setVal('ndt_in_lightIntensity', r.lightIntensity);
 				setVal('ndt_in_couplant', r.couplant);
 				setVal('ndt_in_coverage', r.coverage);
-				setVal('ndt_in_verdictLabel', r.verdictLabel || 'TEST DETERMINATION');
-				setVal('ndt_in_verdictText', r.verdictText);
 				setVal('ndt_in_inspectorName', r.inspectorName);
 				setVal('ndt_in_witnessName', r.witnessName);
 				setTxt('lblActiveSerial', r.reportNo);
@@ -542,3 +562,189 @@
 			runWorkflowChecks();
 			renderSheet();
 		}
+
+		/* CSV IMPORT / EXPORT */
+		function exportSelectedCsv() {
+			syncCurrentData();
+			const isL = currentEngine === 'LIFTING';
+			const list = isL ? liftingBatch : ndtBatch;
+			let it = list.filter(r => r.selected === true);
+			if (!it.length) it = list;
+			const cols = isL ? LIFTING_COLUMNS : NDT_COLUMNS;
+			const lines = ['\uFEFF' + cols.map(c => '"' + c.label + '"').join(',')];
+			it.forEach(x => { lines.push(cols.map(c => '"' + String(x[c.key] || '').replace(/\+\+/g, '\n').replace(/"/g, '""') + '"').join(',')); });
+			const b = new Blob([lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+			const u = URL.createObjectURL(b);
+			const a = document.createElement('a');
+			a.href = u; a.download = 'Export_' + Date.now() + '.csv'; a.click();
+			URL.revokeObjectURL(u);
+			showToast('Exported ' + it.length + '.', 'success');
+		}
+
+		function importMasterCsv(evt) {
+			const f = evt.target.files[0]; if (!f) return;
+			const engineAtImport = currentEngine;
+			const rd = new FileReader();
+			rd.onload = e => {
+				const text = e.target.result;
+				const d = text.includes('\t') ? '\t' : (text.includes(';') ? ';' : ',');
+				const rows = [];
+				let row = [], q = false, cur = '';
+				for (let i = 0; i < text.length; i++) {
+					const c = text[i], nx = text[i + 1];
+					if (c === '"') { if (q && nx === '"') { cur += '"'; i++; } else q = !q; }
+					else if (c === d && !q) { row.push(cur.trim()); cur = ''; }
+					else if ((c === '\r' || c === '\n') && !q) { if (c === '\r' && nx === '\n') i++; row.push(cur.trim()); if (row.length > 1 || row[0] !== '') rows.push(row); row = []; cur = ''; }
+					else cur += c;
+				}
+				if (cur) row.push(cur.trim());
+				if (row.length) rows.push(row);
+				if (rows.length < 2) { showToast('No data rows.', 'error'); return; }
+				const heads = rows[0].map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
+
+				if (engineAtImport === 'LIFTING') {
+					const nb = [];
+					for (let i = 1; i < rows.length; i++) {
+						const rec = { selected: false, puwerRows: defaultPuwerRows(), photos: Array(12).fill(null), checklist: [], extraCells: [], fieldToggles: {}, examParticulars: DEFAULT_EXAM_PARTICULARS, additionalTesting: 'NO', quantity: '1', reportDate: '' };
+						LIFTING_COLUMNS.forEach(c => { const mi = heads.findIndex(h => h.includes(c.key.toLowerCase())); rec[c.key] = mi !== -1 && rows[i][mi] !== undefined ? rows[i][mi].replace(/\r?\n/g, '++') : ''; });
+						if (!rec.reportNo) rec.reportNo = getNextReportNumber();
+						if (!rec.reportDate) rec.reportDate = rec.examDate || todayISO();
+						_validateRecordInPlace(rec);                       
+						nb.push(rec);
+					}
+					if (nb.length) { liftingBatch = nb; activeIdx = 0; loadActiveRecord(); showToast('Imported ' + nb.length + ' (LIFTING).', 'success'); }
+				} else {
+					const nb = [];
+					for (let i = 1; i < rows.length; i++) {
+						const rec = defaultNdtRecord(null);
+						NDT_COLUMNS.forEach(c => { const mi = heads.findIndex(h => h.includes(c.key.toLowerCase())); if (mi !== -1 && rows[i][mi] !== undefined) rec[c.key] = rows[i][mi].replace(/\r?\n/g, '++'); });
+						if (!rec.reportNo) rec.reportNo = getNextReportNumber('NDT');
+						_validateRecordInPlace(rec);
+						nb.push(rec);
+					}
+					if (nb.length) { ndtBatch = nb; activeIdx = 0; loadActiveRecord(); showToast('Imported ' + nb.length + ' (NDT).', 'success'); }
+				}
+			};
+			rd.readAsText(f);
+			evt.target.value = '';
+		}
+
+		/* DEMO SAMPLE GENERATOR */
+		function addSampleRecord(type) {
+			const today = todayISO();
+			if (currentEngine === 'LIFTING' || type === 'crane' || type === 'sling') {
+				const isCrane = type !== 'sling';
+				const sample = {
+					reportNo: getNextReportNumber('LFT'),
+					reportDate: today,
+					jobRef: isCrane ? 'JOB-CR-904' : 'JOB-SL-402',
+					poRef: 'PO-2026-ENG',
+					companyAccred: 'Vanguard Inspection Services Ltd.',
+					standards: isCrane ? 'BS 7121-2, LOLER Reg 9, ISO 4309' : 'BS EN 1492-2, LOLER Reg 9, ASME B30.9',
+					sopRef: isCrane ? 'SOP-CRANE-01' : 'SOP-RIG-03',
+					fieldToggles: { dangerTimeText: false },
+					includePuwer: isCrane,
+					includeChecklist: true,
+					includePhotos: false,
+					puwerRows: defaultPuwerRows(),
+					employer: 'North Sea Drilling Offshore Co.++Aberdeen, UK',
+					premises: isCrane ? 'Quayside Offshore Terminal 4' : 'Warehouse Rigging Store #2',
+					subLocation: isCrane ? 'Berth 12 Heavy Lift Area' : 'Rack A-14',
+					colourCode: 'BLUE',
+					description: isCrane ? 'Tadano GR-700EX 70-Tonne Rough Terrain Mobile Crane' : '4-Leg Grade 80 Steel Chain Sling Assembly with Clevis Hooks (10mm)',
+					swl: isCrane ? '70.0 Tonnes @ 3.0m Radius' : '6.7 Tonnes (0°-45°) / 4.75 Tonnes (45°-60°)',
+					quantity: '1',
+					identification: isCrane ? 'Fleet #TC-704 / Tag: CR-2026' : 'ID Tag #SL-04-981 / SN-CH-441',
+					manufacturer: isCrane ? 'Tadano Faun GmbH' : 'Gunnebo Industries',
+					model: isCrane ? 'GR-700EX' : 'Classic G80 GrabiQ',
+					serial: isCrane ? 'SN-TD-881940' : 'SN-GN-22019',
+					plantId: isCrane ? 'PLANT-CRN-08' : 'PLANT-SLG-19',
+					mfgYear: '2023',
+					lastExamDate: calculateNextDate(today, -6),
+					markingsLegible: 'YES',
+					q_firstExam: 'NO',
+					q_installedCorrectly: 'YES',
+					q_int6m: isCrane ? 'NO' : 'YES',
+					q_int12m: isCrane ? 'YES' : 'NO',
+					q_scheme: 'NO',
+					q_exceptional: 'NO',
+					examParticulars: isCrane ? 'Visual examination, operational overload test, slew bearing backlash, and boom telemetry limit calibration by Competent Person.' : '100% visual, dimensional, elongation check, and link wear gauge inspection carried out by Competent Person.',
+					additionalTesting: isCrane ? 'YES' : 'NO',
+					additionalTestingDetails: isCrane ? 'Functional test of load moment indicator (LMI) and boom angle sensor limits.' : '',
+					proofLoadApplied: isCrane ? 'Static Proof Load Test 87.5 Tonnes (125% SWL) held for 10 minutes' : 'Visual & dimensional link caliper check',
+					lastProofDetails: '2023-08-15 | Cert #PLT-9921',
+					nextProofDate: calculateNextDate(today, 24),
+					defectDesc: 'NONE. Work equipment is in sound condition and free from patent structural or mechanical defect.',
+					dangerImm: 'NO',
+					dangerTimeText: 'N/A',
+					remedies: 'Routine scheduled lubrication as per manufacturer O&M manual.',
+					isSafe: 'YES',
+					examDate: today,
+					nextExamDate: calculateNextDate(today, isCrane ? 12 : 6),
+					verdictLabel: 'FIT FOR CONTINUED SERVICE',
+					verdictText: 'Complies with LOLER 1998 Regulation 9(3) statutory requirements.',
+					extraCells: [],
+					examinerName: 'Marcus Vance | Senior LEEA Inspector',
+					authName: 'David H. Miller | Technical Director',
+					checklist: [
+						{ item: 'Structural welds & boom boom integrity', status: 'PASS', note: 'No deformation' },
+						{ item: 'Safety latches and clevis pins', status: 'PASS', note: 'Positive locking' },
+						{ item: 'Wire rope / chain wear gauge', status: 'PASS', note: 'Within 2% wear limit' }
+					],
+					photos: Array(12).fill(null),
+					inspectorSigLive: null, inspectorSigUpload: null, inspectorSigMode: 'LIVE',
+					authSigLive: null, authSigUpload: null, authSigMode: 'LIVE',
+					stampUpload: null, stampPos: { x: 70, y: 76 },
+					selected: false
+				};
+				liftingBatch.push(sample);
+				activeIdx = liftingBatch.length - 1;
+				showToast('Sample LOLER Record added (' + (isCrane ? 'Crane' : 'Sling') + ').', 'success');
+			} else {
+				const isUT = type === 'ut';
+				const sample = Object.assign(defaultNdtRecord(null), {
+					reportNo: getNextReportNumber('NDT'),
+					method: isUT ? 'UT' : 'MPI',
+					client: 'Petrobel Offshore Egypt',
+					location: 'Offshore Platform Wellhead Module B',
+					poRef: 'PO-2026-NDT-08',
+					itemDesc: isUT ? 'Butt Weld Joint W-104 (12" Sch 80 Super Duplex Pipe)' : 'High-Pressure Manifold Flange Weld Neck Joint F-02',
+					material: isUT ? 'UNS S32750 Super Duplex' : 'ASTM A105 / A350 LF2 Carbon Steel',
+					testSpec: isUT ? 'ASME Sec V Art. 4 & ASME Sec VIII Div 1' : 'ASME Sec V Art. 7 & ASTM E 709',
+					result: 'PASSED / ACCEPTABLE',
+					remarks: 'No planar or volumetric indications detected exceeding statutory acceptance thresholds.',
+					inspectorName: 'Ibrahim Eldofy',
+					witnessName: 'Reda El-Awady',
+					certLevel: 'ISO 9712 Level II',
+					certNo: 'EG-NDT-2026-99',
+					certExpiry: calculateNextDate(today, 36),
+					visionTest: calculateNextDate(today, -2),
+					procedureNo: isUT ? 'SOP-NDT-UT-008 Rev 2' : 'SOP-NDT-MPI-004 Rev 3',
+					acceptCriteria: 'ASME B31.3 Severe Cyclic / ISO 5817 Level B',
+					calDue: calculateNextDate(today, 10),
+					refBlock: isUT ? 'IIW V1, V2 & DAC 12mm Block' : 'Parker Cast Steel Pie Gauge',
+					surfaceCond: 'Smooth, ground flush, wire brushed',
+					surfaceTemp: '26',
+					lightIntensity: isUT ? '650 lux ambient' : '1100 lux visible white light',
+					couplant: isUT ? 'Ultrasound Gel Sonotech' : 'N/A',
+					coverage: '100% full volumetric and heat affected zone (HAZ) scan',
+					yokeSerial: isUT ? 'N/A' : 'Parker Contour B-300 AC',
+					magCurrent: isUT ? 'N/A' : 'AC Continuous 110V 4.5kg lift certified',
+					inkType: isUT ? 'N/A' : 'Ardrox 800/3 Black Ink with WCP-2 Contrast',
+					utUnit: isUT ? 'Krautkramer USM 36 Digital Flaw Detector' : 'N/A',
+					probeFreq: isUT ? '4.0 MHz Dual Element Angle 45°/60°/70°' : 'N/A',
+					indications: [
+						{ joint: isUT ? 'Weld W-104 Root' : 'Flange Toe Weld', area: '12 to 3 o\'clock position', finding: 'Clean, no root lack of penetration', result: 'PASS' },
+						{ joint: isUT ? 'Weld W-104 Cap' : 'Flange Neck Haz', area: '3 to 6 o\'clock position', finding: 'Clean profile, no undercut', result: 'PASS' }
+					],
+					selected: false
+				});
+				ndtBatch.push(sample);
+				activeIdx = ndtBatch.length - 1;
+				showToast('Sample NDT Record added (' + (isUT ? 'Ultrasonic UT' : 'Magnetic MPI') + ').', 'success');
+			}
+			loadActiveRecord();
+			renderSheet();
+			debouncedSync();
+		}
+

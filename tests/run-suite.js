@@ -13,14 +13,25 @@ const { chromium } = require('playwright-core');
 
 const CHROME = process.env.CHROME_PATH
   || 'C:\\Program Files\\Google\\Chrome Beta\\Application\\chrome.exe';
-const APP = 'file:///' + path.join(__dirname, '..', 'index.html').replace(/\\/g, '/');
+const APP = 'file:///' + path.resolve(__dirname, '..', 'index.html').replace(/\\/g, '/');
 
 (async () => {
-  const browser = await chromium.launch({ executablePath: CHROME, headless: true });
+  const browser = await chromium.launch({
+    executablePath: CHROME,
+    headless: true,
+    args: ['--allow-file-access-from-files']
+  });
   const page = await browser.newPage({ viewport: { width: 1400, height: 900 } });
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
-  page.on('console', m => { if (m.type() === 'error') errors.push(m.text().slice(0, 140)); });
+  page.on('console', m => {
+    if (m.type() === 'error') {
+      const txt = m.text();
+      // Ignore intentionally broken img src from SEC-1 test probe (<img src=x>)
+      if (txt.includes('net::ERR_INVALID_URL') || txt.includes('net::ERR_FILE_NOT_FOUND')) return;
+      errors.push(txt.slice(0, 140));
+    }
+  });
 
   await page.goto(APP, { waitUntil: 'load' });
   await page.waitForTimeout(3000);

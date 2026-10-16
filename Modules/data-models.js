@@ -7,20 +7,28 @@ function getNextReportNumber(p) {
     const yr = dt.slice(0, 4);
     let mx = 0;
     list.forEach(r => {
-        const m = (r.reportNo || '').match(/(d+)$/);
+        if (!r || !r.reportNo) return;
+        // Match either trailing digits or digits after the last delimiter
+        const m = String(r.reportNo).match(/(\d+)(?!.*\d)/);
         if (m) {
             const n = parseInt(m[1], 10);
-            if (n > mx) mx = n;
+            if (!isNaN(n) && n > mx) mx = n;
         }
     });
     const seq = mx > 0 ? (mx + 1) : 1;
-    const seqStr = String(seq);
     const pat = (typeof docControl !== 'undefined' && docControl && docControl.reportNoPattern) ? docControl.reportNoPattern : '{PREFIX}-{DATE}-0{SEQ}';
-    return pat
+    let res = pat
         .replace(/{PREFIX}/g, prefix)
         .replace(/{DATE}/g, dt)
-        .replace(/{YEAR}/g, yr)
-        .replace(/{SEQ}/g, seqStr);
+        .replace(/{YEAR}/g, yr);
+
+    // If pattern contains 0{SEQ} and seq >= 10, replace 0{SEQ} directly with seq (e.g. 09 -> 10)
+    if (res.includes('0{SEQ}')) {
+        res = res.replace(/0{SEQ}/g, seq < 10 ? ('0' + seq) : String(seq));
+    } else {
+        res = res.replace(/{SEQ}/g, String(seq));
+    }
+    return res;
 }
 
 
@@ -32,7 +40,7 @@ function getNextReportNumber(p) {
 				};
 
 				/* CONSTANTS */
-				const DEFAULT_EXAM_PARTICULARS = 'Visual examination and functional test (if applicable) carried out as part of thorough examination by Competent Person';
+				var DEFAULT_EXAM_PARTICULARS = window.DEFAULT_EXAM_PARTICULARS || 'Visual examination and functional test (if applicable) carried out as part of thorough examination by Competent Person';
 
 				const UNIT_DB = {
 					mass: { label: 'Mass', units: { t: ['Tonne (t)', 1000], kg: ['Kilogram (kg)', 1], g: ['Gram (g)', .001], lb: ['Pound (lb)', .45359237], oz: ['Ounce (oz)', .028349523125], st: ['Stone (st)', 6.35029318], lt: ['Long Ton (Imperial)', 1016.0469088], ston: ['Short Ton (US)', 907.18474] } },

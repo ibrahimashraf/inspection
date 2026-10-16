@@ -1,0 +1,61 @@
+		/* ── 22. PRINT ──────────────────────────────────────────────── */
+		#printContainer { display: none; }
+		@page { size: 210mm 297mm; margin: 0; }
+		@media print {
+			html, body {
+				width: 210mm !important;
+				height: auto !important;
+				margin: 0 !important;
+				padding: 0 !important;
+				background: #fff !important;
+				overflow: visible !important;
+			}
+			.master-switch-bar,
+			.formatting-toolbar,
+			header.app-bar,
+			.workspace,
+			.a4-gauge-banner,
+			.toast-container,
+			.workflow-alerts,
+			.skip-link,
+			#photoViewer,
+			.app-footer,
+			.no-print,
+			.overlay-resize-handle,
+			.overlay-ctrls { display: none !important; }
+
+			.overlay-box { border: none !important; background: transparent !important; }
+
+			#printContainer { display: block !important; width: 210mm !important; }
+
+			.a4-page-frame {
+				width: 210mm !important;
+				max-width: 210mm !important;
+				height: 295mm !important;
+				max-height: 295mm !important;
+				min-height: 0 !important;
+				zoom: 1 !important;
+				box-shadow: none !important;
+				border: 1.5px solid currentColor !important;
+				padding: 6mm 8mm !important;
+				margin: 0 !important;
+				page-break-after: always !important;
+				break-after: page !important;
+				overflow: hidden !important;
+				box-sizing: border-box !important;
+			}
+			.a4-page-frame .ctbl {
+				width: 100% !important;
+				border-collapse: collapse !important;
+				border-spacing: 0 !important;
+				box-sizing: border-box !important;
+			}
+			.a4-page-frame .ctbl td,
+			.a4-page-frame .ctbl th {
+				box-sizing: border-box !important;
+			}
+			.a4-page-frame:last-child {
+				page-break-after: avoid !important;
+				break-after: avoid !important;
+			}
+		}

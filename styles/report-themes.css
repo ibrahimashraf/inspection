@@ -1,0 +1,1008 @@
+		/* ==============================================================
+		   LEIMS INSPECTION REPORT COMPREHENSIVE ARCHETYPES
+		   Structural, layout, border, padding, and typography transformations.
+		   ============================================================== */
+
+		/* ── THEME 1: CLASSIC STATUTORY (Formal Legal Serif, Heavy Double Borders) ── */
+		.a4-page-frame.theme-report-classic {
+			font-family: "Times New Roman", Times, Georgia, "Liberation Serif", serif;
+			border: 2.5px solid #000000;
+		}
+		.a4-page-frame.theme-report-classic .sheet-body {
+			padding: 1px 0;
+		}
+		.a4-page-frame.theme-report-classic .corp-header,
+		.a4-page-frame.theme-report-classic .corp-footer {
+			border: 1.5px solid #000000;
+			font-family: "Times New Roman", Times, Georgia, serif;
+		}
+		.a4-page-frame.theme-report-classic .corp-header .ch-name {
+			color: #000000;
+			font-size: 13pt;
+			letter-spacing: .04em;
+			text-transform: uppercase;
+		}
+		.a4-page-frame.theme-report-classic .corp-header .ch-accred,
+		.a4-page-frame.theme-report-classic .corp-header .ch-right,
+		.a4-page-frame.theme-report-classic .corp-footer {
+			color: #1e293b;
+		}
+		.a4-page-frame.theme-report-classic .ctbl {
+			border-collapse: collapse;
+		}
+		.a4-page-frame.theme-report-classic .ctbl th,
+		.a4-page-frame.theme-report-classic .ctbl td {
+			border: 1.2px solid #000000;
+			padding: 2.2px 3.8px;
+		}
+		.a4-page-frame.theme-report-classic .csec {
+			background: #000000 !important;
+			color: #ffffff !important;
+			font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+			font-weight: 900;
+			font-size: 6.4pt;
+			text-transform: uppercase;
+			padding: 2.5px 5px;
+			letter-spacing: .08em;
+			border: 1px solid #000000 !important;
+		}
+		.a4-page-frame.theme-report-classic .report-main-title {
+			color: #000000;
+			font-size: 11pt;
+			font-weight: 900;
+			letter-spacing: .08em;
+			text-decoration: none;
+			padding-bottom: 2px;
+		}
+		.a4-page-frame.theme-report-classic .report-main-subtitle {
+			color: #1e293b;
+			font-size: 6.8pt;
+			font-weight: 700;
+			border-bottom: 3px double #000000;
+			padding-bottom: 3px;
+			margin-bottom: 3px;
+		}
+		.a4-page-frame.theme-report-classic .report-annex-title {
+			color: #000000;
+			font-weight: 900;
+			font-size: 9.8pt;
+		}
+		.a4-page-frame.theme-report-classic .report-annex-sub {
+			color: #475569;
+			border-bottom: 2px solid #000000;
+			padding-bottom: 2px;
+		}
+		.a4-page-frame.theme-report-classic .report-tbl-head td,
+		.a4-page-frame.theme-report-classic .report-tbl-head th {
+			background: #f1f5f9;
+			color: #000000;
+			border: 1.2px solid #000000;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-classic .report-caption {
+			color: #334155;
+		}
+		.a4-page-frame.theme-report-classic .lbl {
+			color: #334155;
+			letter-spacing: .03em;
+			font-size: 5.2pt;
+			font-weight: 800;
+		}
+		.a4-page-frame.theme-report-classic .val {
+			color: #000000;
+			font-size: 6.2pt;
+		}
+		.a4-page-frame.theme-report-classic .dc-strip td {
+			background: #f8fafc;
+			border: 1.2px solid #000000;
+			color: #0f172a;
+		}
+		.a4-page-frame.theme-report-classic .dc-l {
+			color: #000000;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-classic .verdict-box {
+			border: 2px solid #000000;
+			background: #fafafa;
+		}
+		.a4-page-frame.theme-report-classic .qcol-head {
+			color: #000000;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-classic .tick-box {
+			border: 1.2px solid #000000;
+			color: #000000;
+		}
+
+		/* ── THEME 2: SWISS EXECUTIVE (High-Precision Slate Navy, Modern Sans) ── */
+		.a4-page-frame.theme-report-swiss {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+			border: 1.8px solid #0f172a;
+		}
+		.a4-page-frame.theme-report-swiss .corp-header,
+		.a4-page-frame.theme-report-swiss .corp-footer {
+			border-color: #0f172a;
+		}
+		.a4-page-frame.theme-report-swiss .corp-header .ch-name {
+			color: #0f172a;
+			font-weight: 900;
+			letter-spacing: .02em;
+		}
+		.a4-page-frame.theme-report-swiss .corp-header .ch-accred,
+		.a4-page-frame.theme-report-swiss .corp-header .ch-right,
+		.a4-page-frame.theme-report-swiss .corp-footer {
+			color: #334155;
+		}
+		.a4-page-frame.theme-report-swiss .ctbl th,
+		.a4-page-frame.theme-report-swiss .ctbl td {
+			border: 1px solid #0f172a;
+			padding: 2.2px 4.5px;
+		}
+		.a4-page-frame.theme-report-swiss .csec {
+			background: #0f172a !important;
+			color: #ffffff !important;
+			font-weight: 900;
+			font-size: 6.7pt;
+			text-transform: uppercase;
+			padding: 2.6px 6px;
+			letter-spacing: .07em;
+			border: 1px solid #0f172a !important;
+		}
+		.a4-page-frame.theme-report-swiss .report-main-title {
+			color: #0f172a;
+			font-size: 10.5pt;
+			font-weight: 900;
+			letter-spacing: .04em;
+		}
+		.a4-page-frame.theme-report-swiss .report-main-subtitle {
+			color: #475569;
+			font-size: 6.8pt;
+			font-weight: 600;
+			border-bottom: 1.5px solid #0f172a;
+			padding-bottom: 2.5px;
+			margin-bottom: 2px;
+		}
+		.a4-page-frame.theme-report-swiss .report-annex-title {
+			color: #0f172a;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-swiss .report-annex-sub {
+			color: #475569;
+		}
+		.a4-page-frame.theme-report-swiss .report-tbl-head td,
+		.a4-page-frame.theme-report-swiss .report-tbl-head th {
+			background: #e2e8f0;
+			color: #0f172a;
+			border: 1px solid #0f172a;
+			font-weight: 800;
+		}
+		.a4-page-frame.theme-report-swiss .report-caption {
+			color: #334155;
+		}
+		.a4-page-frame.theme-report-swiss .lbl {
+			color: #475569;
+			letter-spacing: .045em;
+			font-weight: 800;
+		}
+		.a4-page-frame.theme-report-swiss .val {
+			color: #020617;
+		}
+		.a4-page-frame.theme-report-swiss .dc-strip td {
+			background: #f8fafc;
+			border: 1px solid #0f172a;
+			color: #0f172a;
+		}
+		.a4-page-frame.theme-report-swiss .dc-l {
+			color: #334155;
+			font-weight: 800;
+		}
+		.a4-page-frame.theme-report-swiss .verdict-box {
+			border: 2px solid #0f172a;
+			background: #f8fafc;
+		}
+		.a4-page-frame.theme-report-swiss .qcol-head {
+			color: #0f172a;
+			font-weight: 900;
+			letter-spacing: .03em;
+		}
+		.a4-page-frame.theme-report-swiss .tick-box {
+			border: 1px solid #0f172a;
+			color: #0f172a;
+		}
+
+		/* ── THEME 3: MINIMAL LINE (Open Architectural Ink-Saver, Horizontal Hairlines) ── */
+		.a4-page-frame.theme-report-minimal {
+			border: 1px solid #64748b;
+			background: #ffffff;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+		}
+		.a4-page-frame.theme-report-minimal .corp-header,
+		.a4-page-frame.theme-report-minimal .corp-footer {
+			border-color: #cbd5e1;
+		}
+		.a4-page-frame.theme-report-minimal .corp-header .ch-name {
+			color: #0f172a;
+			font-weight: 700;
+			letter-spacing: .03em;
+		}
+		.a4-page-frame.theme-report-minimal .corp-header .ch-accred,
+		.a4-page-frame.theme-report-minimal .corp-header .ch-right,
+		.a4-page-frame.theme-report-minimal .corp-footer {
+			color: #64748b;
+		}
+		/* Hairline horizontal structure with suppressed vertical borders */
+		.a4-page-frame.theme-report-minimal .ctbl {
+			border: none;
+		}
+		.a4-page-frame.theme-report-minimal .ctbl th,
+		.a4-page-frame.theme-report-minimal .ctbl td {
+			border: none;
+			border-bottom: 1px solid #cbd5e1;
+			border-top: 1px solid #cbd5e1;
+			padding: 2.4px 5px;
+		}
+		.a4-page-frame.theme-report-minimal .csec {
+			background: #f8fafc !important;
+			color: #0f172a !important;
+			font-weight: 800;
+			font-size: 6.5pt;
+			text-transform: uppercase;
+			padding: 2.6px 6px;
+			letter-spacing: .08em;
+			border: none !important;
+			border-top: 1.5px solid #0f172a !important;
+			border-bottom: 1px solid #0f172a !important;
+			border-left: 4px solid #0f172a !important;
+		}
+		.a4-page-frame.theme-report-minimal .report-main-title {
+			color: #0f172a;
+			font-size: 10pt;
+			letter-spacing: .08em;
+			font-weight: 800;
+		}
+		.a4-page-frame.theme-report-minimal .report-main-subtitle {
+			color: #64748b;
+			font-size: 6.6pt;
+			letter-spacing: .04em;
+			border-bottom: 1px solid #94a3b8;
+			padding-bottom: 2px;
+			margin-bottom: 3px;
+		}
+		.a4-page-frame.theme-report-minimal .report-annex-title {
+			color: #0f172a;
+		}
+		.a4-page-frame.theme-report-minimal .report-annex-sub {
+			color: #64748b;
+		}
+		.a4-page-frame.theme-report-minimal .report-tbl-head td,
+		.a4-page-frame.theme-report-minimal .report-tbl-head th {
+			background: #f8fafc;
+			color: #0f172a;
+			border: none;
+			border-bottom: 1.5px solid #0f172a;
+			border-top: 1px solid #cbd5e1;
+		}
+		.a4-page-frame.theme-report-minimal .report-caption {
+			color: #64748b;
+		}
+		.a4-page-frame.theme-report-minimal .lbl {
+			color: #64748b;
+			letter-spacing: .05em;
+			font-size: 4.9pt;
+		}
+		.a4-page-frame.theme-report-minimal .val {
+			color: #0f172a;
+		}
+		.a4-page-frame.theme-report-minimal .dc-strip td {
+			background: #ffffff;
+			border: none;
+			border-bottom: 1px solid #cbd5e1;
+			color: #475569;
+		}
+		.a4-page-frame.theme-report-minimal .dc-l {
+			color: #64748b;
+		}
+		.a4-page-frame.theme-report-minimal .verdict-box {
+			border: 1.5px solid #0f172a;
+			background: #ffffff;
+		}
+		.a4-page-frame.theme-report-minimal .qcol-head {
+			color: #0f172a;
+			font-weight: 800;
+		}
+		.a4-page-frame.theme-report-minimal .tick-box {
+			border: 1px solid #64748b;
+			color: #0f172a;
+		}
+
+		/* ── THEME 4: TECHNICAL BLUEPRINT (Offshore / CAD Engineering Grid) ── */
+		.a4-page-frame.theme-report-blueprint {
+			border: 2px solid #1e3a8a;
+			background: #f8fafc;
+			font-family: "Consolas", "Courier New", monospace;
+		}
+		.a4-page-frame.theme-report-blueprint .corp-header,
+		.a4-page-frame.theme-report-blueprint .corp-footer {
+			border: 1.5px solid #1e3a8a;
+			background: #eff6ff;
+		}
+		.a4-page-frame.theme-report-blueprint .corp-header .ch-name {
+			color: #1e3a8a;
+			font-weight: 900;
+			letter-spacing: .06em;
+		}
+		.a4-page-frame.theme-report-blueprint .corp-header .ch-accred,
+		.a4-page-frame.theme-report-blueprint .corp-header .ch-right,
+		.a4-page-frame.theme-report-blueprint .corp-footer {
+			color: #1e40af;
+		}
+		.a4-page-frame.theme-report-blueprint .ctbl th,
+		.a4-page-frame.theme-report-blueprint .ctbl td {
+			border: 1px solid #60a5fa;
+			padding: 2.2px 4px;
+		}
+		.a4-page-frame.theme-report-blueprint .csec {
+			background: #1e3a8a !important;
+			color: #eff6ff !important;
+			font-family: -apple-system, sans-serif;
+			font-weight: 900;
+			font-size: 6.6pt;
+			text-transform: uppercase;
+			padding: 2.4px 5px;
+			letter-spacing: .08em;
+			border: 1px solid #1e3a8a !important;
+		}
+		.a4-page-frame.theme-report-blueprint .report-main-title {
+			color: #1e3a8a;
+			font-size: 10.5pt;
+			letter-spacing: .08em;
+			border: 1.5px solid #1e3a8a;
+			padding: 3px 6px;
+			background: #eff6ff;
+			display: inline-block;
+		}
+		.a4-page-frame.theme-report-blueprint .report-main-subtitle {
+			color: #1d4ed8;
+			font-size: 6.8pt;
+			margin-top: 3px;
+		}
+		.a4-page-frame.theme-report-blueprint .report-annex-title {
+			color: #1e3a8a;
+		}
+		.a4-page-frame.theme-report-blueprint .report-annex-sub {
+			color: #3b82f6;
+		}
+		.a4-page-frame.theme-report-blueprint .report-tbl-head td,
+		.a4-page-frame.theme-report-blueprint .report-tbl-head th {
+			background: #dbeafe;
+			color: #1e3a8a;
+			border: 1px solid #60a5fa;
+		}
+		.a4-page-frame.theme-report-blueprint .report-caption {
+			color: #1e40af;
+		}
+		.a4-page-frame.theme-report-blueprint .lbl {
+			color: #1d4ed8;
+			letter-spacing: .05em;
+			font-weight: 800;
+		}
+		.a4-page-frame.theme-report-blueprint .val {
+			color: #0f172a;
+		}
+		.a4-page-frame.theme-report-blueprint .dc-strip td {
+			background: #eff6ff;
+			border: 1px solid #60a5fa;
+			color: #1e3a8a;
+		}
+		.a4-page-frame.theme-report-blueprint .dc-l {
+			color: #1d4ed8;
+			font-weight: 800;
+		}
+		.a4-page-frame.theme-report-blueprint .verdict-box {
+			border: 2px solid #1e3a8a;
+			background: #eff6ff;
+		}
+		.a4-page-frame.theme-report-blueprint .qcol-head {
+			color: #1e3a8a;
+			font-weight: 800;
+		}
+		.a4-page-frame.theme-report-blueprint .tick-box {
+			border: 1px solid #1e3a8a;
+			color: #1e3a8a;
+		}
+
+		/* ── THEME 5: OFFSHORE INDUSTRIAL AMBER (DNV / North Sea Maritime) ── */
+		.a4-page-frame.theme-report-offshore {
+			border: 2px solid #92400e;
+			background: #fffdfa;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+		}
+		.a4-page-frame.theme-report-offshore .corp-header,
+		.a4-page-frame.theme-report-offshore .corp-footer {
+			border: 1.5px solid #92400e;
+			background: #fffbeb;
+		}
+		.a4-page-frame.theme-report-offshore .corp-header .ch-name { color: #78350f; font-weight: 900; }
+		.a4-page-frame.theme-report-offshore .ctbl th,
+		.a4-page-frame.theme-report-offshore .ctbl td {
+			border: 1px solid #b45309;
+			padding: 2.2px 4px;
+		}
+		.a4-page-frame.theme-report-offshore .csec {
+			background: #78350f !important;
+			color: #fef3c7 !important;
+			font-weight: 900;
+			font-size: 6.6pt;
+			text-transform: uppercase;
+			padding: 2.4px 5px;
+			letter-spacing: .06em;
+			border: 1px solid #78350f !important;
+		}
+		.a4-page-frame.theme-report-offshore .report-main-title { color: #78350f; font-size: 10.5pt; font-weight: 900; }
+		.a4-page-frame.theme-report-offshore .report-main-subtitle { color: #92400e; font-size: 6.8pt; border-bottom: 2px solid #b45309; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-offshore .lbl { color: #92400e; font-weight: 800; font-size: 5pt; }
+		.a4-page-frame.theme-report-offshore .val { color: #000; }
+		.a4-page-frame.theme-report-offshore .dc-strip td { background: #fffbeb; border: 1px solid #b45309; color: #78350f; }
+		.a4-page-frame.theme-report-offshore .verdict-box { border: 2px solid #b45309; background: #fffbeb; }
+
+		/* ── THEME 6: EXECUTIVE OBSIDIAN (Monochrome High-End Audit) ── */
+		.a4-page-frame.theme-report-obsidian-rep {
+			border: 2px solid #18181b;
+			background: #ffffff;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+		}
+		.a4-page-frame.theme-report-obsidian-rep .corp-header,
+		.a4-page-frame.theme-report-obsidian-rep .corp-footer { border: 1.5px solid #18181b; }
+		.a4-page-frame.theme-report-obsidian-rep .corp-header .ch-name { color: #09090b; font-weight: 900; }
+		.a4-page-frame.theme-report-obsidian-rep .ctbl th,
+		.a4-page-frame.theme-report-obsidian-rep .ctbl td { border: 1px solid #3f3f46; padding: 2.2px 4px; }
+		.a4-page-frame.theme-report-obsidian-rep .csec {
+			background: #18181b !important;
+			color: #ffffff !important;
+			font-weight: 800;
+			font-size: 6.5pt;
+			text-transform: uppercase;
+			padding: 2.4px 5px;
+			letter-spacing: .06em;
+			border: 1px solid #18181b !important;
+		}
+		.a4-page-frame.theme-report-obsidian-rep .report-main-title { color: #09090b; font-size: 10.5pt; font-weight: 900; letter-spacing: .06em; }
+		.a4-page-frame.theme-report-obsidian-rep .report-main-subtitle { color: #52525b; font-size: 6.8pt; border-bottom: 1.5px solid #18181b; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-obsidian-rep .lbl { color: #52525b; font-weight: 700; }
+		.a4-page-frame.theme-report-obsidian-rep .val { color: #000; }
+		.a4-page-frame.theme-report-obsidian-rep .dc-strip td { background: #f4f4f5; border: 1px solid #3f3f46; color: #09090b; }
+		.a4-page-frame.theme-report-obsidian-rep .verdict-box { border: 2px solid #09090b; background: #f4f4f5; }
+
+		/* ── THEME 7: CRIMSON MARITIME (Lloyd's Register) ── */
+		.a4-page-frame.theme-report-crimson {
+			border: 2px solid #991b1b;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+		}
+		.a4-page-frame.theme-report-crimson .corp-header,
+		.a4-page-frame.theme-report-crimson .corp-footer { border: 1.5px solid #991b1b; }
+		.a4-page-frame.theme-report-crimson .corp-header .ch-name { color: #991b1b; font-weight: 900; }
+		.a4-page-frame.theme-report-crimson .ctbl th,
+		.a4-page-frame.theme-report-crimson .ctbl td { border: 1px solid #b91c1c; padding: 2.2px 4px; }
+		.a4-page-frame.theme-report-crimson .csec {
+			background: #991b1b !important;
+			color: #ffffff !important;
+			font-weight: 900;
+			font-size: 6.6pt;
+			text-transform: uppercase;
+			padding: 2.4px 5px;
+			letter-spacing: .06em;
+			border: 1px solid #991b1b !important;
+		}
+		.a4-page-frame.theme-report-crimson .report-main-title { color: #991b1b; font-size: 10.5pt; font-weight: 900; }
+		.a4-page-frame.theme-report-crimson .report-main-subtitle { color: #7f1d1d; font-size: 6.8pt; border-bottom: 2px solid #991b1b; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-crimson .lbl { color: #991b1b; font-weight: 700; }
+		.a4-page-frame.theme-report-crimson .val { color: #000; }
+		.a4-page-frame.theme-report-crimson .dc-strip td { background: #fef2f2; border: 1px solid #b91c1c; color: #991b1b; }
+		.a4-page-frame.theme-report-crimson .verdict-box { border: 2px solid #991b1b; background: #fef2f2; }
+
+		/* ── THEME 8: FEDERAL COMPLIANCE (OSHA / ASME High-Visibility) ── */
+		.a4-page-frame.theme-report-federal {
+			border: 2px solid #000000;
+			font-family: Arial, "Helvetica Neue", sans-serif;
+		}
+		.a4-page-frame.theme-report-federal .corp-header,
+		.a4-page-frame.theme-report-federal .corp-footer { border: 1.5px solid #000; }
+		.a4-page-frame.theme-report-federal .corp-header .ch-name { color: #000; font-weight: 900; }
+		.a4-page-frame.theme-report-federal .ctbl th,
+		.a4-page-frame.theme-report-federal .ctbl td { border: 1.2px solid #000; padding: 2.2px 4px; }
+		.a4-page-frame.theme-report-federal .csec {
+			background: #000000 !important;
+			color: #f59e0b !important;
+			font-weight: 900;
+			font-size: 6.7pt;
+			text-transform: uppercase;
+			padding: 2.5px 5px;
+			letter-spacing: .06em;
+			border-left: 5px solid #f59e0b !important;
+			border: 1px solid #000;
+		}
+		.a4-page-frame.theme-report-federal .report-main-title { color: #000; font-size: 10.5pt; font-weight: 900; }
+		.a4-page-frame.theme-report-federal .report-main-subtitle { color: #b45309; font-size: 6.8pt; font-weight: 800; border-bottom: 2px solid #000; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-federal .lbl { color: #000; font-weight: 800; }
+		.a4-page-frame.theme-report-federal .val { color: #000; }
+		.a4-page-frame.theme-report-federal .dc-strip td { background: #fef3c7; border: 1.2px solid #000; color: #000; }
+		.a4-page-frame.theme-report-federal .verdict-box { border: 2.5px solid #000; background: #fef3c7; }
+
+		/* ── THEME 9: NORDIC DEEP FJORD (Equinor Marine Blue) ── */
+		.a4-page-frame.theme-report-fjord {
+			border: 2px solid #0c4a6e;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+		}
+		.a4-page-frame.theme-report-fjord .corp-header,
+		.a4-page-frame.theme-report-fjord .corp-footer { border: 1.5px solid #0c4a6e; }
+		.a4-page-frame.theme-report-fjord .corp-header .ch-name { color: #0c4a6e; font-weight: 900; }
+		.a4-page-frame.theme-report-fjord .ctbl th,
+		.a4-page-frame.theme-report-fjord .ctbl td { border: 1px solid #0284c7; padding: 2.2px 4px; }
+		.a4-page-frame.theme-report-fjord .csec {
+			background: #0c4a6e !important;
+			color: #ffffff !important;
+			font-weight: 800;
+			font-size: 6.5pt;
+			text-transform: uppercase;
+			padding: 2.4px 5px;
+			letter-spacing: .06em;
+			border: 1px solid #0c4a6e !important;
+		}
+		.a4-page-frame.theme-report-fjord .report-main-title { color: #0c4a6e; font-size: 10.5pt; font-weight: 900; }
+		.a4-page-frame.theme-report-fjord .report-main-subtitle { color: #0284c7; font-size: 6.8pt; border-bottom: 1.5px solid #0c4a6e; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-fjord .lbl { color: #0369a1; font-weight: 700; }
+		.a4-page-frame.theme-report-fjord .val { color: #082f49; }
+		.a4-page-frame.theme-report-fjord .dc-strip td { background: #f0f9ff; border: 1px solid #0284c7; color: #0c4a6e; }
+		.a4-page-frame.theme-report-fjord .verdict-box { border: 2px solid #0c4a6e; background: #f0f9ff; }
+
+		/* ── THEME 10: SUBSEA PETRO-TECH (API 8C Teal Grid) ── */
+		.a4-page-frame.theme-report-subsea {
+			border: 2px solid #115e59;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+		}
+		.a4-page-frame.theme-report-subsea .corp-header,
+		.a4-page-frame.theme-report-subsea .corp-footer { border: 1.5px solid #115e59; }
+		.a4-page-frame.theme-report-subsea .corp-header .ch-name { color: #115e59; font-weight: 900; }
+		.a4-page-frame.theme-report-subsea .ctbl th,
+		.a4-page-frame.theme-report-subsea .ctbl td { border: 1px solid #0d9488; padding: 2.2px 4px; }
+		.a4-page-frame.theme-report-subsea .csec {
+			background: #134e4a !important;
+			color: #ccfbf1 !important;
+			font-weight: 800;
+			font-size: 6.5pt;
+			text-transform: uppercase;
+			padding: 2.4px 5px;
+			letter-spacing: .06em;
+			border: 1px solid #115e59 !important;
+		}
+		.a4-page-frame.theme-report-subsea .report-main-title { color: #115e59; font-size: 10.5pt; font-weight: 900; }
+		.a4-page-frame.theme-report-subsea .report-main-subtitle { color: #0f766e; font-size: 6.8pt; border-bottom: 1.5px solid #115e59; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-subsea .lbl { color: #0f766e; font-weight: 700; }
+		.a4-page-frame.theme-report-subsea .val { color: #042f2e; }
+		.a4-page-frame.theme-report-subsea .dc-strip td { background: #f0fdfa; border: 1px solid #0d9488; color: #115e59; }
+		.a4-page-frame.theme-report-subsea .verdict-box { border: 2px solid #115e59; background: #f0fdfa; }
+
+		/* ── THEME 11: AVIONICS FLIGHT-LINE (FAA Form 1 Precision Layout) ── */
+		.a4-page-frame.theme-report-avionics {
+			border: 2px solid #1e293b;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+		}
+		.a4-page-frame.theme-report-avionics .corp-header,
+		.a4-page-frame.theme-report-avionics .corp-footer { border: 1.5px solid #0f172a; }
+		.a4-page-frame.theme-report-avionics .corp-header .ch-name { color: #0f172a; font-weight: 900; }
+		.a4-page-frame.theme-report-avionics .ctbl th,
+		.a4-page-frame.theme-report-avionics .ctbl td { border: 1px solid #64748b; padding: 2.2px 4px; }
+		.a4-page-frame.theme-report-avionics .csec {
+			background: #334155 !important;
+			color: #ffffff !important;
+			font-weight: 900;
+			font-size: 6.6pt;
+			text-transform: uppercase;
+			padding: 2.4px 5px;
+			letter-spacing: .05em;
+			border: 1px solid #334155 !important;
+		}
+		.a4-page-frame.theme-report-avionics .report-main-title { color: #0f172a; font-size: 10pt; font-weight: 900; }
+		.a4-page-frame.theme-report-avionics .report-main-subtitle { color: #475569; font-size: 6.8pt; border-bottom: 1.5px solid #334155; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-avionics .lbl { color: #475569; font-weight: 800; }
+		.a4-page-frame.theme-report-avionics .val { color: #0f172a; }
+		.a4-page-frame.theme-report-avionics .dc-strip td { background: #f1f5f9; border: 1px solid #64748b; color: #0f172a; }
+		.a4-page-frame.theme-report-avionics .verdict-box { border: 2px solid #0f172a; background: #f1f5f9; }
+
+		/* ── THEME 12: METRIC MILLIMETER (JIS / Pure Monospace Calibration Grid) ── */
+		.a4-page-frame.theme-report-metric {
+			border: 2px solid #000000;
+			font-family: 'JetBrains Mono', Consolas, "Liberation Mono", Courier, monospace;
+			background: #ffffff;
+		}
+		.a4-page-frame.theme-report-metric .corp-header,
+		.a4-page-frame.theme-report-metric .corp-footer { border: 1.5px solid #000; }
+		.a4-page-frame.theme-report-metric .corp-header .ch-name { color: #000; font-weight: 900; }
+		.a4-page-frame.theme-report-metric .ctbl th,
+		.a4-page-frame.theme-report-metric .ctbl td {
+			border: 1px solid #555555;
+			padding: 2px 4px;
+		}
+		.a4-page-frame.theme-report-metric .csec {
+			background: #000000 !important;
+			color: #ffffff !important;
+			font-family: 'JetBrains Mono', Consolas, monospace;
+			font-weight: 800;
+			font-size: 6.4pt;
+			text-transform: uppercase;
+			padding: 2.2px 4.5px;
+			letter-spacing: .05em;
+			border: 1px solid #000000 !important;
+		}
+		.a4-page-frame.theme-report-metric .report-main-title { color: #000; font-size: 10pt; font-weight: 900; letter-spacing: .06em; }
+		.a4-page-frame.theme-report-metric .report-main-subtitle { color: #444; font-size: 6.6pt; border-bottom: 1.5px dashed #000; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-metric .lbl { color: #555; font-size: 5.5pt; font-weight: 800; }
+		.a4-page-frame.theme-report-metric .val { color: #000; font-size: 6pt; }
+		.a4-page-frame.theme-report-metric .dc-strip td { background: #fafafa; border: 1px solid #555; color: #000; }
+		.a4-page-frame.theme-report-metric .verdict-box { border: 1.5px solid #000; background: #fafafa; }
+
+		/* ── THEME 13: HOLOGRAPHIC LASER NDT LAB (High-Tech Sky Blue Accent) ── */
+		.a4-page-frame.theme-report-laser-ndt {
+			border: 2px solid #0284c7;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+		}
+		.a4-page-frame.theme-report-laser-ndt .corp-header,
+		.a4-page-frame.theme-report-laser-ndt .corp-footer { border: 1.5px solid #0284c7; }
+		.a4-page-frame.theme-report-laser-ndt .corp-header .ch-name { color: #0284c7; font-weight: 900; }
+		.a4-page-frame.theme-report-laser-ndt .ctbl th,
+		.a4-page-frame.theme-report-laser-ndt .ctbl td { border: 1px solid #38bdf8; padding: 2.2px 4px; }
+		.a4-page-frame.theme-report-laser-ndt .csec {
+			background: #0369a1 !important;
+			color: #ffffff !important;
+			font-weight: 900;
+			font-size: 6.6pt;
+			text-transform: uppercase;
+			padding: 2.4px 5px;
+			border-left: 5px solid #38bdf8 !important;
+			border: 1px solid #0369a1;
+		}
+		.a4-page-frame.theme-report-laser-ndt .report-main-title { color: #0369a1; font-size: 10.5pt; font-weight: 900; }
+		.a4-page-frame.theme-report-laser-ndt .report-main-subtitle { color: #0284c7; font-size: 6.8pt; border-bottom: 1.5px solid #0284c7; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-laser-ndt .lbl { color: #0369a1; font-weight: 700; }
+		.a4-page-frame.theme-report-laser-ndt .val { color: #082f49; }
+		.a4-page-frame.theme-report-laser-ndt .dc-strip td { background: #f0f9ff; border: 1px solid #38bdf8; color: #0369a1; }
+		.a4-page-frame.theme-report-laser-ndt .verdict-box { border: 2px solid #0284c7; background: #f0f9ff; }
+
+		/* ── THEME 14: BRUTALIST MONOLITH (Heavy Industrial Stark 3px Borders) ── */
+		.a4-page-frame.theme-report-monolith {
+			border: 3.5px solid #000000 !important;
+			font-family: "Arial Black", Arial, sans-serif;
+			background: #ffffff;
+		}
+		.a4-page-frame.theme-report-monolith .corp-header,
+		.a4-page-frame.theme-report-monolith .corp-footer {
+			border: 2.5px solid #000000 !important;
+		}
+		.a4-page-frame.theme-report-monolith .corp-header .ch-name { color: #000; font-weight: 900; font-size: 13pt; }
+		.a4-page-frame.theme-report-monolith .ctbl th,
+		.a4-page-frame.theme-report-monolith .ctbl td {
+			border: 2px solid #000000 !important;
+			padding: 2.2px 4px;
+		}
+		.a4-page-frame.theme-report-monolith .csec {
+			background: #000000 !important;
+			color: #ffffff !important;
+			font-family: "Arial Black", Arial, sans-serif;
+			font-weight: 900;
+			font-size: 7pt;
+			text-transform: uppercase;
+			padding: 2.8px 5px;
+			letter-spacing: .08em;
+			border: 1px solid #000000 !important;
+		}
+		.a4-page-frame.theme-report-monolith .report-main-title {
+			color: #000000;
+			font-size: 11.5pt;
+			font-weight: 900;
+			letter-spacing: .08em;
+			border-bottom: 3.5px solid #000;
+			padding-bottom: 2px;
+		}
+		.a4-page-frame.theme-report-monolith .report-main-subtitle { color: #000; font-size: 7pt; font-weight: 900; margin-top: 2px; }
+		.a4-page-frame.theme-report-monolith .lbl { color: #000; font-weight: 900; font-size: 5.5pt; }
+		.a4-page-frame.theme-report-monolith .val { color: #000; font-family: Arial, sans-serif; font-weight: 700; }
+		.a4-page-frame.theme-report-monolith .dc-strip td { background: #e4e4e7; border: 2px solid #000; color: #000; font-weight: 700; }
+		.a4-page-frame.theme-report-monolith .verdict-box { border: 3px solid #000; background: #fff; }
+
+		/* ── THEME 15: ARCHIVAL PARCHMENT (Historical Guild Serif, Warm Classical) ── */
+		.a4-page-frame.theme-report-parchment {
+			border: 2px solid #78350f;
+			background: #fdfbf7 !important;
+			font-family: "Georgia", "Palatino Linotype", "Book Antiqua", serif;
+		}
+		.a4-page-frame.theme-report-parchment .corp-header,
+		.a4-page-frame.theme-report-parchment .corp-footer {
+			border: 1.5px solid #78350f;
+			background: #fbf5e6;
+		}
+		.a4-page-frame.theme-report-parchment .corp-header .ch-name { color: #78350f; font-family: Georgia, serif; font-size: 13pt; }
+		.a4-page-frame.theme-report-parchment .ctbl th,
+		.a4-page-frame.theme-report-parchment .ctbl td {
+			border: 1px solid #b45309;
+			padding: 2.2px 4px;
+		}
+		.a4-page-frame.theme-report-parchment .csec {
+			background: #78350f !important;
+			color: #fdfbf7 !important;
+			font-family: Georgia, serif;
+			font-weight: 800;
+			font-size: 6.7pt;
+			text-transform: uppercase;
+			padding: 2.5px 5px;
+			letter-spacing: .08em;
+			border: 1px solid #78350f !important;
+		}
+		.a4-page-frame.theme-report-parchment .report-main-title {
+			color: #78350f;
+			font-size: 11pt;
+			font-weight: 900;
+			letter-spacing: .06em;
+			border-bottom: 2px solid #78350f;
+			padding-bottom: 2px;
+		}
+		.a4-page-frame.theme-report-parchment .report-main-subtitle { color: #92400e; font-size: 6.8pt; font-style: italic; }
+		.a4-page-frame.theme-report-parchment .lbl { color: #92400e; font-size: 5.5pt; font-weight: 700; }
+		.a4-page-frame.theme-report-parchment .val { color: #451a03; }
+		.a4-page-frame.theme-report-parchment .dc-strip td { background: #fef3c7; border: 1px solid #b45309; color: #78350f; }
+		.a4-page-frame.theme-report-parchment .verdict-box { border: 2px solid #78350f; background: #fef3c7; }
+
+		/* ── THEME 16: LINEAR DEVTOOLS AUDIT (Modern GitHub Slate) ── */
+		.a4-page-frame.theme-report-cert-linear {
+			border: 1.5px solid #21262d;
+			background: #ffffff;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+		}
+		.a4-page-frame.theme-report-cert-linear .corp-header,
+		.a4-page-frame.theme-report-cert-linear .corp-footer { border: 1.2px solid #30363d; }
+		.a4-page-frame.theme-report-cert-linear .corp-header .ch-name { color: #0d1117; font-weight: 800; }
+		.a4-page-frame.theme-report-cert-linear .ctbl th,
+		.a4-page-frame.theme-report-cert-linear .ctbl td { border: 1px solid #d0d7de; padding: 2.2px 4px; }
+		.a4-page-frame.theme-report-cert-linear .csec {
+			background: #161b22 !important;
+			color: #58a6ff !important;
+			font-weight: 800;
+			font-size: 6.5pt;
+			text-transform: uppercase;
+			padding: 2.4px 5px;
+			border-left: 4px solid #58a6ff !important;
+			border: 1px solid #161b22;
+		}
+		.a4-page-frame.theme-report-cert-linear .report-main-title { color: #0d1117; font-size: 10pt; font-weight: 800; letter-spacing: .04em; }
+		.a4-page-frame.theme-report-cert-linear .report-main-subtitle { color: #57606a; font-size: 6.6pt; border-bottom: 1.5px solid #d0d7de; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-cert-linear .lbl { color: #57606a; font-weight: 700; }
+		.a4-page-frame.theme-report-cert-linear .val { color: #24292f; }
+		.a4-page-frame.theme-report-cert-linear .dc-strip td { background: #f6f8fa; border: 1px solid #d0d7de; color: #24292f; }
+		.a4-page-frame.theme-report-cert-linear .verdict-box { border: 1.5px solid #21262d; background: #f6f8fa; }
+
+		/* ── THEME 17: BLOOMBERG TABULAR LEDGER (Terminal Monospace Financial) ── */
+		.a4-page-frame.theme-report-cert-bloomberg {
+			border: 2.5px solid #000000;
+			font-family: 'JetBrains Mono', Consolas, monospace;
+			background: #ffffff;
+		}
+		.a4-page-frame.theme-report-cert-bloomberg .corp-header,
+		.a4-page-frame.theme-report-cert-bloomberg .corp-footer { border: 1.5px solid #000; }
+		.a4-page-frame.theme-report-cert-bloomberg .corp-header .ch-name { color: #000; font-weight: 900; }
+		.a4-page-frame.theme-report-cert-bloomberg .ctbl th,
+		.a4-page-frame.theme-report-cert-bloomberg .ctbl td { border: 1.2px solid #000000; padding: 2px 4px; }
+		.a4-page-frame.theme-report-cert-bloomberg .csec {
+			background: #111111 !important;
+			color: #ff9900 !important;
+			font-family: 'JetBrains Mono', Consolas, monospace;
+			font-weight: 900;
+			font-size: 6.5pt;
+			text-transform: uppercase;
+			padding: 2.2px 4px;
+			letter-spacing: .06em;
+			border: 1px solid #000000 !important;
+		}
+		.a4-page-frame.theme-report-cert-bloomberg .report-main-title { color: #000; font-size: 10.5pt; font-weight: 900; }
+		.a4-page-frame.theme-report-cert-bloomberg .report-main-subtitle { color: #333; font-size: 6.6pt; border-bottom: 2px solid #000; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-cert-bloomberg .lbl { color: #444; font-size: 5.6pt; font-weight: 800; }
+		.a4-page-frame.theme-report-cert-bloomberg .val { color: #000; }
+		.a4-page-frame.theme-report-cert-bloomberg .dc-strip td { background: #f4f4f5; border: 1.2px solid #000; color: #000; }
+		.a4-page-frame.theme-report-cert-bloomberg .verdict-box { border: 2.5px solid #000; background: #fff; }
+
+		/* ── THEME 18: NEUMORPHIC LETTERPRESS (Pressed Warm Paper Archetype) ── */
+		.a4-page-frame.theme-report-cert-neumorphic {
+			border: 1.5px solid #dcd7ca;
+			background: #f4f1ea !important;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+		}
+		.a4-page-frame.theme-report-cert-neumorphic .corp-header,
+		.a4-page-frame.theme-report-cert-neumorphic .corp-footer {
+			border: 1px solid #dcd7ca;
+			background: #ede9df;
+		}
+		.a4-page-frame.theme-report-cert-neumorphic .corp-header .ch-name { color: #334155; font-weight: 800; }
+		.a4-page-frame.theme-report-cert-neumorphic .ctbl th,
+		.a4-page-frame.theme-report-cert-neumorphic .ctbl td { border: 1px solid #dcd7ca; padding: 2.3px 4px; }
+		.a4-page-frame.theme-report-cert-neumorphic .csec {
+			background: #e8e4da !important;
+			color: #334155 !important;
+			font-weight: 800;
+			font-size: 6.5pt;
+			text-transform: uppercase;
+			padding: 2.4px 5px;
+			border: 1px solid #dcd7ca !important;
+		}
+		.a4-page-frame.theme-report-cert-neumorphic .report-main-title { color: #334155; font-size: 10pt; font-weight: 900; }
+		.a4-page-frame.theme-report-cert-neumorphic .report-main-subtitle { color: #64748b; font-size: 6.8pt; border-bottom: 1.5px solid #dcd7ca; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-cert-neumorphic .lbl { color: #64748b; font-weight: 700; }
+		.a4-page-frame.theme-report-cert-neumorphic .val { color: #1e293b; }
+		.a4-page-frame.theme-report-cert-neumorphic .dc-strip td { background: #e8e4da; border: 1px solid #dcd7ca; color: #334155; }
+		.a4-page-frame.theme-report-cert-neumorphic .verdict-box { border: 1.5px solid #dcd7ca; background: #f4f1ea; box-shadow: 1px 1px 4px #dcd7ca; }
+
+		/* ── THEME 19: VISIONOS SPATIAL GLASS (Frosted Minimal Modern) ── */
+		.a4-page-frame.theme-report-cert-visionos {
+			border: 1.5px solid #cbd5e1;
+			background: #f8fafc !important;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+		}
+		.a4-page-frame.theme-report-cert-visionos .corp-header,
+		.a4-page-frame.theme-report-cert-visionos .corp-footer { border: 1px solid #cbd5e1; background: #ffffff; }
+		.a4-page-frame.theme-report-cert-visionos .corp-header .ch-name { color: #0f172a; font-weight: 800; }
+		.a4-page-frame.theme-report-cert-visionos .ctbl th,
+		.a4-page-frame.theme-report-cert-visionos .ctbl td { border: 1px solid #e2e8f0; padding: 2.3px 4px; }
+		.a4-page-frame.theme-report-cert-visionos .csec {
+			background: #f1f5f9 !important;
+			color: #0f172a !important;
+			font-weight: 800;
+			font-size: 6.5pt;
+			text-transform: uppercase;
+			padding: 2.4px 5px;
+			border: 1px solid #e2e8f0 !important;
+		}
+		.a4-page-frame.theme-report-cert-visionos .report-main-title { color: #0f172a; font-size: 10pt; font-weight: 900; }
+		.a4-page-frame.theme-report-cert-visionos .report-main-subtitle { color: #475569; font-size: 6.8pt; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-cert-visionos .lbl { color: #64748b; font-weight: 700; }
+		.a4-page-frame.theme-report-cert-visionos .val { color: #0f172a; }
+		.a4-page-frame.theme-report-cert-visionos .dc-strip td { background: #ffffff; border: 1px solid #e2e8f0; color: #0f172a; }
+		.a4-page-frame.theme-report-cert-visionos .verdict-box { border: 1.5px solid #cbd5e1; background: #ffffff; }
+
+		/* ── THEME 20: PRISMATIC AURORA (Vibrant Tech Purple Accent) ── */
+		.a4-page-frame.theme-report-cert-aurora {
+			border: 2px solid #8b5cf6;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+		}
+		.a4-page-frame.theme-report-cert-aurora .corp-header,
+		.a4-page-frame.theme-report-cert-aurora .corp-footer { border: 1.5px solid #8b5cf6; }
+		.a4-page-frame.theme-report-cert-aurora .corp-header .ch-name { color: #7c3aed; font-weight: 900; }
+		.a4-page-frame.theme-report-cert-aurora .ctbl th,
+		.a4-page-frame.theme-report-cert-aurora .ctbl td { border: 1px solid #c4b5fd; padding: 2.2px 4px; }
+		.a4-page-frame.theme-report-cert-aurora .csec {
+			background: #7c3aed !important;
+			color: #ffffff !important;
+			font-weight: 800;
+			font-size: 6.5pt;
+			text-transform: uppercase;
+			padding: 2.4px 5px;
+			border: 1px solid #7c3aed !important;
+		}
+		.a4-page-frame.theme-report-cert-aurora .report-main-title { color: #7c3aed; font-size: 10.5pt; font-weight: 900; }
+		.a4-page-frame.theme-report-cert-aurora .report-main-subtitle { color: #9333ea; font-size: 6.8pt; border-bottom: 2px solid #8b5cf6; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-cert-aurora .lbl { color: #7c3aed; font-weight: 700; }
+		.a4-page-frame.theme-report-cert-aurora .val { color: #1e1b4b; }
+		.a4-page-frame.theme-report-cert-aurora .dc-strip td { background: #faf5ff; border: 1px solid #c4b5fd; color: #7c3aed; }
+		.a4-page-frame.theme-report-cert-aurora .verdict-box { border: 2px solid #8b5cf6; background: #faf5ff; }
+
+		/* ── THEME 21: NEUBRUTALIST POP (Stark 3px Black with Pop Accents) ── */
+		.a4-page-frame.theme-report-cert-neubrutalist {
+			border: 3px solid #000000 !important;
+			font-family: Arial, "Helvetica Neue", sans-serif;
+		}
+		.a4-page-frame.theme-report-cert-neubrutalist .corp-header,
+		.a4-page-frame.theme-report-cert-neubrutalist .corp-footer { border: 2px solid #000 !important; }
+		.a4-page-frame.theme-report-cert-neubrutalist .corp-header .ch-name { color: #000; font-weight: 900; }
+		.a4-page-frame.theme-report-cert-neubrutalist .ctbl th,
+		.a4-page-frame.theme-report-cert-neubrutalist .ctbl td { border: 1.5px solid #000 !important; padding: 2.2px 4px; }
+		.a4-page-frame.theme-report-cert-neubrutalist .csec {
+			background: #000000 !important;
+			color: #ffffff !important;
+			font-weight: 900;
+			font-size: 6.8pt;
+			text-transform: uppercase;
+			padding: 2.6px 5px;
+			border: 1.5px solid #000 !important;
+		}
+		.a4-page-frame.theme-report-cert-neubrutalist .report-main-title { color: #000; font-size: 11pt; font-weight: 900; }
+		.a4-page-frame.theme-report-cert-neubrutalist .report-main-subtitle { color: #000; font-size: 6.8pt; font-weight: 800; border-bottom: 2.5px solid #000; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-cert-neubrutalist .lbl { color: #000; font-weight: 900; }
+		.a4-page-frame.theme-report-cert-neubrutalist .val { color: #000; }
+		.a4-page-frame.theme-report-cert-neubrutalist .dc-strip td { background: #fef08a; border: 1.5px solid #000; color: #000; font-weight: 700; }
+		.a4-page-frame.theme-report-cert-neubrutalist .verdict-box { border: 2.5px solid #000; background: #86efac; box-shadow: 2px 2px 0 #000; }
+
+		/* ── THEME 22: APPLE BENTO MODULAR (Modern Clean Framed Grid) ── */
+		.a4-page-frame.theme-report-cert-bento {
+			border: 1.5px solid #cbd5e1;
+			background: #f8fafc !important;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+		}
+		.a4-page-frame.theme-report-cert-bento .corp-header,
+		.a4-page-frame.theme-report-cert-bento .corp-footer {
+			border: 1px solid #cbd5e1;
+			background: #ffffff;
+		}
+		.a4-page-frame.theme-report-cert-bento .corp-header .ch-name { color: #0f172a; font-weight: 800; }
+		.a4-page-frame.theme-report-cert-bento .ctbl th,
+		.a4-page-frame.theme-report-cert-bento .ctbl td {
+			border: 1px solid #e2e8f0;
+			background: #ffffff;
+			padding: 2.4px 4.5px;
+		}
+		.a4-page-frame.theme-report-cert-bento .csec {
+			background: #f1f5f9 !important;
+			color: #0f172a !important;
+			font-weight: 800;
+			font-size: 6.5pt;
+			text-transform: uppercase;
+			padding: 2.5px 6px;
+			border: 1px solid #cbd5e1 !important;
+		}
+		.a4-page-frame.theme-report-cert-bento .report-main-title { color: #0f172a; font-size: 10pt; font-weight: 800; }
+		.a4-page-frame.theme-report-cert-bento .report-main-subtitle { color: #64748b; font-size: 6.8pt; border-bottom: 1.5px solid #cbd5e1; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-cert-bento .lbl { color: #64748b; font-weight: 700; }
+		.a4-page-frame.theme-report-cert-bento .val { color: #0f172a; }
+		.a4-page-frame.theme-report-cert-bento .dc-strip td { background: #ffffff; border: 1px solid #e2e8f0; color: #0f172a; }
+		.a4-page-frame.theme-report-cert-bento .verdict-box { border: 1px solid #cbd5e1; background: #ffffff; }
+
+		/* ── THEME 23: DARK LUXURY OBSIDIAN GOLD ── */
+		.a4-page-frame.theme-report-cert-luxury {
+			border: 2px solid #d4af37;
+			background: #0a0a0a !important;
+			color: #f5f5f5 !important;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Georgia, serif;
+		}
+		.a4-page-frame.theme-report-cert-luxury .corp-header,
+		.a4-page-frame.theme-report-cert-luxury .corp-footer { border: 1.5px solid #d4af37; background: #141414; }
+		.a4-page-frame.theme-report-cert-luxury .corp-header .ch-name { color: #d4af37; font-weight: 900; }
+		.a4-page-frame.theme-report-cert-luxury .ctbl th,
+		.a4-page-frame.theme-report-cert-luxury .ctbl td { border: 1px solid #333333; padding: 2.2px 4px; }
+		.a4-page-frame.theme-report-cert-luxury .csec {
+			background: #141414 !important;
+			color: #d4af37 !important;
+			font-weight: 800;
+			font-size: 6.5pt;
+			text-transform: uppercase;
+			padding: 2.4px 5px;
+			border-left: 4px solid #d4af37 !important;
+			border: 1px solid #333;
+		}
+		.a4-page-frame.theme-report-cert-luxury .report-main-title { color: #d4af37; font-size: 10.5pt; font-weight: 900; letter-spacing: .08em; }
+		.a4-page-frame.theme-report-cert-luxury .report-main-subtitle { color: #e5e5e5; font-size: 6.8pt; border-bottom: 1.5px solid #d4af37; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-cert-luxury .lbl { color: #a3a3a3; font-size: 6pt; }
+		.a4-page-frame.theme-report-cert-luxury .val { color: #ffffff !important; }
+		.a4-page-frame.theme-report-cert-luxury .dc-strip td { background: #141414; border: 1px solid #333; color: #d4af37; }
+		.a4-page-frame.theme-report-cert-luxury .verdict-box { border: 1.5px solid #d4af37; background: #141414; }
+
+		/* ── THEME 24: MODERNIST BAUHAUS (Bold Geometric Primary Blocks) ── */
+		.a4-page-frame.theme-report-bauhaus {
+			border: 2.5px solid #000000 !important;
+			font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+		}
+		.a4-page-frame.theme-report-bauhaus .corp-header,
+		.a4-page-frame.theme-report-bauhaus .corp-footer { border: 1.5px solid #000; }
+		.a4-page-frame.theme-report-bauhaus .corp-header .ch-name { color: #000; font-weight: 900; }
+		.a4-page-frame.theme-report-bauhaus .ctbl th,
+		.a4-page-frame.theme-report-bauhaus .ctbl td { border: 1.5px solid #000; padding: 2.2px 4px; }
+		.a4-page-frame.theme-report-bauhaus .csec {
+			background: #000000 !important;
+			color: #ffffff !important;
+			font-weight: 900;
+			font-size: 6.6pt;
+			text-transform: uppercase;
+			padding: 2.5px 5px;
+			border-left: 6px solid #2563eb !important;
+			border: 1px solid #000;
+		}
+		.a4-page-frame.theme-report-bauhaus .report-main-title { color: #000000; font-size: 10.5pt; font-weight: 900; }
+		.a4-page-frame.theme-report-bauhaus .report-main-subtitle { color: #1e3a8a; font-size: 6.8pt; font-weight: 700; border-bottom: 2px solid #000; padding-bottom: 2px; }
+		.a4-page-frame.theme-report-bauhaus .lbl { color: #000000; font-weight: 800; font-size: 6pt; }
+		.a4-page-frame.theme-report-bauhaus .val { color: #000000; }
+		.a4-page-frame.theme-report-bauhaus .dc-strip td { background: #fef08a; border: 1.5px solid #000; color: #000; }
+		.a4-page-frame.theme-report-bauhaus .verdict-box { border: 2px solid #000; background: #ffffff; box-shadow: 2px 2px 0px #000; }

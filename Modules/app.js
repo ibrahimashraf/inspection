@@ -72,13 +72,13 @@
 					t.classList.add('active');
 					document.querySelectorAll('.nav-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
 					if (btn) { btn.classList.add('active'); btn.setAttribute('aria-selected', 'true'); }
-					if (tabId === 'tab_checklist') renderChecklistBuilder();
+					if (tabId === 'tab_checklist') { if (typeof renderChecklistTab === 'function') renderChecklistTab(); renderChecklistBuilder(); }
 					if (tabId === 'tab_batch') renderSheet();
-					if (tabId === 'tab_evidence') renderPhotoTiles();
-					if (tabId === 'tab_brand') renderAssetThumbs();
+					if (tabId === 'tab_evidence') { if (typeof renderEvidenceTab === 'function') renderEvidenceTab(); renderPhotoTiles(); }
+					if (tabId === 'tab_brand') { if (typeof renderBrandTab === 'function') renderBrandTab(); renderAssetThumbs(); }
 					if (tabId === 'tab_loler') { renderSigThumbs(); renderExtraCellBuilder(); }
 					if (tabId === 'tab_puwer') renderPuwerBuilder();
-					if (tabId === 'tab_tools') { initConv(); runSlingCalc(); runRopeCalc(); runUnitConvert(); }
+					if (tabId === 'tab_tools') { if (typeof renderToolsTab === 'function') renderToolsTab(); initConv(); runSlingCalc(); runRopeCalc(); runUnitConvert(); }
 					            if (tabId === 'tab_ndt') { renderNdtSigThumbs(); renderNdtExtraCellBuilder(); renderNdtIndications(); updateNdtFieldStates(); }
             // The signature pads may have been off-screen when they were
             // first set up. Any time a tab becomes visible, re-size every
@@ -149,74 +149,6 @@
 					document.body.classList.remove('printing-lock');
 				}
 			}
-			function exportSelectedCsv() {
-					syncCurrentData();
-					const isL = currentEngine === 'LIFTING';
-					const list = isL ? liftingBatch : ndtBatch;
-					let it = list.filter(r => r.selected === true);
-					if (!it.length) it = list;
-					const cols = isL ? LIFTING_COLUMNS : NDT_COLUMNS;
-					const lines = ['\uFEFF' + cols.map(c => '"' + c.label + '"').join(',')];
-					it.forEach(x => { lines.push(cols.map(c => '"' + String(x[c.key] || '').replace(/\+\+/g, '\n').replace(/"/g, '""') + '"').join(',')); });
-					const b = new Blob([lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
-					const u = URL.createObjectURL(b);
-					const a = document.createElement('a');
-					a.href = u; a.download = 'Export_' + Date.now() + '.csv'; a.click();
-					URL.revokeObjectURL(u);
-					showToast('Exported ' + it.length + '.', 'success');
-				}
-
-				// ── FIX C3: engine-aware CSV import. Previously always wrote to
-				// liftingBatch, silently destroying the LIFTING queue while the
-				// user was on the NDT engine.
-				function importMasterCsv(evt) {
-					const f = evt.target.files[0]; if (!f) return;
-					const engineAtImport = currentEngine;
-					const rd = new FileReader();
-					rd.onload = e => {
-						const text = e.target.result;
-						const d = text.includes('\t') ? '\t' : (text.includes(';') ? ';' : ',');
-						const rows = [];
-						let row = [], q = false, cur = '';
-						for (let i = 0; i < text.length; i++) {
-							const c = text[i], nx = text[i + 1];
-							if (c === '"') { if (q && nx === '"') { cur += '"'; i++; } else q = !q; }
-							else if (c === d && !q) { row.push(cur.trim()); cur = ''; }
-							else if ((c === '\r' || c === '\n') && !q) { if (c === '\r' && nx === '\n') i++; row.push(cur.trim()); if (row.length > 1 || row[0] !== '') rows.push(row); row = []; cur = ''; }
-							else cur += c;
-						}
-						if (cur) row.push(cur.trim());
-						if (row.length) rows.push(row);
-						if (rows.length < 2) { showToast('No data rows.', 'error'); return; }
-						const heads = rows[0].map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
-
-						if (engineAtImport === 'LIFTING') {
-							const nb = [];
-							for (let i = 1; i < rows.length; i++) {
-								const rec = { selected: false, puwerRows: defaultPuwerRows(), photos: Array(12).fill(null), checklist: [], extraCells: [], fieldToggles: {}, examParticulars: DEFAULT_EXAM_PARTICULARS, additionalTesting: 'NO', quantity: '1', reportDate: '' };
-								LIFTING_COLUMNS.forEach(c => { const mi = heads.findIndex(h => h.includes(c.key.toLowerCase())); rec[c.key] = mi !== -1 && rows[i][mi] !== undefined ? rows[i][mi].replace(/\r?\n/g, '++') : ''; });
-								if (!rec.reportNo) rec.reportNo = getNextReportNumber();
-								if (!rec.reportDate) rec.reportDate = rec.examDate || todayISO();
-								_validateRecordInPlace(rec);                       
-								nb.push(rec);
-							}
-							if (nb.length) { liftingBatch = nb; activeIdx = 0; loadActiveRecord(); showToast('Imported ' + nb.length + ' (LIFTING).', 'success'); }
-						} else {
-							const nb = [];
-							for (let i = 1; i < rows.length; i++) {
-								const rec = defaultNdtRecord(null);
-								NDT_COLUMNS.forEach(c => { const mi = heads.findIndex(h => h.includes(c.key.toLowerCase())); if (mi !== -1 && rows[i][mi] !== undefined) rec[c.key] = rows[i][mi].replace(/\r?\n/g, '++'); });
-								if (!rec.reportNo) rec.reportNo = getNextReportNumber('NDT');
-								_validateRecordInPlace(rec);
-								nb.push(rec);
-							}
-							if (nb.length) { ndtBatch = nb; activeIdx = 0; loadActiveRecord(); showToast('Imported ' + nb.length + ' (NDT).', 'success'); }
-						}
-					};
-					rd.readAsText(f);
-					evt.target.value = '';
-				}
-
 				/* LIFECYCLE */
 				window.addEventListener('pagehide', () => {
 					if (typeof isDirty === 'function' && isDirty()) persistStateV2().catch(() => {});
@@ -239,11 +171,11 @@
 					const g = id => document.getElementById(id);
 					setTheme(store.get('ims_theme') || 'dark');
 					const uf = store.get('ims_ui_font');
-					if (uf) { document.documentElement.style.setProperty('--app-font-family', uf); g('globalFontSelect').value = uf; }
+					if (uf) { updateAppFont(uf); if (g('globalFontSelect')) g('globalFontSelect').value = uf; }
 					const us = store.get('ims_ui_size');
 					if (us) { g('globalSizeSelect').value = us; document.documentElement.style.setProperty('--app-font-size', us); }
 					const rf = store.get('ims_rf');
-					if (rf) { document.documentElement.style.setProperty('--report-font-family', rf); g('reportFontSelect').value = rf; }
+					if (rf) { updateReportFont(rf); const rfel = g('reportFontSelect'); if (rfel) rfel.value = rf; }
 					const rs = store.get('ims_rs');
 					if (rs) { document.documentElement.style.setProperty('--report-font-size', rs); g('reportSizeSelect').value = rs; }
 					const dn = store.get('ims_rd');
@@ -253,9 +185,9 @@
 					try { const dc = JSON.parse(store.get('ims_dc') || 'null'); if (dc) { if (typeof dc.on === 'boolean') docControl.on = dc.on; if (dc.docNo) docControl.docNo = dc.docNo; if (dc.rev) docControl.rev = dc.rev; if (dc.revDate) docControl.revDate = dc.revDate; if (dc.reportNoPattern) docControl.reportNoPattern = dc.reportNoPattern; } } catch (e) {}
 					try { const ci = JSON.parse(store.get('ims_ci') || 'null'); if (ci) Object.keys(corpInfo).forEach(k => { if (ci[k] !== undefined) corpInfo[k] = ci[k]; }); } catch (e) {}
 					try { const ft = JSON.parse(store.get('ims_ft') || 'null'); if (ft) Object.keys(featureToggles).forEach(k => { if (typeof ft[k] === 'boolean') featureToggles[k] = ft[k]; }); } catch (e) {}
-					if (g('dc_docNo')) g('dc_docNo').value = docControl.docNo;
-					if (g('dc_rev')) g('dc_rev').value = docControl.rev;
-					if (g('dc_revDate')) g('dc_revDate').value = docControl.revDate;
+					['dc_docNo', 'in_main_docNo', 'ndt_main_docNo'].forEach(id => { if (g(id)) g(id).value = docControl.docNo; });
+					['dc_rev', 'in_main_docRev', 'ndt_main_docRev'].forEach(id => { if (g(id)) g(id).value = docControl.rev; });
+					['dc_revDate', 'in_main_docRevDate', 'ndt_main_docRevDate'].forEach(id => { if (g(id)) g(id).value = docControl.revDate; });
 					if (g('dc_reportNoPattern')) g('dc_reportNoPattern').value = docControl.reportNoPattern || '{PREFIX}-{DATE}-0{SEQ}';
 					if (g('ci_body')) g('ci_body').value = corpInfo.body;
 					if (g('ci_accred')) g('ci_accred').value = corpInfo.accred;
@@ -263,11 +195,17 @@
 					if (g('ci_phone')) g('ci_phone').value = corpInfo.phone;
 					if (g('ci_email')) g('ci_email').value = corpInfo.email;
 					if (g('ci_web')) g('ci_web').value = corpInfo.web;
-					if (g('ci_footnote')) g('ci_footnote').value = corpInfo.footnote;
-					const dp = g('pill_docControl');
-					if (dp) { dp.className = 'micro-toggle ' + (docControl.on ? 'on' : 'off'); dp.innerHTML = '<span class="toggle-dot"></span>' + (docControl.on ? 'ON' : 'OFF'); }
+					['ci_footnote', 'in_main_footnote', 'ndt_main_footnote'].forEach(id => { if (g(id)) g(id).value = corpInfo.footnote; });
+					['pill_docControl', 'pill_main_docControl', 'pill_ndt_main_docControl'].forEach(id => {
+						const dp = g(id);
+						if (dp) { dp.className = 'micro-toggle ' + (docControl.on ? 'on' : 'off'); dp.innerHTML = '<span class="toggle-dot"></span>' + (docControl.on ? 'ON' : 'OFF'); }
+					});
 					const ly = parseInt(store.get('ims_layout') || '0', 10);
 					if (!isNaN(ly) && ly >= 0 && ly < layoutModes.length) currentLayoutIdx = ly;
+					const rTheme = store.get('ims_report_theme');
+					if (rTheme && typeof setReportTheme === 'function') setReportTheme(rTheme);
+					const fStyle = store.get('ims_form_style');
+					if (fStyle && typeof setFormStyle === 'function') setFormStyle(fStyle);
 					applyLayout();
 					updateFeaturePills();
 					refreshQrUI();
@@ -454,6 +392,7 @@
 					try { if (typeof installOnlineListeners === 'function') installOnlineListeners(); } catch (e) {}
 					try { if (typeof installStickyBanner === 'function') installStickyBanner(); } catch (e) {}
 					try { if (typeof installKeyboardShortcuts === 'function') installKeyboardShortcuts(); } catch (e) {}
+					try { if (typeof installTrackpadZoom === 'function') installTrackpadZoom(); } catch (e) {}
 					try { MQ_BESIDE_OK.addEventListener('change', applyLayout); } catch (e) {}
 					try { window.addEventListener('resize', applyZoom, { passive: true }); } catch (e) {}
 					try { applyLayout(); } catch (e) {}

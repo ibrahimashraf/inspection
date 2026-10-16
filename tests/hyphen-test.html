@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Hyphen vs Number Spacing Test Lab</title>
+	<style>
+		body {
+			background: #080c14;
+			color: #e2e8f0;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+			padding: 30px;
+		}
+		.box {
+			background: #ffffff;
+			color: #020617;
+			padding: 16px;
+			margin-bottom: 20px;
+			border: 1.5px solid #0f172a;
+			max-width: 600px;
+		}
+		.label {
+			font-size: 11px;
+			color: #64748b;
+			text-transform: uppercase;
+			font-weight: bold;
+			margin-bottom: 4px;
+		}
+		.text-sample {
+			font-size: 28px;
+			font-weight: 700;
+			line-height: 1.2;
+		}
+
+		/* 1. SEGOE UI WITH TNUM (The current culprit) */
+		.segoe-tnum {
+			font-family: "Segoe UI", sans-serif;
+			font-feature-settings: "tnum" 1;
+		}
+
+		/* 2. SEGOE UI WITHOUT TNUM (Proportional natural kerning) */
+		.segoe-proportional {
+			font-family: "Segoe UI", sans-serif;
+			font-feature-settings: "pnum" 1;
+		}
+
+		/* 3. ARIAL / HELVETICA (Equal balanced hyphen clearance) */
+		.arial-pure {
+			font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+		}
+
+		/* 4. INTER WITH TABULAR NUMBERS */
+		.inter-pure {
+			font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+			font-feature-settings: "tnum" 1;
+		}
+	</style>
+</head>
+<body>
+
+	<h2>Investigating the Space Between "-" and "4" in PLT-440</h2>
+
+	<!-- 1. CURRENT ISSUE -->
+	<div class="box">
+		<div class="label">1. Current (Segoe UI with "tnum" 1): Notice how "-" hugs "4"</div>
+		<div class="text-sample segoe-tnum">PLT-440 &nbsp;&nbsp; SN-99482-B</div>
+		<p style="font-size:12px; color:#ef4444; margin:4px 0 0;">
+			In Segoe UI, the digit "4" has a wide left triangular overhang that physically encroaches into the space of the hyphen when tabular mode is active.
+		</p>
+	</div>
+
+	<!-- 2. FIX A: REMOVE TNUM (Proportional Segoe) -->
+	<div class="box">
+		<div class="label">2. Fix A: Segoe UI Proportional (No "tnum")</div>
+		<div class="text-sample segoe-proportional">PLT-440 &nbsp;&nbsp; SN-99482-B</div>
+		<p style="font-size:12px; color:#10b981; margin:4px 0 0;">
+			Kerning pairs kick in naturally: proper optical air between "-" and "4".
+		</p>
+	</div>
+
+	<!-- 3. FIX B: ARIAL PURE (Classic Swiss, Perfectly Balanced Hyphens) -->
+	<div class="box">
+		<div class="label">3. Fix B: Arial / Helvetica Neue (Bold 700)</div>
+		<div class="text-sample arial-pure">PLT-440 &nbsp;&nbsp; SN-99482-B</div>
+		<p style="font-size:12px; color:#10b981; margin:4px 0 0;">
+			Arial's hyphen glyph has identical left and right sidebearings; "-" sits precisely dead-center between "T" and "4".
+		</p>
+	</div>
+
+	<!-- 4. FIX C: INTER (Engineered Metrics) -->
+	<div class="box">
+		<div class="label">4. Fix C: Inter (Bold 700 with tnum)</div>
+		<div class="text-sample inter-pure">PLT-440 &nbsp;&nbsp; SN-99482-B</div>
+		<p style="font-size:12px; color:#10b981; margin:4px 0 0;">
+			Inter has special contextual kerning for hyphens before digits (`-1`, `-4`, etc.).
+		</p>
+	</div>
+
+</body>
+</html>

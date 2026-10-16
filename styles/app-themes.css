@@ -1,0 +1,623 @@
+		/* ── 21. THEMES ─────────────────────────────────────────────── */
+		/* Nordic Frost (Clean Modern Engineering Light) */
+		body.theme-light, :root.theme-light {
+			color-scheme: light;
+			--bg:            #f8fafc;
+			--surface:       #ffffff;
+			--panel:         #f1f5f9;
+			--cell:          #f8fafc;
+			--cell-hover:    #f1f5f9;
+			--ink:           #0f172a;
+			--ink-muted:     #475569;
+			--ink-subtle:    #64748b;
+			--hairline:      #e2e8f0;
+			--hairline-soft: #edf2f7;
+			--hairline-strong: #cbd5e1;
+			--accent:        #2563eb;
+			--accent-hover:  #1d4ed8;
+			--accent-subtle: rgba(37, 99, 235, .10);
+			--pass:          #16a34a;
+			--warn:          #d97706;
+			--fail:          #dc2626;
+			--del-red:       #b91c1c;
+			--preview-bg:    #cbd5e1;
+		}
+		/* Industrial Warm / Amber Technical */
+		body.theme-sunlight, :root.theme-sunlight {
+			color-scheme: light;
+			--bg:            #fcf8f2;
+			--surface:       #ffffff;
+			--panel:         #f7f0e4;
+			--cell:          #fcf8f2;
+			--cell-hover:    #f3ebd9;
+			--ink:           #292524;
+			--ink-muted:     #57534e;
+			--ink-subtle:    #78716c;
+			--hairline:      #e7dfd5;
+			--hairline-soft: #f0e9df;
+			--hairline-strong: #d6cbbe;
+			--accent:        #d97706;
+			--accent-hover:  #b45309;
+			--accent-subtle: rgba(217, 119, 6, .12);
+			--pass:          #15803d;
+			--warn:          #b45309;
+			--fail:          #b91c1c;
+			--del-red:       #991b1b;
+			--preview-bg:    #ded5c6;
+		}
+		/* Obsidian Stealth (OLED Field Mode with Signal Emerald) */
+		body.theme-night, :root.theme-night {
+			color-scheme: dark;
+			--bg:            #000000;
+			--surface:       #0c0d10;
+			--panel:         #13151b;
+			--cell:          #08090c;
+			--cell-hover:    #151820;
+			--ink:           #f8fafc;
+			--ink-muted:     #94a3b8;
+			--ink-subtle:    #64748b;
+			--hairline:      #1f242e;
+			--hairline-soft: #171b23;
+			--hairline-strong: #2e3544;
+			--accent:        #10b981;
+			--accent-hover:  #059669;
+			--accent-subtle: rgba(16, 185, 129, .15);
+			--pass:          #10b981;
+			--warn:          #f59e0b;
+			--fail:          #f43f5e;
+			--del-red:       #e11d48;
+			--preview-bg:    #000000;
+		}
+		/* Cobalt & Tangerine (Accessible High-Def Color-Blind Safe) */
+		body.theme-cbsafe, :root.theme-cbsafe {
+			color-scheme: dark;
+			--bg:            #0a0f1d;
+			--surface:       #111827;
+			--panel:         #1a2234;
+			--cell:          #0e1524;
+			--cell-hover:    #192338;
+			--ink:           #f9fafb;
+			--ink-muted:     #9ca3af;
+			--ink-subtle:    #6b7280;
+			--hairline:      #26334d;
+			--hairline-soft: #1e283d;
+			--hairline-strong: #374663;
+			--accent:        #38bdf8;
+			--accent-hover:  #0284c7;
+			--accent-subtle: rgba(56, 189, 248, .15);
+			--pass:          #38bdf8;   /* high-contrast sky blue */
+			--warn:          #fbbf24;
+			--fail:          #fb923c;   /* pure orange = fail */
+			--del-red:       #ea580c;
+			--preview-bg:    #060a14;
+		}
+		body.theme-hc, :root.theme-hc {
+			color-scheme: dark;
+			--bg:            #000000;
+			--surface:       #0a0a0a;
+			--panel:         #141414;
+			--cell:          #000000;
+			--cell-hover:    #1c1c1c;
+			--ink:           #ffffff;
+			--ink-muted:     #d4d4d4;
+			--ink-subtle:    #999999;
+			--hairline:      #6b6b6b;
+			--hairline-soft: #333333;
+			--hairline-strong: #b3b3b3;
+			--accent:        #ffd400;
+			--accent-hover:  #ffdd33;
+			--accent-subtle: rgba(255, 212, 0, .15);
+			--pass:          #00ff7f;
+			--warn:          #ffa500;
+			--fail:          #ff5252;
+			--del-red:       #ff0000;
+			--preview-bg:    #000000;
+		}
+
+		/* 05. Bloomberg Terminal (OLED Horizon Amber) */
+		body.theme-bloomberg, :root.theme-bloomberg {
+			color-scheme: dark;
+			--bg:            #000000;
+			--surface:       #0c0d10;
+			--panel:         #18181b;
+			--cell:          #080808;
+			--cell-hover:    #141417;
+			--ink:           #ffffff;
+			--ink-muted:     #a1a1aa;
+			--ink-subtle:    #71717a;
+			--hairline:      #27272a;
+			--hairline-soft: #18181b;
+			--hairline-strong: #3f3f46;
+			--accent:        #ff9900;
+			--accent-hover:  #e68a00;
+			--accent-subtle: rgba(255, 153, 0, 0.16);
+			--pass:          #22c55e;
+			--warn:          #ff9900;
+			--fail:          #ef4444;
+			--del-red:       #dc2626;
+			--preview-bg:    #000000;
+		}
+
+		/* 06. Draftsman Blueprint (Cad-Night Cobalt) */
+		body.theme-blueprint, :root.theme-blueprint {
+			color-scheme: dark;
+			--bg:            #0a1128;
+			--surface:       #001f54;
+			--panel:         #034078;
+			--cell:          #07193f;
+			--cell-hover:    #0a2864;
+			--ink:           #f0fdf4;
+			--ink-muted:     #90e0ef;
+			--ink-subtle:    #64b5f6;
+			--hairline:      #1282a2;
+			--hairline-soft: #0a4f70;
+			--hairline-strong: #00f0ff;
+			--accent:        #00f0ff;
+			--accent-hover:  #00c4d4;
+			--accent-subtle: rgba(0, 240, 255, 0.18);
+			--pass:          #00f0ff;
+			--warn:          #ffd166;
+			--fail:          #ef476f;
+			--del-red:       #e63946;
+			--preview-bg:    #050b1a;
+		}
+
+		/* 07. JIS Precision Metric (High-Def Technical Laboratory) */
+		body.theme-metric, :root.theme-metric {
+			color-scheme: light;
+			--bg:            #eef2f6;
+			--surface:       #fcfdff;
+			--panel:         #e2e8f0;
+			--cell:          #f1f5f9;
+			--cell-hover:    #e2e8f0;
+			--ink:           #091e42;
+			--ink-muted:     #334155;
+			--ink-subtle:    #475569;
+			--hairline:      #0284c7;
+			--hairline-soft: #bae6fd;
+			--hairline-strong: #0369a1;
+			--accent:        #0284c7;
+			--accent-hover:  #0369a1;
+			--accent-subtle: rgba(2, 132, 199, 0.14);
+			--pass:          #059669;
+			--warn:          #d97706;
+			--fail:          #dc2626;
+			--del-red:       #b91c1c;
+			--preview-bg:    #cbd5e1;
+		}
+
+		/* 08. Neumorphic Soft Clay (Tactile Well Taupe) */
+		body.theme-clay, :root.theme-clay {
+			color-scheme: light;
+			--bg:            #f4f1ea;
+			--surface:       #e8e4da;
+			--panel:         #ded9cd;
+			--cell:          #f4f1ea;
+			--cell-hover:    #ede9e0;
+			--ink:           #334155;
+			--ink-muted:     #64748b;
+			--ink-subtle:    #94a3b8;
+			--hairline:      #dcd7ca;
+			--hairline-soft: #e5e0d4;
+			--hairline-strong: #b8b2a3;
+			--accent:        #64748b;
+			--accent-hover:  #475569;
+			--accent-subtle: rgba(100, 116, 139, 0.15);
+			--pass:          #15803d;
+			--warn:          #b45309;
+			--fail:          #b91c1c;
+			--del-red:       #991b1b;
+			--preview-bg:    #ded9cd;
+		}
+
+		/* 09. Avionics Aluminum (Brushed Cockpit Steel) */
+		body.theme-avionics, :root.theme-avionics {
+			color-scheme: dark;
+			--bg:            #1e232b;
+			--surface:       #2b303c;
+			--panel:         #333a48;
+			--cell:          #1a1f26;
+			--cell-hover:    #242a34;
+			--ink:           #f8fafc;
+			--ink-muted:     #94a3b8;
+			--ink-subtle:    #64748b;
+			--hairline:      #475569;
+			--hairline-soft: #384152;
+			--hairline-strong: #64748b;
+			--accent:        #38bdf8;
+			--accent-hover:  #0ea5e9;
+			--accent-subtle: rgba(56, 189, 248, 0.16);
+			--pass:          #34d399;
+			--warn:          #fbbf24;
+			--fail:          #f87171;
+			--del-red:       #ef4444;
+			--preview-bg:    #12161c;
+		}
+
+		/* 10. Archival Guild Linen (Heritage Leather & Parchment) */
+		body.theme-linen, :root.theme-linen {
+			color-scheme: light;
+			--bg:            #fdfbf7;
+			--surface:       #f7f4ec;
+			--panel:         #ede8dc;
+			--cell:          #fdfbf7;
+			--cell-hover:    #f3efe3;
+			--ink:           #451a03;
+			--ink-muted:     #92400e;
+			--ink-subtle:    #b45309;
+			--hairline:      #b45309;
+			--hairline-soft: #e2d9c8;
+			--hairline-strong: #78350f;
+			--accent:        #78350f;
+			--accent-hover:  #5c280a;
+			--accent-subtle: rgba(120, 53, 15, 0.14);
+			--pass:          #166534;
+			--warn:          #b45309;
+			--fail:          #991b1b;
+			--del-red:       #7f1d1d;
+			--preview-bg:    #ede8dc;
+		}
+
+		/* 11. E-Ink Matte Paper (Stark Monochromatic Ink) */
+		body.theme-eink, :root.theme-eink {
+			color-scheme: light;
+			--bg:            #f4f3ef;
+			--surface:       #ffffff;
+			--panel:         #e9e8e2;
+			--cell:          #ffffff;
+			--cell-hover:    #f0efe9;
+			--ink:           #1a1a1a;
+			--ink-muted:     #555555;
+			--ink-subtle:    #777777;
+			--hairline:      #1a1a1a;
+			--hairline-soft: #cccccc;
+			--hairline-strong: #1a1a1a;
+			--accent:        #1a1a1a;
+			--accent-hover:  #333333;
+			--accent-subtle: rgba(26, 26, 26, 0.12);
+			--pass:          #1a1a1a;
+			--warn:          #555555;
+			--fail:          #1a1a1a;
+			--del-red:       #000000;
+			--preview-bg:    #e5e4de;
+		}
+
+		/* 12. VisionOS Spatial Acrylic (Frosted Translucent Glow) */
+		body.theme-visionos, :root.theme-visionos {
+			color-scheme: dark;
+			--bg:            #0b0f19;
+			--surface:       #151b2c;
+			--panel:         #1d243b;
+			--cell:          #101524;
+			--cell-hover:    #1b233a;
+			--ink:           #ffffff;
+			--ink-muted:     #94a3b8;
+			--ink-subtle:    #64748b;
+			--hairline:      rgba(255, 255, 255, 0.16);
+			--hairline-soft: rgba(255, 255, 255, 0.08);
+			--hairline-strong: #a855f7;
+			--accent:        #a855f7;
+			--accent-hover:  #9333ea;
+			--accent-subtle: rgba(168, 85, 247, 0.20);
+			--pass:          #34d399;
+			--warn:          #fbbf24;
+			--fail:          #f43f5e;
+			--del-red:       #e11d48;
+			--preview-bg:    #050811;
+		}
+
+		/* 13. Terminal Green Phosphor (CRT Cathode Radiation) */
+		body.theme-terminal, :root.theme-terminal {
+			color-scheme: dark;
+			--bg:            #050505;
+			--surface:       #0a110a;
+			--panel:         #0f1c0f;
+			--cell:          #050805;
+			--cell-hover:    #102210;
+			--ink:           #33ff00;
+			--ink-muted:     #22aa00;
+			--ink-subtle:    #1a8000;
+			--hairline:      #1a551a;
+			--hairline-soft: #0f330f;
+			--hairline-strong: #33ff00;
+			--accent:        #33ff00;
+			--accent-hover:  #2ee600;
+			--accent-subtle: rgba(51, 255, 0, 0.20);
+			--pass:          #33ff00;
+			--warn:          #ffcc00;
+			--fail:          #ff3300;
+			--del-red:       #cc0000;
+			--preview-bg:    #000000;
+		}
+		body.theme-terminal .btn-accent, :root.theme-terminal .btn-accent { color: #000000 !important; }
+
+		/* 14. Cyberdeck Neon Vector (Cyan & Magenta Night City) */
+		body.theme-cyberdeck, :root.theme-cyberdeck {
+			color-scheme: dark;
+			--bg:            #05080f;
+			--surface:       #0b1329;
+			--panel:         #101b3b;
+			--cell:          #070d1e;
+			--cell-hover:    #13224a;
+			--ink:           #00f0ff;
+			--ink-muted:     #00b4d8;
+			--ink-subtle:    #0077b6;
+			--hairline:      #00f0ff;
+			--hairline-soft: #005f73;
+			--hairline-strong: #ff0055;
+			--accent:        #ff0055;
+			--accent-hover:  #e6004c;
+			--accent-subtle: rgba(255, 0, 85, 0.22);
+			--pass:          #00f0ff;
+			--warn:          #ffd60a;
+			--fail:          #ff0055;
+			--del-red:       #d90429;
+			--preview-bg:    #020408;
+		}
+
+		/* 15. Prismatic Aurora Mesh (Cosmic Violet Gradient) */
+		body.theme-aurora, :root.theme-aurora {
+			color-scheme: dark;
+			--bg:            #110924;
+			--surface:       #1a0f38;
+			--panel:         #23144d;
+			--cell:          #140b2b;
+			--cell-hover:    #2a185c;
+			--ink:           #fdf4ff;
+			--ink-muted:     #c4b5fd;
+			--ink-subtle:    #a78bfa;
+			--hairline:      #8b5cf6;
+			--hairline-soft: #5b21b6;
+			--hairline-strong: #ec4899;
+			--accent:        #ec4899;
+			--accent-hover:  #db2777;
+			--accent-subtle: rgba(236, 72, 153, 0.22);
+			--pass:          #34d399;
+			--warn:          #f59e0b;
+			--fail:          #f43f5e;
+			--del-red:       #e11d48;
+			--preview-bg:    #0a0517;
+		}
+
+		/* 16. Neubrutalist Pop Yellow (Graphic Shock) */
+		body.theme-neubrutalist, :root.theme-neubrutalist {
+			color-scheme: light;
+			--bg:            #fef08a;
+			--surface:       #ffffff;
+			--panel:         #fef9c3;
+			--cell:          #ffffff;
+			--cell-hover:    #fef08a;
+			--ink:           #000000;
+			--ink-muted:     #333333;
+			--ink-subtle:    #555555;
+			--hairline:      #000000;
+			--hairline-soft: #000000;
+			--hairline-strong: #000000;
+			--accent:        #ef4444;
+			--accent-hover:  #dc2626;
+			--accent-subtle: rgba(239, 68, 68, 0.18);
+			--pass:          #16a34a;
+			--warn:          #f59e0b;
+			--fail:          #ef4444;
+			--del-red:       #b91c1c;
+			--preview-bg:    #fef9c3;
+		}
+		body.theme-neubrutalist :not(.a4-page-frame) .card, :root.theme-neubrutalist :not(.a4-page-frame) .card {
+			border: 2.5px solid #000000 !important;
+			box-shadow: 4px 4px 0px #000000 !important;
+		}
+
+		/* 17. Weimar Bauhaus 1919 (Constructivist Primary Triad) */
+		body.theme-bauhaus, :root.theme-bauhaus {
+			color-scheme: light;
+			--bg:            #f0f0f0;
+			--surface:       #ffffff;
+			--panel:         #fef08a;
+			--cell:          #ffffff;
+			--cell-hover:    #f8f8f8;
+			--ink:           #121212;
+			--ink-muted:     #444444;
+			--ink-subtle:    #666666;
+			--hairline:      #121212;
+			--hairline-soft: #444444;
+			--hairline-strong: #d02020;
+			--accent:        #d02020;
+			--accent-hover:  #b01a1a;
+			--accent-subtle: rgba(208, 32, 32, 0.18);
+			--pass:          #1040c0;
+			--warn:          #eab308;
+			--fail:          #d02020;
+			--del-red:       #901010;
+			--preview-bg:    #e4e4e4;
+		}
+
+		/* 18. Industrial Monolith Raw (Cast Concrete & Safety Orange) */
+		body.theme-monolith, :root.theme-monolith {
+			color-scheme: dark;
+			--bg:            #18181b;
+			--surface:       #27272a;
+			--panel:         #3f3f46;
+			--cell:          #202023;
+			--cell-hover:    #2d2d31;
+			--ink:           #f4f4f5;
+			--ink-muted:     #a1a1aa;
+			--ink-subtle:    #71717a;
+			--hairline:      #3f3f46;
+			--hairline-soft: #27272a;
+			--hairline-strong: #ea580c;
+			--accent:        #ea580c;
+			--accent-hover:  #c2410c;
+			--accent-subtle: rgba(234, 88, 12, 0.20);
+			--pass:          #22c55e;
+			--warn:          #f59e0b;
+			--fail:          #ef4444;
+			--del-red:       #dc2626;
+			--preview-bg:    #0f0f11;
+		}
+
+		/* 19. Y2K Millennium Chrome (Bubblegum Iridescent) */
+		body.theme-y2k, :root.theme-y2k {
+			color-scheme: dark;
+			--bg:            #1e1b4b;
+			--surface:       #311042;
+			--panel:         #431454;
+			--cell:          #230c33;
+			--cell-hover:    #3b134f;
+			--ink:           #f5d0fe;
+			--ink-muted:     #d8b4fe;
+			--ink-subtle:    #c084fc;
+			--hairline:      #c0c0c0;
+			--hairline-soft: #701a75;
+			--hairline-strong: #f472b6;
+			--accent:        #f472b6;
+			--accent-hover:  #ec4899;
+			--accent-subtle: rgba(244, 114, 182, 0.24);
+			--pass:          #38bdf8;
+			--warn:          #fde047;
+			--fail:          #f43f5e;
+			--del-red:       #e11d48;
+			--preview-bg:    #130a24;
+		}
+
+		/* 20. UK Statutory Legal (Judicial Formal Monolith) */
+		body.theme-statutory, :root.theme-statutory {
+			color-scheme: light;
+			--bg:            #f7f6f0;
+			--surface:       #fffef9;
+			--panel:         #ece9dc;
+			--cell:          #faf8f2;
+			--cell-hover:    #f0ece0;
+			--ink:           #141b12;
+			--ink-muted:     #283624;
+			--ink-subtle:    #4a5a46;
+			--hairline:      #1b4332;
+			--hairline-soft: #d8dfd5;
+			--hairline-strong: #081c15;
+			--accent:        #1b4332;
+			--accent-hover:  #081c15;
+			--accent-subtle: rgba(27, 67, 50, 0.16);
+			--pass:          #2d6a4f;
+			--warn:          #b45309;
+			--fail:          #991b1b;
+			--del-red:       #7f1d1d;
+			--preview-bg:    #ded9cb;
+		}
+
+		/* 21. Lloyd's Crimson Maritime (Marine Classification) */
+		body.theme-crimson, :root.theme-crimson {
+			color-scheme: light;
+			--bg:            #fafaf9;
+			--surface:       #fef2f2;
+			--panel:         #fee2e2;
+			--cell:          #ffffff;
+			--cell-hover:    #fef2f2;
+			--ink:           #1c1917;
+			--ink-muted:     #7f1d1d;
+			--ink-subtle:    #991b1b;
+			--hairline:      #b91c1c;
+			--hairline-soft: #fecaca;
+			--hairline-strong: #991b1b;
+			--accent:        #991b1b;
+			--accent-hover:  #7f1d1d;
+			--accent-subtle: rgba(153, 27, 27, 0.15);
+			--pass:          #15803d;
+			--warn:          #b45309;
+			--fail:          #991b1b;
+			--del-red:       #7f1d1d;
+			--preview-bg:    #e7e5e4;
+		}
+
+		/* 22. DNV Offshore Amber Rig (High-Hazard Marine Safety) */
+		body.theme-offshore, :root.theme-offshore {
+			color-scheme: dark;
+			--bg:            #0d141e;
+			--surface:       #162130;
+			--panel:         #1d2d42;
+			--cell:          #101a26;
+			--cell-hover:    #1a2a3e;
+			--ink:           #f0fdf4;
+			--ink-muted:     #93c5fd;
+			--ink-subtle:    #60a5fa;
+			--hairline:      #2563eb;
+			--hairline-soft: #1d4ed8;
+			--hairline-strong: #facc15;
+			--accent:        #facc15;
+			--accent-hover:  #eab308;
+			--accent-subtle: rgba(250, 204, 21, 0.22);
+			--pass:          #22c55e;
+			--warn:          #facc15;
+			--fail:          #ef4444;
+			--del-red:       #dc2626;
+			--preview-bg:    #060a10;
+		}
+		body.theme-offshore .btn-accent, :root.theme-offshore .btn-accent { color: #000000 !important; }
+
+		/* 23. US OSHA Hazard Chevron (Emergency Black & Yellow) */
+		body.theme-osha, :root.theme-osha {
+			color-scheme: dark;
+			--bg:            #111111;
+			--surface:       #1c1917;
+			--panel:         #292524;
+			--cell:          #0a0a0a;
+			--cell-hover:    #171717;
+			--ink:           #ffffff;
+			--ink-muted:     #fcd34d;
+			--ink-subtle:    #fbbf24;
+			--hairline:      #f59e0b;
+			--hairline-soft: #78350f;
+			--hairline-strong: #eab308;
+			--accent:        #f59e0b;
+			--accent-hover:  #d97706;
+			--accent-subtle: rgba(245, 158, 11, 0.22);
+			--pass:          #22c55e;
+			--warn:          #eab308;
+			--fail:          #ef4444;
+			--del-red:       #dc2626;
+			--preview-bg:    #000000;
+		}
+		body.theme-osha .btn-accent, :root.theme-osha .btn-accent { color: #000000 !important; }
+
+		/* 24. Dark Luxury Obsidian Gold (Executive Sovereign Satin) */
+		body.theme-luxury, :root.theme-luxury {
+			color-scheme: dark;
+			--bg:            #0a0a0a;
+			--surface:       #141414;
+			--panel:         #1f1f1f;
+			--cell:          #0d0d0d;
+			--cell-hover:    #181818;
+			--ink:           #f5f5f5;
+			--ink-muted:     #a3a3a3;
+			--ink-subtle:    #737373;
+			--hairline:      rgba(212, 175, 55, 0.35);
+			--hairline-soft: rgba(212, 175, 55, 0.15);
+			--hairline-strong: #d4af37;
+			--accent:        #d4af37;
+			--accent-hover:  #bfa030;
+			--accent-subtle: rgba(212, 175, 55, 0.18);
+			--pass:          #34d399;
+			--warn:          #d4af37;
+			--fail:          #f43f5e;
+			--del-red:       #e11d48;
+			--preview-bg:    #000000;
+		}
+		body.theme-luxury .btn-accent, :root.theme-luxury .btn-accent { color: #000000 !important; }
+		body.theme-hc :not(.a4-page-frame) .csec, :root.theme-hc :not(.a4-page-frame) .csec { background: #ffffff; color: #000000; }
+		body.theme-hc .btn-accent, :root.theme-hc .btn-accent,
+		body.theme-hc .btn-accent:hover, :root.theme-hc .btn-accent:hover,
+		body.theme-hc .engine-tab-btn.active, :root.theme-hc .engine-tab-btn.active,
+		body.theme-hc .skip-link, :root.theme-hc .skip-link,
+		body.theme-hc .peek-handle.on, :root.theme-hc .peek-handle.on,
+		body.theme-hc .micro-toggle.on, :root.theme-hc .micro-toggle.on,
+		body.theme-hc #batchPageIndicator, :root.theme-hc #batchPageIndicator,
+		body.theme-hc #res_angle_warn, :root.theme-hc #res_angle_warn {
+			color: #000000 !important;
+		}
+		body.theme-hc table.sheet th, :root.theme-hc table.sheet th { font-weight: 900; }
+
+		/* Reduced motion — anyone who asks for less, gets none. */
+		@media (prefers-reduced-motion: reduce) {
+			*, *::before, *::after {
+				transition-duration: 0ms !important;
+				animation-duration: 0ms !important;
+			}
+		}

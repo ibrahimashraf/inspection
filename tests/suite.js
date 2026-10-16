@@ -563,6 +563,39 @@
             }
         });
 
+        /* ---- DEMO GENERATOR -------------------------------------------- */
+        await T('SAMPLE-1', 'addSampleRecord injects valid LOLER and NDT records', async () => {
+            if (typeof addSampleRecord !== 'function') return { ok: false, msg: 'addSampleRecord not defined' };
+            const wasEng = currentEngine;
+            const wasLiftingLen = liftingBatch.length;
+            const wasNdtLen = ndtBatch.length;
+            try {
+                currentEngine = 'LIFTING';
+                addSampleRecord('crane');
+                const hasCrane = liftingBatch.length === wasLiftingLen + 1 && liftingBatch[liftingBatch.length - 1].model === 'GR-700EX';
+
+                addSampleRecord('sling');
+                const hasSling = liftingBatch.length === wasLiftingLen + 2 && liftingBatch[liftingBatch.length - 1].colourCode === 'BLUE';
+
+                currentEngine = 'NDT';
+                addSampleRecord('ut');
+                const hasUt = ndtBatch.length === wasNdtLen + 1 && ndtBatch[ndtBatch.length - 1].method === 'UT';
+
+                addSampleRecord('mpi');
+                const hasMpi = ndtBatch.length === wasNdtLen + 2 && ndtBatch[ndtBatch.length - 1].method === 'MPI';
+
+                return {
+                    ok: hasCrane && hasSling && hasUt && hasMpi,
+                    msg: 'crane=' + hasCrane + ', sling=' + hasSling + ', ut=' + hasUt + ', mpi=' + hasMpi
+                };
+            } finally {
+                liftingBatch.splice(wasLiftingLen);
+                ndtBatch.splice(wasNdtLen);
+                currentEngine = wasEng;
+            }
+        });
+
+
         /* ---- REPORT ---------------------------------------------------- */
         const glyph = r => r.ok === true ? 'PASS' : (r.ok === 'skip' ? 'SKIP' : 'FAIL');
         console.log('%c===== IMS REGRESSION SUITE =====', 'font-weight:900');

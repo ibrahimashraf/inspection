@@ -228,7 +228,7 @@
             position: 'sticky',
             top: '0',
             left: '0',
-            zIndex: '5',
+            zIndex: '200',
             width: 'min(100%, 794px)',
             marginLeft: 'auto',
             marginRight: 'auto',

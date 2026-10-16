@@ -1,0 +1,271 @@
+		/* ── 9B. ORTHOGONAL FORM DESIGN PRESETS (24 Mutually Exclusive Archetypes) ── */
+		/* Style 1: Linear Minimalist (Vercel / Linear Slate) */
+		body.form-style-linear input[type="text"], body.form-style-linear input[type="email"], body.form-style-linear input[type="number"], body.form-style-linear input[type="date"], body.form-style-linear input[type="search"], body.form-style-linear select, body.form-style-linear textarea,
+		:root.form-style-linear input[type="text"], :root.form-style-linear input[type="email"], :root.form-style-linear input[type="number"], :root.form-style-linear input[type="date"], :root.form-style-linear input[type="search"], :root.form-style-linear select, :root.form-style-linear textarea {
+			border-radius: 6px;
+			padding: 7px 11px;
+			border-width: 1px;
+			transition: border-color 0.15s ease, box-shadow 0.15s ease;
+		}
+		body.form-style-linear .fg, :root.form-style-linear .fg { border-radius: 6px; border-width: 1px; }
+
+		/* Style 2: Floating Neo-SaaS (Stripe / Raycast Pill) */
+		body.form-style-floating input[type="text"], body.form-style-floating input[type="email"], body.form-style-floating input[type="number"], body.form-style-floating input[type="date"], body.form-style-floating input[type="search"], body.form-style-floating select, body.form-style-floating textarea,
+		:root.form-style-floating input[type="text"], :root.form-style-floating input[type="email"], :root.form-style-floating input[type="number"], :root.form-style-floating input[type="date"], :root.form-style-floating input[type="search"], :root.form-style-floating select, :root.form-style-floating textarea {
+			border-radius: 12px;
+			padding: 9px 14px;
+			border-width: 1.5px;
+			box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+		}
+		body.form-style-floating .fg, :root.form-style-floating .fg { border-radius: 14px; border-width: 1.5px; }
+
+		/* Style 3: Bento Grid Modular Tiles (Apple) */
+		body.form-style-bento .fg, :root.form-style-bento .fg {
+			border-radius: 12px;
+			border-width: 1px;
+			padding: 12px 14px 14px;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+			transition: transform 0.2s ease, box-shadow 0.2s ease;
+		}
+		body.form-style-bento .fg:hover, :root.form-style-bento .fg:hover { transform: translateY(-1.5px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+		body.form-style-bento input, body.form-style-bento select, body.form-style-bento textarea,
+		:root.form-style-bento input, :root.form-style-bento select, :root.form-style-bento textarea {
+			border-radius: 8px;
+			padding: 8px 10px;
+		}
+
+		/* Style 4: Material You M3 (Filled Container & Underline) */
+		body.form-style-material input[type="text"], body.form-style-material input[type="email"], body.form-style-material input[type="number"], body.form-style-material input[type="date"], body.form-style-material input[type="search"], body.form-style-material select, body.form-style-material textarea,
+		:root.form-style-material input[type="text"], :root.form-style-material input[type="email"], :root.form-style-material input[type="number"], :root.form-style-material input[type="date"], :root.form-style-material input[type="search"], :root.form-style-material select, :root.form-style-material textarea {
+			border-top: none !important;
+			border-left: none !important;
+			border-right: none !important;
+			border-bottom: 2px solid var(--hairline-strong) !important;
+			border-radius: 8px 8px 0 0 !important;
+			padding: 10px 12px;
+		}
+		body.form-style-material input:focus, body.form-style-material select:focus, body.form-style-material textarea:focus,
+		:root.form-style-material input:focus, :root.form-style-material select:focus, :root.form-style-material textarea:focus {
+			border-bottom-color: var(--accent) !important;
+			box-shadow: 0 2px 0 0 var(--accent) !important;
+		}
+
+		/* Style 5: Industrial Rugged (Mil-Spec 2px Tactical) */
+		body.form-style-rugged input[type="text"], body.form-style-rugged input[type="email"], body.form-style-rugged input[type="number"], body.form-style-rugged input[type="date"], body.form-style-rugged input[type="search"], body.form-style-rugged select, body.form-style-rugged textarea,
+		:root.form-style-rugged input[type="text"], :root.form-style-rugged input[type="email"], :root.form-style-rugged input[type="number"], :root.form-style-rugged input[type="date"], :root.form-style-rugged input[type="search"], :root.form-style-rugged select, :root.form-style-rugged textarea {
+			border-radius: 0px !important;
+			border-width: 2px !important;
+			font-family: var(--font-data) !important;
+			font-weight: 700;
+			letter-spacing: 0.02em;
+		}
+		body.form-style-rugged .fg, :root.form-style-rugged .fg { border-radius: 0px !important; border-width: 2px !important; }
+
+		/* Style 6: Neumorphic Tactile Wells (Soft Clay Inset) */
+		body.form-style-neumorphic input[type="text"], body.form-style-neumorphic input[type="email"], body.form-style-neumorphic input[type="number"], body.form-style-neumorphic input[type="date"], body.form-style-neumorphic input[type="search"], body.form-style-neumorphic select, body.form-style-neumorphic textarea,
+		:root.form-style-neumorphic input[type="text"], :root.form-style-neumorphic input[type="email"], :root.form-style-neumorphic input[type="number"], :root.form-style-neumorphic input[type="date"], :root.form-style-neumorphic input[type="search"], :root.form-style-neumorphic select, :root.form-style-neumorphic textarea {
+			border: 1px solid var(--hairline-soft) !important;
+			border-radius: 10px !important;
+			box-shadow: inset 2px 2px 5px rgba(0,0,0,0.18), inset -2px -2px 5px rgba(255,255,255,0.05);
+			padding: 9px 12px;
+		}
+		body.form-style-neumorphic .fg, :root.form-style-neumorphic .fg { border-radius: 12px; }
+
+		/* Style 7: Analog Hardware Meter (Brushed Metal Inset) */
+		body.form-style-meter input[type="text"], body.form-style-meter input[type="email"], body.form-style-meter input[type="number"], body.form-style-meter input[type="date"], body.form-style-meter input[type="search"], body.form-style-meter select, body.form-style-meter textarea,
+		:root.form-style-meter input[type="text"], :root.form-style-meter input[type="email"], :root.form-style-meter input[type="number"], :root.form-style-meter input[type="date"], :root.form-style-meter input[type="search"], :root.form-style-meter select, :root.form-style-meter textarea {
+			border-radius: 3px !important;
+			border-width: 1.5px !important;
+			font-family: var(--font-data) !important;
+			box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+		}
+		body.form-style-meter .fg, :root.form-style-meter .fg { border-radius: 4px; border-width: 1.5px; }
+
+		/* Style 8: Compact Tabular HUD (Bloomberg Terminal) */
+		body.form-style-compact-hud .fg, :root.form-style-compact-hud .fg {
+			padding: 3px 8px !important;
+			border-radius: 2px !important;
+			gap: 2px !important;
+		}
+		body.form-style-compact-hud .fg-hdr, :root.form-style-compact-hud .fg-hdr { min-height: 16px !important; margin-bottom: 0 !important; }
+		body.form-style-compact-hud .fg-title, :root.form-style-compact-hud .fg-title { font-size: 10px !important; }
+		body.form-style-compact-hud input, body.form-style-compact-hud select, body.form-style-compact-hud textarea,
+		:root.form-style-compact-hud input, :root.form-style-compact-hud select, :root.form-style-compact-hud textarea {
+			min-height: 26px !important;
+			padding: 2px 6px !important;
+			font-size: 11.5px !important;
+			border-radius: 2px !important;
+			font-family: var(--font-data) !important;
+		}
+
+		/* Style 9: Cyberdeck Neon Bracket (Sci-Fi FUI) */
+		body.form-style-cyberdeck input[type="text"], body.form-style-cyberdeck input[type="email"], body.form-style-cyberdeck input[type="number"], body.form-style-cyberdeck input[type="date"], body.form-style-cyberdeck input[type="search"], body.form-style-cyberdeck select, body.form-style-cyberdeck textarea,
+		:root.form-style-cyberdeck input[type="text"], :root.form-style-cyberdeck input[type="email"], :root.form-style-cyberdeck input[type="number"], :root.form-style-cyberdeck input[type="date"], :root.form-style-cyberdeck input[type="search"], :root.form-style-cyberdeck select, :root.form-style-cyberdeck textarea {
+			border-radius: 0px !important;
+			border: 1px solid var(--accent) !important;
+			font-family: var(--font-data) !important;
+			box-shadow: 0 0 6px var(--accent-subtle);
+		}
+		body.form-style-cyberdeck .fg-title::before, :root.form-style-cyberdeck .fg-title::before { content: "[ "; color: var(--accent); }
+		body.form-style-cyberdeck .fg-title::after, :root.form-style-cyberdeck .fg-title::after { content: " ]"; color: var(--accent); }
+		body.form-style-cyberdeck .fg, :root.form-style-cyberdeck .fg { border-radius: 0px; border-color: var(--accent); }
+
+		/* Style 10: Glassmorphic Spatial (VisionOS Frosted) */
+		body.form-style-glassmorphic input[type="text"], body.form-style-glassmorphic input[type="email"], body.form-style-glassmorphic input[type="number"], body.form-style-glassmorphic input[type="date"], body.form-style-glassmorphic input[type="search"], body.form-style-glassmorphic select, body.form-style-glassmorphic textarea,
+		:root.form-style-glassmorphic input[type="text"], :root.form-style-glassmorphic input[type="email"], :root.form-style-glassmorphic input[type="number"], :root.form-style-glassmorphic input[type="date"], :root.form-style-glassmorphic input[type="search"], :root.form-style-glassmorphic select, :root.form-style-glassmorphic textarea {
+			backdrop-filter: blur(14px);
+			-webkit-backdrop-filter: blur(14px);
+			background: rgba(255, 255, 255, 0.06);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			border-radius: 12px;
+			padding: 9px 13px;
+		}
+		body.form-style-glassmorphic .fg, :root.form-style-glassmorphic .fg {
+			backdrop-filter: blur(16px);
+			border-radius: 14px;
+			border: 1px solid rgba(255, 255, 255, 0.15);
+		}
+
+		/* Style 11: Synthwave Outrun (Magenta Neon) */
+		body.form-style-synthwave input[type="text"], body.form-style-synthwave input[type="email"], body.form-style-synthwave input[type="number"], body.form-style-synthwave input[type="date"], body.form-style-synthwave input[type="search"], body.form-style-synthwave select, body.form-style-synthwave textarea,
+		:root.form-style-synthwave input[type="text"], :root.form-style-synthwave input[type="email"], :root.form-style-synthwave input[type="number"], :root.form-style-synthwave input[type="date"], :root.form-style-synthwave input[type="search"], :root.form-style-synthwave select, :root.form-style-synthwave textarea {
+			border-radius: 8px;
+			border: 1.5px solid #d946ef;
+			box-shadow: 0 0 10px rgba(217, 70, 239, 0.25);
+		}
+		body.form-style-synthwave .fg, :root.form-style-synthwave .fg { border-radius: 10px; border-color: #ec4899; }
+
+		/* Style 12: Holographic Blueprint Grid */
+		body.form-style-wireframe input[type="text"], body.form-style-wireframe input[type="email"], body.form-style-wireframe input[type="number"], body.form-style-wireframe input[type="date"], body.form-style-wireframe input[type="search"], body.form-style-wireframe select, body.form-style-wireframe textarea,
+		:root.form-style-wireframe input[type="text"], :root.form-style-wireframe input[type="email"], :root.form-style-wireframe input[type="number"], :root.form-style-wireframe input[type="date"], :root.form-style-wireframe input[type="search"], :root.form-style-wireframe select, :root.form-style-wireframe textarea {
+			border-radius: 0;
+			border: 1px dashed var(--accent) !important;
+			background: transparent;
+			font-family: var(--font-data);
+		}
+		body.form-style-wireframe .fg, :root.form-style-wireframe .fg { border-radius: 0; border: 1px dashed var(--hairline-strong); background: transparent; }
+
+		/* Style 13: Swiss Modernist Underline (Vignelli) */
+		body.form-style-swiss input[type="text"], body.form-style-swiss input[type="email"], body.form-style-swiss input[type="number"], body.form-style-swiss input[type="date"], body.form-style-swiss input[type="search"], body.form-style-swiss select, body.form-style-swiss textarea,
+		:root.form-style-swiss input[type="text"], :root.form-style-swiss input[type="email"], :root.form-style-swiss input[type="number"], :root.form-style-swiss input[type="date"], :root.form-style-swiss input[type="search"], :root.form-style-swiss select, :root.form-style-swiss textarea {
+			border-top: none !important;
+			border-left: none !important;
+			border-right: none !important;
+			border-bottom: 2px solid currentColor !important;
+			border-radius: 0 !important;
+			background: transparent !important;
+			padding: 6px 0 !important;
+			font-weight: 600;
+		}
+		body.form-style-swiss .fg, :root.form-style-swiss .fg { border-radius: 0; border-width: 1.5px; }
+
+		/* Style 14: Nordic Japandi Zen (Clay Muted) */
+		body.form-style-zen input[type="text"], body.form-style-zen input[type="email"], body.form-style-zen input[type="number"], body.form-style-zen input[type="date"], body.form-style-zen input[type="search"], body.form-style-zen select, body.form-style-zen textarea,
+		:root.form-style-zen input[type="text"], :root.form-style-zen input[type="email"], :root.form-style-zen input[type="number"], :root.form-style-zen input[type="date"], :root.form-style-zen input[type="search"], :root.form-style-zen select, :root.form-style-zen textarea {
+			border-radius: 8px;
+			padding: 8px 12px;
+			border: 1px solid var(--hairline);
+		}
+		body.form-style-zen .fg, :root.form-style-zen .fg { border-radius: 12px; }
+
+		/* Style 15: Brutalist Neo-Raw (Hard Drop Shadow) */
+		body.form-style-brutalist input[type="text"], body.form-style-brutalist input[type="email"], body.form-style-brutalist input[type="number"], body.form-style-brutalist input[type="date"], body.form-style-brutalist input[type="search"], body.form-style-brutalist select, body.form-style-brutalist textarea,
+		:root.form-style-brutalist input[type="text"], :root.form-style-brutalist input[type="email"], :root.form-style-brutalist input[type="number"], :root.form-style-brutalist input[type="date"], :root.form-style-brutalist input[type="search"], :root.form-style-brutalist select, :root.form-style-brutalist textarea {
+			border: 2.5px solid currentColor !important;
+			border-radius: 0 !important;
+			box-shadow: 3px 3px 0px currentColor;
+			font-weight: 700;
+		}
+		body.form-style-brutalist .fg, :root.form-style-brutalist .fg {
+			border: 2.5px solid currentColor;
+			border-radius: 0;
+			box-shadow: 4px 4px 0px currentColor;
+		}
+
+		/* Style 16: Dark Luxury Stealth (Obsidian & Gold) */
+		body.form-style-stealth input[type="text"], body.form-style-stealth input[type="email"], body.form-style-stealth input[type="number"], body.form-style-stealth input[type="date"], body.form-style-stealth input[type="search"], body.form-style-stealth select, body.form-style-stealth textarea,
+		:root.form-style-stealth input[type="text"], :root.form-style-stealth input[type="email"], :root.form-style-stealth input[type="number"], :root.form-style-stealth input[type="date"], :root.form-style-stealth input[type="search"], :root.form-style-stealth select, :root.form-style-stealth textarea {
+			border-radius: 4px;
+			border: 1px solid rgba(212, 175, 55, 0.35);
+			padding: 8px 12px;
+		}
+		body.form-style-stealth input:focus, :root.form-style-stealth input:focus {
+			border-color: #d4af37 !important;
+			box-shadow: 0 0 10px rgba(212, 175, 55, 0.3) !important;
+		}
+		body.form-style-stealth .fg, :root.form-style-stealth .fg { border-radius: 6px; border-color: rgba(212, 175, 55, 0.3); }
+
+		/* Style 17: JIS Metric Tolerance Mono */
+		body.form-style-metric input[type="text"], body.form-style-metric input[type="email"], body.form-style-metric input[type="number"], body.form-style-metric input[type="date"], body.form-style-metric input[type="search"], body.form-style-metric select, body.form-style-metric textarea,
+		:root.form-style-metric input[type="text"], :root.form-style-metric input[type="email"], :root.form-style-metric input[type="number"], :root.form-style-metric input[type="date"], :root.form-style-metric input[type="search"], :root.form-style-metric select, :root.form-style-metric textarea {
+			border-radius: 0px !important;
+			border: 1px solid currentColor !important;
+			font-family: var(--font-data) !important;
+			padding: 5px 8px;
+		}
+		body.form-style-metric .fg, :root.form-style-metric .fg { border-radius: 0px; border: 1px solid currentColor; }
+
+		/* Style 18: Archival Linen Rules */
+		body.form-style-linen input[type="text"], body.form-style-linen input[type="email"], body.form-style-linen input[type="number"], body.form-style-linen input[type="date"], body.form-style-linen input[type="search"], body.form-style-linen select, body.form-style-linen textarea,
+		:root.form-style-linen input[type="text"], :root.form-style-linen input[type="email"], :root.form-style-linen input[type="number"], :root.form-style-linen input[type="date"], :root.form-style-linen input[type="search"], :root.form-style-linen select, :root.form-style-linen textarea {
+			border-radius: 3px;
+			border: 1px solid var(--hairline-strong);
+			font-family: Georgia, serif;
+		}
+		body.form-style-linen .fg, :root.form-style-linen .fg { border-radius: 4px; border: 1px solid var(--hairline-strong); }
+
+		/* Style 19: E-Ink Matte Paper Zero-Motion */
+		body.form-style-eink input[type="text"], body.form-style-eink input[type="email"], body.form-style-eink input[type="number"], body.form-style-eink input[type="date"], body.form-style-eink input[type="search"], body.form-style-eink select, body.form-style-eink textarea,
+		:root.form-style-eink input[type="text"], :root.form-style-eink input[type="email"], :root.form-style-eink input[type="number"], :root.form-style-eink input[type="date"], :root.form-style-eink input[type="search"], :root.form-style-eink select, :root.form-style-eink textarea {
+			border: 2px solid #000 !important;
+			border-radius: 0 !important;
+			transition: none !important;
+		}
+		body.form-style-eink .fg, :root.form-style-eink .fg { border: 2px solid #000; border-radius: 0; }
+
+		/* Style 20: Terminal Green Phosphor */
+		body.form-style-terminal-green input[type="text"], body.form-style-terminal-green input[type="email"], body.form-style-terminal-green input[type="number"], body.form-style-terminal-green input[type="date"], body.form-style-terminal-green input[type="search"], body.form-style-terminal-green select, body.form-style-terminal-green textarea,
+		:root.form-style-terminal-green input[type="text"], :root.form-style-terminal-green input[type="email"], :root.form-style-terminal-green input[type="number"], :root.form-style-terminal-green input[type="date"], :root.form-style-terminal-green input[type="search"], :root.form-style-terminal-green select, :root.form-style-terminal-green textarea {
+			border-radius: 0;
+			border: 1px solid #33ff00 !important;
+			font-family: var(--font-data) !important;
+			box-shadow: 0 0 6px rgba(51, 255, 0, 0.3);
+		}
+		body.form-style-terminal-green .fg, :root.form-style-terminal-green .fg { border-radius: 0; border: 1px solid #1a551a; }
+
+		/* Style 21: Weimar Bauhaus 1919 Primary */
+		body.form-style-bauhaus input[type="text"], body.form-style-bauhaus input[type="email"], body.form-style-bauhaus input[type="number"], body.form-style-bauhaus input[type="date"], body.form-style-bauhaus input[type="search"], body.form-style-bauhaus select, body.form-style-bauhaus textarea,
+		:root.form-style-bauhaus input[type="text"], :root.form-style-bauhaus input[type="email"], :root.form-style-bauhaus input[type="number"], :root.form-style-bauhaus input[type="date"], :root.form-style-bauhaus input[type="search"], :root.form-style-bauhaus select, :root.form-style-bauhaus textarea {
+			border: 2px solid #000 !important;
+			border-radius: 0 !important;
+			font-weight: 700;
+		}
+		body.form-style-bauhaus input:focus, :root.form-style-bauhaus input:focus { box-shadow: 3px 3px 0 #000 !important; }
+		body.form-style-bauhaus .fg, :root.form-style-bauhaus .fg { border: 2px solid #000; border-radius: 0; }
+
+		/* Style 22: Y2K Millennium Iridescent */
+		body.form-style-y2k input[type="text"], body.form-style-y2k input[type="email"], body.form-style-y2k input[type="number"], body.form-style-y2k input[type="date"], body.form-style-y2k input[type="search"], body.form-style-y2k select, body.form-style-y2k textarea,
+		:root.form-style-y2k input[type="text"], :root.form-style-y2k input[type="email"], :root.form-style-y2k input[type="number"], :root.form-style-y2k input[type="date"], :root.form-style-y2k input[type="search"], :root.form-style-y2k select, :root.form-style-y2k textarea {
+			border-radius: 12px;
+			border: 1.5px solid #c084fc;
+			box-shadow: 0 0 10px rgba(192, 132, 252, 0.3);
+		}
+		body.form-style-y2k .fg, :root.form-style-y2k .fg { border-radius: 14px; border: 1.5px solid #a855f7; }
+
+		/* Style 23: Lloyd's Crimson Maritime */
+		body.form-style-crimson input[type="text"], body.form-style-crimson input[type="email"], body.form-style-crimson input[type="number"], body.form-style-crimson input[type="date"], body.form-style-crimson input[type="search"], body.form-style-crimson select, body.form-style-crimson textarea,
+		:root.form-style-crimson input[type="text"], :root.form-style-crimson input[type="email"], :root.form-style-crimson input[type="number"], :root.form-style-crimson input[type="date"], :root.form-style-crimson input[type="search"], :root.form-style-crimson select, :root.form-style-crimson textarea {
+			border-radius: 4px;
+			border: 1.5px solid #b91c1c;
+		}
+		body.form-style-crimson input:focus, :root.form-style-crimson input:focus { border-color: #991b1b !important; box-shadow: 0 0 0 3px rgba(153, 27, 27, 0.2) !important; }
+		body.form-style-crimson .fg, :root.form-style-crimson .fg { border-radius: 4px; border-color: #b91c1c; }
+
+		/* Style 24: US OSHA Safety Chevron */
+		body.form-style-osha input[type="text"], body.form-style-osha input[type="email"], body.form-style-osha input[type="number"], body.form-style-osha input[type="date"], body.form-style-osha input[type="search"], body.form-style-osha select, body.form-style-osha textarea,
+		:root.form-style-osha input[type="text"], :root.form-style-osha input[type="email"], :root.form-style-osha input[type="number"], :root.form-style-osha input[type="date"], :root.form-style-osha input[type="search"], :root.form-style-osha select, :root.form-style-osha textarea {
+			border-radius: 0 !important;
+			border: 2px solid #f59e0b !important;
+			font-family: var(--font-data) !important;
+		}
+		body.form-style-osha .fg, :root.form-style-osha .fg { border-radius: 0; border: 2px solid #f59e0b; }

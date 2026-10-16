@@ -173,23 +173,38 @@ async function _serializeRecord(record, recordId) {
    ============================================================== */
 async function _serializeAssets(assets) {
     const src = assets || {};
-    const out = { headerBanner: src.headerBanner || null, footerBanner: src.footerBanner || null };
+    const out = {
+        headerBanner: src.headerBanner || null,
+        footerBanner: src.footerBanner || null,
+        logo: src.logo || null,
+        accreds: []
+    };
     const tasks = [];
-    ['headerBanner', 'footerBanner'].forEach(k => {
+    ['headerBanner', 'footerBanner', 'logo'].forEach(k => {
         const v = src[k];
         if (typeof v === 'string' && v.startsWith('data:')) {
             const key = `assets/${k}`;
             tasks.push(BlobStore.put(key, v).then(() => { out[k] = BLOB_PREFIX + key; }));
         }
     });
+    if (Array.isArray(src.accreds)) {
+        src.accreds.forEach((item, idx) => {
+            const entry = { id: item.id || ('acc_' + idx), name: item.name || '', img: item.img || null };
+            out.accreds.push(entry);
+            if (typeof entry.img === 'string' && entry.img.startsWith('data:')) {
+                const key = `assets/accred_${entry.id}`;
+                tasks.push(BlobStore.put(key, entry.img).then(() => { entry.img = BLOB_PREFIX + key; }));
+            }
+        });
+    }
     await Promise.all(tasks);
     return out;
 }
 
 async function _deserializeAssets(serialized) {
-    const out = { headerBanner: null, footerBanner: null };
+    const out = { headerBanner: null, footerBanner: null, logo: null, accreds: [] };
     if (!serialized || typeof serialized !== 'object') return out;
-    await Promise.all(['headerBanner', 'footerBanner'].map(async k => {
+    await Promise.all(['headerBanner', 'footerBanner', 'logo'].map(async k => {
         const v = serialized[k];
         if (typeof v === 'string' && v.startsWith(BLOB_PREFIX)) {
             const key = v.slice(BLOB_PREFIX.length);
@@ -201,10 +216,27 @@ async function _deserializeAssets(serialized) {
                 out[k] = null;
             }
         } else if (typeof v === 'string' && v.startsWith('data:')) {
-            // Legacy: if someone manually seeded localStorage with a data URL.
             out[k] = v;
         }
     }));
+    if (Array.isArray(serialized.accreds)) {
+        out.accreds = await Promise.all(serialized.accreds.map(async item => {
+            const entry = { id: item.id, name: item.name || '', img: null };
+            const v = item.img;
+            if (typeof v === 'string' && v.startsWith(BLOB_PREFIX)) {
+                const key = v.slice(BLOB_PREFIX.length);
+                try {
+                    const blob = await BlobStore.get(key);
+                    entry.img = blob || null;
+                } catch (e) {
+                    entry.img = null;
+                }
+            } else if (typeof v === 'string' && v.startsWith('data:')) {
+                entry.img = v;
+            }
+            return entry;
+        }));
+    }
     return out;
 }
 async function _deserializeRecord(s, reportMissing) {
@@ -412,8 +444,9 @@ async function restoreStateV2() {
         if (raw) {
             const parsed = JSON.parse(raw);
             const hydrated = await _deserializeAssets(parsed);
-            if (!window.assets) window.assets = { headerBanner: null, footerBanner: null };
+            if (!window.assets) window.assets = { headerBanner: null, footerBanner: null, logo: null, accreds: [] };
             Object.assign(window.assets, hydrated);
+            if (!Array.isArray(window.assets.accreds)) window.assets.accreds = [];
         }
     } catch (e) {
         console.warn('[restore] assets', e);

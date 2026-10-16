@@ -1,4 +1,48 @@
 				/* UNIT CONVERTER */
+				function renderToolsTab() {
+					const container = document.getElementById('tab_tools');
+					if (!container || container.dataset.rendered === 'true') return;
+					container.innerHTML = 
+						'<div class="card">' +
+							'<h3><span>Inspection Tools (Inspector Aids)</span></h3>' +
+							'<div class="card-note">Never printed or exported — offline helper calculations only.</div>' +
+						'</div>' +
+						'<div class="card">' +
+							'<h3>1. Multi-Leg Rigging Geometry</h3>' +
+							'<div class="row cols-3">' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Load (t)</span></div><input type="number" id="calc_w" value="10" oninput="runSlingCalc()"></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Legs</span></div><input type="number" id="calc_n" value="2" oninput="runSlingCalc()"></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Angle °</span></div><input type="number" id="calc_deg" value="60" oninput="runSlingCalc()"></div>' +
+							'</div>' +
+							'<div class="tool-readout"><span>TENSION/LEG: <strong id="res_tension">5.77 T</strong></span><span>FACTOR: <strong id="res_mult">1.15x</strong></span></div>' +
+							'<div id="res_angle_warn" role="alert" style="margin-top:8px;padding:6px 8px;background:var(--warn);color:#fff;font-weight:700;text-align:center;border-radius:var(--radius-sm);display:none;">WARNING: Angle &lt; 45° derates capacity!</div>' +
+						'</div>' +
+						'<div class="card">' +
+							'<h3>2. ISO 4309 Rope Discard Engine</h3>' +
+							'<div class="row cols-4">' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Nominal mm</span></div><input type="number" id="calc_nom_rope" value="26.0" oninput="runRopeCalc()"></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Measured mm</span></div><input type="number" id="calc_meas_rope" value="24.1" oninput="runRopeCalc()"></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Broken Wires</span></div><input type="number" id="calc_bw_6d" value="2" oninput="runRopeCalc()"></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Limit %</span></div><select id="calc_rope_type" onchange="runRopeCalc()"><option value="6">Rot-Resistant 6%</option><option value="10">Standard 10%</option></select></div>' +
+							'</div>' +
+							'<div class="tool-readout"><span>REDUCTION: <strong id="res_reduction">-7.31%</strong></span><span id="res_rope_band" role="alert" style="padding:4px 8px;background:var(--fail);color:#fff;font-weight:700;border-radius:var(--radius-sm);"><strong id="res_rope_status" style="color:#fff;">DISCARD REQUIRED</strong></span></div>' +
+						'</div>' +
+						'<div class="card">' +
+							'<h3>3. Offline Unit Converter (Imperial ⇄ Metric)</h3>' +
+							'<div class="row cols-4">' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Category</span></div><select id="conv_cat" onchange="populateConvUnits()"></select></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Value</span></div><input type="number" id="conv_val" value="1" oninput="runUnitConvert()"></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">From</span></div><select id="conv_from" onchange="runUnitConvert()"></select></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">To</span></div><select id="conv_to" onchange="runUnitConvert()"></select></div>' +
+							'</div>' +
+							'<div class="row cols-2">' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Result</span></div><input type="text" id="conv_out" class="mono" readonly></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Factor</span></div><input type="text" id="conv_factor" class="mono" readonly></div>' +
+							'</div>' +
+							'<button class="btn" onclick="swapConv()">⇄ Swap From / To</button>' +
+						'</div>';
+					container.dataset.rendered = 'true';
+				}
 				function initConv() { const c = document.getElementById('conv_cat'); if (!c) return; if (!c.options.length) c.innerHTML = Object.keys(UNIT_DB).map(k => '<option value="' + k + '">' + UNIT_DB[k].label + '</option>').join(''); populateConvUnits(); }
 				function populateConvUnits() {
 					const c = document.getElementById('conv_cat'); if (!c) return; if (!c.options.length) initConv();
