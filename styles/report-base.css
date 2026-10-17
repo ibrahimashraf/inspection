@@ -5,6 +5,7 @@
 			z-index: 200;
 			width: 100%;
 			max-width: 794px;
+			margin: 0 auto var(--space-4) auto;
 			background: var(--surface);
 			border: var(--stroke-hairline) solid var(--hairline);
 			border-radius: var(--radius-2);
@@ -90,11 +91,38 @@
 			border: 1px solid #000;
 			background: #fff;
 			padding: 3px 6px;
-			margin-top: 3px;
+			margin-top: auto;
 			font-size: 5.2pt;
 			color: #334155;
 			text-align: center;
 			flex: 0 0 auto;
+		}
+
+		/* ── HEADER / FOOTER FILL STYLING (data-report-hf-style) ── */
+		html[data-report-hf-style="tint"] .a4-page-frame .corp-header,
+		html[data-report-hf-style="tint"] .a4-page-frame .corp-footer {
+			background: var(--custom-cert-fill-tint, #f1f5f9) !important;
+		}
+
+		html[data-report-hf-style="solid"] .a4-page-frame .corp-header,
+		html[data-report-hf-style="solid"] .a4-page-frame .corp-footer {
+			background: var(--custom-cert-primary, #0f172a) !important;
+		}
+		html[data-report-hf-style="solid"] .a4-page-frame .corp-header .ch-name,
+		html[data-report-hf-style="solid"] .a4-page-frame .corp-header .ch-accred,
+		html[data-report-hf-style="solid"] .a4-page-frame .corp-header .ch-right,
+		html[data-report-hf-style="solid"] .a4-page-frame .corp-footer,
+		html[data-report-hf-style="solid"] .a4-page-frame .corp-footer .val {
+			color: #ffffff !important;
+		}
+
+		html[data-report-hf-style="accent"] .a4-page-frame .corp-header {
+			border-top: 3.5px solid var(--custom-cert-primary, #0f172a) !important;
+			background: #ffffff !important;
+		}
+		html[data-report-hf-style="accent"] .a4-page-frame .corp-footer {
+			border-bottom: 3.5px solid var(--custom-cert-primary, #0f172a) !important;
+			background: #ffffff !important;
 		}
 
 		.reserved-header-banner {
@@ -121,7 +149,7 @@
 			align-items: center;
 			justify-content: center;
 			overflow: hidden;
-			margin-top: 3px;
+			margin-top: auto;
 			flex: 0 0 auto;
 		}
 		.reserved-footer-banner img { width: 100%; height: 100%; object-fit: contain; }
@@ -335,4 +363,4 @@
 		.overlay-box.is-selected:not(.is-locked) .overlay-resize-handle {
 			display: block;
 		}
-		#dragStamp, #dragLogo, [id^="dragAccred_"] { z-index: var(--z-raised) !important; pointer-events: auto; }
+		#dragStamp, #dragLogo, [id^="dragAccred_"] { z-index: 50 !important; pointer-events: auto; }

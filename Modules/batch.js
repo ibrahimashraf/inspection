@@ -202,27 +202,32 @@
 					const list = currentEngine === 'LIFTING' ? liftingBatch : ndtBatch;
 					const sel = list.filter(r => r.selected);
 					if (!sel.length) { showToast('Nothing selected.', 'error'); return; }
-					sel.forEach(s0 => {
-					const c = JSON.parse(JSON.stringify(s0));
-					c.reportNo = getNextReportNumber(currentEngine === 'LIFTING' ? 'LFT' : 'NDT');
-					c.selected = false;
-					// New identity. Photos in c.photos are live data URLs (from the
-					// in-memory source record), so re-staging under the fresh uid is safe.
-					delete c.uid;
-					c._photoMarkers = null;
-					// Re-stage under new uid so the clone owns its own IDB keys.
+					// Find the index of the last selected row to insert the clone block immediately after it
+					let lastSelIdx = -1;
+					list.forEach((r, idx) => {
+						if (r.selected) lastSelIdx = idx;
+					});
 					const engine = currentEngine === 'LIFTING' ? 'lifting' : 'ndt';
-					PhotosIDB.stageRecordPhotos(engine, c).catch(e => console.error('[clone] stage', e));
-					list.splice(list.indexOf(s0) + 1, 0, c);
-				});
-				renderSheet(); showToast('Cloned ' + sel.length + '.', 'success');
+					const newClones = [];
+					sel.forEach(s0 => {
+						const c = JSON.parse(JSON.stringify(s0));
+						c.reportNo = getNextReportNumber(currentEngine === 'LIFTING' ? 'LFT' : 'NDT');
+						s0.selected = false;
+						c.selected = true;
+						delete c.uid;
+						c._photoMarkers = null;
+						PhotosIDB.stageRecordPhotos(engine, c).catch(e => console.error('[clone] stage', e));
+						list.splice(lastSelIdx + 1 + newClones.length, 0, c);
+						newClones.push(c);
+					});
+					renderSheet(); showToast('Cloned ' + sel.length + '.', 'success');
 				}
 				function deleteSelectedRows() {
 					const list = currentEngine === 'LIFTING' ? liftingBatch : ndtBatch;
 					const sel = list.filter(r => r.selected);
 					if (!sel.length) { showToast('Nothing selected.', 'error'); return; }
 					const rem = list.filter(r => !r.selected);
-					if (currentEngine === 'LIFTING') liftingBatch = rem.length ? rem : [{ reportNo: getNextReportNumber(), reportDate: todayISO(), quantity: '1', examParticulars: DEFAULT_EXAM_PARTICULARS, additionalTesting: 'NO', fieldToggles: {}, puwerRows: defaultPuwerRows(), photos: Array(12).fill(null), checklist: [], extraCells: [], selected: false }];
+					if (currentEngine === 'LIFTING') liftingBatch = rem.length ? rem : [{ reportNo: getNextReportNumber(), reportDate: todayISO(), quantity: '1', examParticulars: DEFAULT_EXAM_PARTICULARS, additionalTesting: 'NO', fieldToggles: {}, sectionToggles: {}, puwerRows: defaultPuwerRows(), photos: Array(12).fill(null), checklist: [], extraCells: [], selected: false }];
 					else ndtBatch = rem.length ? rem : [defaultNdtRecord(null)];
 					activeIdx = 0; loadActiveRecord(); renderSheet(); showToast('Deleted ' + sel.length + '.', 'info');
 				}
@@ -413,29 +418,77 @@
 					syncCurrentData();
 					const list = currentEngine === 'LIFTING' ? liftingBatch : ndtBatch;
 					const a = list[activeIdx] || {};
+					const inheritLocked = (key, fallback) => (columnLocks && columnLocks[key] && a[key] !== undefined && a[key] !== '') ? a[key] : fallback;
+
 					if (currentEngine === 'LIFTING') {
 						list.splice(activeIdx + 1, 0, {
-							reportNo: getNextReportNumber(), reportDate: todayISO(), jobRef: '', poRef: '',
-							companyAccred: a.companyAccred || '', standards: a.standards || '', sopRef: a.sopRef || '',
-							fieldToggles: { dangerTimeText: false }, includePuwer: false, includeChecklist: false, includePhotos: false, puwerRows: defaultPuwerRows(),
-							employer: a.employer || '', premises: a.premises || '', subLocation: '', colourCode: '',
-							description: '', swl: '', quantity: '1', identification: '', manufacturer: '', model: '', serial: '', plantId: '', mfgYear: '',
-							lastExamDate: '', markingsLegible: 'YES',
-							q_firstExam: 'NO', q_installedCorrectly: 'N/A', q_int6m: 'YES', q_int12m: 'NO', q_scheme: 'NO', q_exceptional: 'NO',
-							examParticulars: DEFAULT_EXAM_PARTICULARS, additionalTesting: 'NO', additionalTestingDetails: '',
-							proofLoadApplied: '', lastProofDetails: '', nextProofDate: '',
-							defectDesc: 'NONE.', dangerImm: 'NO', dangerTimeText: 'N/A', remedies: 'None', isSafe: 'YES',
-							examDate: todayISO(), nextExamDate: calculateNextDate(todayISO(), 6),
+							reportNo: getNextReportNumber(),
+							reportDate: inheritLocked('reportDate', todayISO()),
+							jobRef: inheritLocked('jobRef', ''),
+							poRef: inheritLocked('poRef', ''),
+							companyAccred: inheritLocked('companyAccred', a.companyAccred || ''),
+							standards: inheritLocked('standards', a.standards || ''),
+							sopRef: inheritLocked('sopRef', a.sopRef || ''),
+							fieldToggles: JSON.parse(JSON.stringify(a.fieldToggles || {})),
+							includePuwer: a.includePuwer || false,
+							includeChecklist: false,
+							includePhotos: false,
+							puwerRows: defaultPuwerRows(),
+							employer: inheritLocked('employer', a.employer || ''),
+							premises: inheritLocked('premises', a.premises || ''),
+							subLocation: inheritLocked('subLocation', ''),
+							colourCode: inheritLocked('colourCode', ''),
+							description: inheritLocked('description', ''),
+							swl: inheritLocked('swl', ''),
+							quantity: inheritLocked('quantity', '1'),
+							manufacturer: inheritLocked('manufacturer', ''),
+							model: inheritLocked('model', ''),
+							serial: inheritLocked('serial', ''),
+							plantId: inheritLocked('plantId', ''),
+							mfgYear: inheritLocked('mfgYear', ''),
+							lastExamDate: inheritLocked('lastExamDate', ''),
+							markingsLegible: inheritLocked('markingsLegible', 'YES'),
+							q_firstExam: inheritLocked('q_firstExam', 'NO'),
+							q_installedCorrectly: inheritLocked('q_installedCorrectly', 'N/A'),
+							q_int6m: inheritLocked('q_int6m', 'YES'),
+							q_int12m: inheritLocked('q_int12m', 'NO'),
+							q_scheme: inheritLocked('q_scheme', 'NO'),
+							q_exceptional: inheritLocked('q_exceptional', 'NO'),
+							examParticulars: inheritLocked('examParticulars', DEFAULT_EXAM_PARTICULARS),
+							additionalTesting: inheritLocked('additionalTesting', 'NO'),
+							additionalTestingDetails: inheritLocked('additionalTestingDetails', ''),
+							proofLoadApplied: inheritLocked('proofLoadApplied', ''),
+							lastProofDetails: inheritLocked('lastProofDetails', ''),
+							nextProofDate: inheritLocked('nextProofDate', ''),
+							defectDesc: inheritLocked('defectDesc', 'NONE.'),
+							dangerImm: inheritLocked('dangerImm', 'NO'),
+							dangerTimeText: inheritLocked('dangerTimeText', 'N/A'),
+							remedies: inheritLocked('remedies', 'None'),
+							isSafe: inheritLocked('isSafe', 'YES'),
+							examDate: inheritLocked('examDate', todayISO()),
+							nextExamDate: inheritLocked('nextExamDate', calculateNextDate(todayISO(), 6)),
 							verdictLabel: '', verdictText: '', extraCells: [],
-							examinerName: a.examinerName || '', authName: a.authName || '',
+							examinerName: inheritLocked('examinerName', a.examinerName || ''),
+							authName: inheritLocked('authName', a.authName || ''),
 							checklist: [], photos: Array(12).fill(null),
 							inspectorSigLive: null, inspectorSigUpload: null, inspectorSigMode: 'LIVE',
 							authSigLive: null, authSigUpload: null, authSigMode: 'LIVE',
 							stampUpload: a.stampUpload || null, stampPos: { x: 70, y: 76 }, selected: false
 						});
 						activeIdx++;
-					} else { list.splice(activeIdx + 1, 0, defaultNdtRecord(a)); activeIdx++; }
-					loadActiveRecord(); showToast('Record added.', 'info'); scrollFormToTop();
+					} else {
+						const rec = defaultNdtRecord(a);
+						Object.keys(columnLocks).forEach(k => {
+							if (columnLocks[k] && a[k] !== undefined && a[k] !== '') rec[k] = a[k];
+						});
+						list.splice(activeIdx + 1, 0, rec);
+						activeIdx++;
+					}
+					loadActiveRecord();
+					renderSheet();
+					debouncedSync();
+					showToast('Record added.', 'info');
+					scrollFormToTop();
 				}
 
 				function loadActiveRecord() {
@@ -642,7 +695,8 @@
 					companyAccred: 'Vanguard Inspection Services Ltd.',
 					standards: isCrane ? 'BS 7121-2, LOLER Reg 9, ISO 4309' : 'BS EN 1492-2, LOLER Reg 9, ASME B30.9',
 					sopRef: isCrane ? 'SOP-CRANE-01' : 'SOP-RIG-03',
-					fieldToggles: { dangerTimeText: false },
+					fieldToggles: {},
+					sectionToggles: {},
 					includePuwer: isCrane,
 					includeChecklist: true,
 					includePhotos: false,
@@ -705,7 +759,7 @@
 				const sample = Object.assign(defaultNdtRecord(null), {
 					reportNo: getNextReportNumber('NDT'),
 					method: isUT ? 'UT' : 'MPI',
-					client: 'Petrobel Offshore Egypt',
+					client: 'Apex Engineering & Energy Corp.',
 					location: 'Offshore Platform Wellhead Module B',
 					poRef: 'PO-2026-NDT-08',
 					itemDesc: isUT ? 'Butt Weld Joint W-104 (12" Sch 80 Super Duplex Pipe)' : 'High-Pressure Manifold Flange Weld Neck Joint F-02',
@@ -713,10 +767,10 @@
 					testSpec: isUT ? 'ASME Sec V Art. 4 & ASME Sec VIII Div 1' : 'ASME Sec V Art. 7 & ASTM E 709',
 					result: 'PASSED / ACCEPTABLE',
 					remarks: 'No planar or volumetric indications detected exceeding statutory acceptance thresholds.',
-					inspectorName: 'Ibrahim Eldofy',
-					witnessName: 'Reda El-Awady',
+					inspectorName: 'Marcus Vance',
+					witnessName: 'David H. Miller',
 					certLevel: 'ISO 9712 Level II',
-					certNo: 'EG-NDT-2026-99',
+					certNo: 'NDT-CERT-2026-99',
 					certExpiry: calculateNextDate(today, 36),
 					visionTest: calculateNextDate(today, -2),
 					procedureNo: isUT ? 'SOP-NDT-UT-008 Rev 2' : 'SOP-NDT-MPI-004 Rev 3',

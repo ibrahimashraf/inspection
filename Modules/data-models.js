@@ -66,12 +66,15 @@ function getNextReportNumber(p) {
 						{ ref: 'Reg 7', item: 'Specific risks restricted to trained persons', result: 'PASS', note: '' },
 						{ ref: 'Reg 8', item: 'Information & instructions available', result: 'PASS', note: '' },
 						{ ref: 'Reg 9', item: 'Training of operators & supervisors', result: 'PASS', note: '' },
+						{ ref: 'Reg 10', item: 'Conformity with Community requirements (CE/UKCA)', result: 'PASS', note: '' },
 						{ ref: 'Reg 11', item: 'Dangerous parts guarded', result: 'PASS', note: '' },
+						{ ref: 'Reg 12', item: 'Protection against specific hazards & falling objects', result: 'PASS', note: '' },
 						{ ref: 'Reg 14', item: 'Controls marked & safe', result: 'PASS', note: '' },
 						{ ref: 'Reg 15', item: 'Stopping & emergency stop functional', result: 'PASS', note: '' },
 						{ ref: 'Reg 16', item: 'Isolation from energy sources', result: 'PASS', note: '' },
 						{ ref: 'Reg 17', item: 'Stability & support verified', result: 'PASS', note: '' },
 						{ ref: 'Reg 18', item: 'Lighting suitable', result: 'PASS', note: '' },
+						{ ref: 'Reg 19', item: 'Maintenance operations safe & segregated', result: 'PASS', note: '' },
 						{ ref: 'Reg 20', item: 'Markings & signs legible', result: 'PASS', note: '' },
 						{ ref: 'Reg 21', item: 'Warning devices effective', result: 'PASS', note: '' },
 						{ ref: 'Reg 22', item: 'Maintenance operations safe', result: 'PASS', note: '' }
@@ -118,6 +121,7 @@ function getNextReportNumber(p) {
 						verdictLabel: "",
 						verdictText: "",
 						extraCells: [],
+						sectionToggles: {},
 						includeChecklist: false,
 						includePhotos: false,
 						checklist: [],
@@ -133,27 +137,31 @@ function getNextReportNumber(p) {
 
 				/* INITIAL DATA */
 				var liftingBatch = [{
-					reportNo: "LFT-20261012-01", reportDate: "2026-09-30", jobRef: "WO-0842", poRef: "PO-99201-EGY",
-					companyAccred: "Vanguard Inspection Ltd.", standards: "BS EN 13889, ISO 4309, ASME B30.26", sopRef: "SOP-LIFT-044 Rev 4",
-					fieldToggles: { dangerTimeText: false }, includePuwer: false, includeChecklist: false, includePhotos: false, puwerRows: defaultPuwerRows(),
-					employer: "Belayim Petroleum Co. (Petrobel)++Cairo, Egypt", premises: "El-Qaher II Jack-up Rig",
-					subLocation: "Drill Floor / Bay 3", colourCode: "GREEN",
-					description: "Grade 80 High-Tensile Bolt Type Anchor Bow Shackle",
+					reportNo: "LFT-20261017-01", reportDate: "2026-10-17", jobRef: "WO-0954", poRef: "PO-2026-8812",
+					companyAccred: "Integin Global Inspection Services Ltd.", standards: "BS EN 13889, ISO 4309, ASME B30.26", sopRef: "SOP-LIFT-044 Rev 4",
+					fieldToggles: {}, sectionToggles: {}, includePuwer: false, includeChecklist: false, includePhotos: false, puwerRows: defaultPuwerRows(),
+					employer: "Global Marine Logistics Ltd.++London, UK", premises: "North Sea Marine Terminal - Rigging Yard B",
+					subLocation: "Heavy Lift Rigging Loft / Bay 4", colourCode: "GREEN",
+					description: "Grade 80 High-Tensile Bolt Type Anchor Safety Bow Shackle",
 					swl: "17.0 Tonnes", quantity: "1", identification: "Stamp: Crosby G-2130 / EQ-SHK-009",
-					manufacturer: "Crosby Group", model: "G-2130", serial: "SN-CR-88401", plantId: "EQ-SHK-009", mfgYear: "2022",
-					lastExamDate: "2026-03-31", markingsLegible: "YES",
+					manufacturer: "Crosby Group", model: "G-2130", serial: "SN-CR-88401", plantId: "EQ-SHK-009", mfgYear: "2023",
+					lastExamDate: "2026-04-15", markingsLegible: "YES",
 					q_firstExam: "NO", q_installedCorrectly: "N/A", q_int6m: "YES", q_int12m: "NO", q_scheme: "NO", q_exceptional: "NO",
 					examParticulars: DEFAULT_EXAM_PARTICULARS,
 					additionalTesting: "NO", additionalTestingDetails: "",
 					proofLoadApplied: "Visual and Dimensional Examination Only",
 					lastProofDetails: "2024-05-12 | Cert #PLT-44018", nextProofDate: "2028-05-11",
-					defectDesc: "NONE. No cracks, visible deformation, galling, or thread wear detected.",
-					dangerImm: "NO", dangerTimeText: "N/A", remedies: "None", isSafe: "YES",
-					examDate: "2026-09-30", nextExamDate: "2027-03-29",
+					defectDesc: "NONE. No cracks, visible deformation, galling, or thread wear detected. Verified safe for lifting operations.",
+					dangerImm: "NO", dangerTimeText: "N/A", remedies: "None required.", isSafe: "YES",
+					examDate: "2026-10-17", nextExamDate: "2027-04-16",
 					verdictLabel: "", verdictText: "", extraCells: [],
-					examinerName: "Ibrahim Eldofy | LEEA Inspector",
-					authName: "Reda El-Awady | Technical Manager",
-					checklist: [{ item: "Visual check for corrosion / distortion", status: "PASS", note: "Clean" }],
+					examinerName: "Marcus Vance | Senior LEEA Inspector",
+					authName: "David H. Miller | Technical Director",
+					checklist: [
+						{ item: "Visual check for corrosion, distortion & wear", status: "PASS", note: "Clean, zero defects" },
+						{ item: "Bow diameter and pin alignment verification", status: "PASS", note: "Within OEM tolerances" },
+						{ item: "Identification stamp legibility and WLL rating", status: "PASS", note: "Clear & embossed" }
+					],
 					photos: Array(12).fill(null),
 					inspectorSigLive: null, inspectorSigUpload: null, inspectorSigMode: 'LIVE',
 					authSigLive: null, authSigUpload: null, authSigMode: 'LIVE',
@@ -161,12 +169,15 @@ function getNextReportNumber(p) {
 				}];
 
 				var ndtBatch = [Object.assign(defaultNdtRecord(null), {
-					reportNo: "NDT-20261012-01", client: "Belayim Petroleum Co.", location: "El-Qaher II Rig",
-					poRef: "PO-99201", itemDesc: "Drill Collar Handling Sub (NC50)", material: "AISI 4145H Mod Alloy",
-					remarks: "No crack indications observed.",
-					inspectorName: "Ibrahim Eldofy", witnessName: "Reda El-Awady",
-					certNo: "EG-NDT-2214", certExpiry: "2027-05-30", visionTest: "2026-01-10",
-					procedureNo: "NDT-PROC-07 Rev 3", acceptCriteria: "ISO 5817 Level B / ASME Sec VIII Div 1",
-					calDue: "2026-12-01", refBlock: "IIW V1 / ISO 19232-1 W6", surfaceCond: "As-welded, wire brushed",
-					indications: [{ joint: "Joint C-1010", area: "Threads", finding: "No cracks", result: "PASS" }]
+					reportNo: "NDT-20261017-01", client: "Apex Engineering & Energy Corp.", location: "Bravo Platform - Wellhead Manifold Deck",
+					poRef: "PO-2026-8812", itemDesc: "High-Pressure Drill Collar Handling Sub (NC50)", material: "AISI 4145H Mod High-Strength Alloy",
+					remarks: "Complete 100% surface scan conducted. Zero relevant crack indications observed. Verified acceptable per ASME Sec VIII Div 1.",
+					inspectorName: "Marcus Vance", witnessName: "David H. Miller",
+					certNo: "NDT-CERT-2026-88", certExpiry: "2027-05-30", visionTest: "2026-01-10",
+					procedureNo: "NDT-PROC-07 Rev 4", acceptCriteria: "ISO 5817 Level B / ASME Sec VIII Div 1",
+					calDue: "2026-12-01", refBlock: "IIW V1 / ISO 19232-1 W6", surfaceCond: "As-welded, wire brushed, clean",
+					indications: [
+						{ joint: "Joint C-1010", area: "Threads & Pin Radius", finding: "No cracks / No indications", result: "PASS" },
+						{ joint: "Joint C-1011", area: "Stress Relief Groove", finding: "Clean profile, no discontinuity", result: "PASS" }
+					]
 				})];

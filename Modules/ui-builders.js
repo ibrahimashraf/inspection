@@ -110,8 +110,8 @@
 						'<div style="padding:16px 20px;overflow-y:auto;flex:1;">' +
 							sec('Text Field Power Formatting (++ Hotkey)', '⚡') +
 							p('<strong>Multiline Split:</strong> Type <code>++</code> anywhere in a text field (such as Client, Premises, Description, or Defects) to force a clean <strong>line break</strong> on the generated A4 certificate.') +
-							p('<em>Example:</em> Typing <code>Belayim Petroleum Co.++Cairo, Egypt</code> prints as:<br>' +
-							  '<div style="margin:4px 0 8px 12px;padding:6px 10px;background:var(--cell);border-left:3px solid var(--accent);font-size:12px;border-radius:2px;">Belayim Petroleum Co.<br>Cairo, Egypt</div>') +
+							p('<em>Example:</em> Typing <code>Global Marine Logistics Ltd.++London, UK</code> prints as:<br>' +
+							  '<div style="margin:4px 0 8px 12px;padding:6px 10px;background:var(--cell);border-left:3px solid var(--accent);font-size:12px;border-radius:2px;">Global Marine Logistics Ltd.<br>London, UK</div>') +
 
 							sec('Keyboard Shortcuts (Hotkeys)', '⌨') +
 							'<table style="width:100%;border-collapse:separate;border-spacing:0 4px;margin-bottom:12px;">' +
@@ -123,7 +123,24 @@
 								row('Esc', 'Close any open modal dialog or full-screen photo viewer') +
 							'</table>' +
 
-							sec('How Report Number Sequence Works (Industry Standard)', '🔢') +
+							sec('App Themes vs. Report Themes', '🎭') +
+							p('<strong>App Themes & UI:</strong> Alters your application workspace interface only (e.g. European Technical Slate, Swiss Studio White, Sunlight, NDT Darkroom, High-Contrast OLED, Refined Engineering Blueprint). It enhances field contrast and reduces eye fatigue on tablets without modifying the customer report.') +
+							p('<strong>Report Archetypes & Typography:</strong> Formats the statutory A4 PDF output. Choose from 20+ institutional styles including Maritime Class Society, Swiss International, CAD Blueprint, UK HSE F91, and vibrant color archetypes (Safety Amber Gold, Maritime Signal Emerald ISO 14001, Bureau Veritas Burgundy, Offshore Crimson).') +
+							p('<strong>Header / Footer Fill Area:</strong> In the Settings Toolbar or Corporate Branding panel, select from <em>White (No Fill)</em>, <em>Subtle Theme Tint</em>, <em>Solid Theme Fill</em>, or <em>Top & Bottom Accent Stripe</em> to dynamically style your certificate header and footer blocks.') +
+
+							sec('One-Stop Defaults Configuration', '⚙') +
+							p('You can configure all default values (App Theme, Font, Scale, Report Theme, Font, Density, Header Fill, QR Channel, ISO Doc Control, and Toggles) in a single place inside the <code>&lt;head&gt;</code> of <code>index.html</code> under <code>window.APP_DEFAULTS</code>.') +
+
+							sec('Enterprise White-Label Customizer', '🎨') +
+							p('Under <em>Settings / White-Label & Archetypes</em>, adjust institutional colors dynamically:') +
+							'<ul style="margin:0 0 10px 18px;padding:0;font-size:var(--ui-font-sm);line-height:1.45;">' +
+								'<li><strong>Section Headings & Accents:</strong> Sets the primary color for table headers, category badges, and divider lines.</li>' +
+								'<li><strong>Outer Border & Grid Lines:</strong> Controls document perimeter line weight and inner cell border shading.</li>' +
+								'<li><strong>Field Label Colors:</strong> Configures label tone (subtle gray, muted slate, or deep contrast).</li>' +
+								'<li><strong>One-Click Presets:</strong> Quickly load verified color harmonies: Classic Navy, Industrial Safety Amber, Forest Green, or Minimal Monochrome.</li>' +
+							'</ul>' +
+
+							sec('ISO Document Control & Auto-Numbering Engine', '🔢') +
 							p('In leading global inspection bodies (<strong>LEEA</strong>, <strong>Bureau Veritas</strong>, <strong>DNV</strong>, <strong>SGS</strong>):') +
 							'<ul style="margin:0 0 10px 18px;padding:0;font-size:var(--ui-font-sm);line-height:1.45;">' +
 								'<li><strong>Default Structure:</strong> <code>[PREFIX]-[YYYYMMDD]-0[SEQ]</code> (e.g. <code>LFT-20261012-01</code> for Lifting, <code>NDT-20261012-01</code> for NDT).</li>' +
@@ -132,10 +149,33 @@
 								'<li><strong>Auto-Increment:</strong> Adding or cloning records automatically increments the numeric sequence (+1) from the highest existing record.</li>' +
 							'</ul>' +
 
+							sec('Evidence & Photo Audit Engine', '📷') +
+							p('Capture or attach up to 4 high-resolution proof photos per inspection item:') +
+							'<ul style="margin:0 0 10px 18px;padding:0;font-size:var(--ui-font-sm);line-height:1.45;">' +
+								'<li><strong>IndexedDB Blob Storage:</strong> High-res images are automatically compressed and offloaded to browser IndexedDB, keeping workspace JSON exports lightweight and ultra-fast.</li>' +
+								'<li><strong>Photo Labels & Timestamps:</strong> Click any photo slot to add custom inspection captions and capture coordinates/timestamps.</li>' +
+								'<li><strong>Interactive Photo Viewer:</strong> Click thumbnail to inspect full-screen with pan, zoom, rotation, and single-click download.</li>' +
+							'</ul>' +
+
+							sec('QR Verification & Digital Dispatch', '📲') +
+							p('Every certificate can embed a tamper-evident dynamic QR code linking directly to verification endpoints:') +
+							'<ul style="margin:0 0 10px 18px;padding:0;font-size:var(--ui-font-sm);line-height:1.45;">' +
+								'<li><strong>Instant Dispatch:</strong> Send report summaries directly to clients via WhatsApp or native Email draft with one click.</li>' +
+								'<li><strong>Field Signatures:</strong> Capture digital touch/stylus signatures directly on mobile screens with inspector accreditation numbers.</li>' +
+							'</ul>' +
+
+							sec('Annexures, PUWER 1998 & Multi-Page Budgeting', '📑') +
+							p('Maintain strict page-budget discipline for single-sheet or comprehensive multi-page audits:') +
+							'<ul style="margin:0 0 10px 18px;padding:0;font-size:var(--ui-font-sm);line-height:1.45;">' +
+								'<li><strong>Single-Page Statutory LOLER:</strong> Keep your core certificate to a single clean A4 sheet for standard compliance.</li>' +
+								'<li><strong>Full PUWER 1998 Statutory Compliance:</strong> Comprehensive audit checklist covering Reg 4 (Suitability), Reg 5 (Maintenance), Reg 6 (Competent Person Inspection), Reg 7 (Specific Risks), Reg 8 (Information), Reg 9 (Training), Reg 10 (CE/UKCA Conformity), Reg 11 (Guarding), Reg 12 (Specific Hazards & Falling Objects), Reg 14 (Controls), Reg 15 (Emergency Stops), Reg 16 (Energy Isolation), Reg 17 (Stability), Reg 18 (Lighting), Reg 19 (Safe Maintenance), Reg 20 (Markings), Reg 21 (Warnings), and Reg 22.</li>' +
+								'<li><strong>Persistent Footers:</strong> Corporate and reserved certification footers are pinned flush to the bottom of all subsequent pages (Page 2+).</li>' +
+							'</ul>' +
+
 							sec('Key Controls & ON / OFF Toggles', '🎛') +
 							p('Every form box has a compact <span style="display:inline-block;padding:1px 5px;background:var(--accent);color:#fff;border-radius:10px;font-size:9px;font-weight:bold;">● ON</span> toggle. Click it anytime to hide or show that section in the final printable report without losing your input.') +
 
-							sec('Designer Asset Dimensions & Guidelines', '🎨') +
+							sec('Designer Asset Dimensions & Guidelines', '📐') +
 							p('Detailed physical and pixel dimensions for design teams preparing custom institutional overlays:') +
 							'<table style="width:100%;border-collapse:collapse;margin-bottom:12px;font-size:11px;border:1px solid var(--hairline);">' +
 								'<tr style="background:var(--panel);font-weight:700;"><th style="padding:6px;border:1px solid var(--hairline);text-align:left;">Asset</th><th style="padding:6px;border:1px solid var(--hairline);text-align:left;">Aspect Ratio</th><th style="padding:6px;border:1px solid var(--hairline);text-align:left;">Recommended (300 DPI)</th><th style="padding:6px;border:1px solid var(--hairline);text-align:left;">Physical A4 Size</th><th style="padding:6px;border:1px solid var(--hairline);text-align:left;">Format</th></tr>' +
@@ -229,10 +269,10 @@
 					const d = readDocControl();
 					if (!d.on) return '';
 					return '<table class="ctbl dc-strip"><colgroup><col style="width:64%"><col style="width:36%"></colgroup><tr><td>' +
-						'<span class="dc-l">File:</span> <span class="val mono" contenteditable="true" onblur="handleDocControlLiveEdit(\'docNo\', this.innerText)" title="Click to edit Document No">' + sanitizeForReport(d.docNo) + '</span> ' +
-						'<span class="dc-l">Rev:</span> <span class="val mono" contenteditable="true" onblur="handleDocControlLiveEdit(\'rev\', this.innerText)" title="Click to edit Revision">' + sanitizeForReport(d.rev) + '</span> ' +
-						'<span class="dc-l">Date:</span> <span class="val mono" contenteditable="true" onblur="handleDocControlLiveEdit(\'revDate\', this.innerText)" title="Click to edit Rev Date">' + sanitizeForReport(d.revDate) + '</span> ' +
-						'<span class="dc-l">Status:</span> Controlled</td><td style="text-align:right;"><span class="dc-l">Page</span> ' + p + ' of ' + t + '</td></tr></table>';
+						'<span class="dc-l">File:</span><span class="val mono" contenteditable="true" onblur="handleDocControlLiveEdit(\'docNo\', this.innerText)" title="Click to edit Document No">' + sanitizeForReport(d.docNo) + '</span>' +
+						'<span class="dc-l">Rev:</span><span class="val mono" contenteditable="true" onblur="handleDocControlLiveEdit(\'rev\', this.innerText)" title="Click to edit Revision">' + sanitizeForReport(d.rev) + '</span>' +
+						'<span class="dc-l">Date:</span><span class="val mono" contenteditable="true" onblur="handleDocControlLiveEdit(\'revDate\', this.innerText)" title="Click to edit Rev Date">' + sanitizeForReport(d.revDate) + '</span>' +
+						'<span class="dc-l">Status:</span><span class="val">Controlled</span></td><td style="text-align:right;"><span class="dc-l">Page</span> ' + p + ' of ' + t + '</td></tr></table>';
 				}
 
 				/* CORP INFO */
@@ -826,11 +866,34 @@
 				}
 
 				/* STYLE UPDATERS */
+				const APP_FONT_MAP = {
+					'system': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+					'geometric': '"Trebuchet MS", "Lucida Grande", "Segoe UI", sans-serif',
+					'mono': 'ui-monospace, "Consolas", "SF Mono", "JetBrains Mono", Menlo, monospace',
+					'serif': 'Charter, Cambria, Georgia, "Times New Roman", serif',
+					'grotesque': 'Verdana, Geneva, Tahoma, sans-serif'
+				};
+
+				const REPORT_FONT_MAP = {
+					'swiss': '-apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif',
+					'serif': '"Charter", "Bitstream Charter", "Cambria", "Georgia", serif',
+					'mono': 'ui-monospace, "Consolas", "SF Mono", "JetBrains Mono", Menlo, monospace',
+					'technical': 'Arial, "Helvetica Neue", sans-serif'
+				};
+
 				function updateAppFont(v) {
-					if (!v) v = "Inter, 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif";
-					document.documentElement.style.setProperty('--app-font-family', v);
-					document.body.style.fontFamily = v;
+					if (!v) v = 'system';
+					const stack = APP_FONT_MAP[v] || v;
+					document.documentElement.style.setProperty('--app-font-family', stack);
+					document.body.style.setProperty('--app-font-family', stack);
+					document.body.style.fontFamily = stack;
 					store.set('ims_ui_font', v);
+					const sel = document.getElementById('globalFontSelect');
+					if (sel) {
+						for (let i = 0; i < sel.options.length; i++) {
+							if (sel.options[i].value === v) { sel.selectedIndex = i; break; }
+						}
+					}
 				}
 				function updateAppSize(v) { document.documentElement.style.setProperty('--app-font-size', v); store.set('ims_ui_size', v); }
 				function updateReportFont(v) {
@@ -839,18 +902,58 @@
 						document.documentElement.style.removeProperty('--report-font-family');
 						store.set('ims_rf', '');
 					} else {
+						const stack = REPORT_FONT_MAP[v] || v;
 						document.documentElement.setAttribute('data-report-font-custom', 'true');
-						document.documentElement.style.setProperty('--report-font-family', v);
+						document.documentElement.style.setProperty('--report-font-family', stack);
 						store.set('ims_rf', v);
+						const sel = document.getElementById('reportFontSelect');
+						if (sel) {
+							for (let i = 0; i < sel.options.length; i++) {
+								if (sel.options[i].value === v) { sel.selectedIndex = i; break; }
+							}
+						}
 					}
 					debouncedSync();
 				}
 				function updateReportSize(v) { document.documentElement.style.setProperty('--report-font-size', v); store.set('ims_rs', v); debouncedSync(); }
 				function updateReportDensity(v) {
-					if (v === 'compact') { document.documentElement.style.setProperty('--report-cell-padding', '1.6px 3px'); document.documentElement.style.setProperty('--report-line-height', '1.1'); }
-					else if (v === 'comfortable') { document.documentElement.style.setProperty('--report-cell-padding', '3.2px 4.5px'); document.documentElement.style.setProperty('--report-line-height', '1.25'); }
-					else { document.documentElement.style.setProperty('--report-cell-padding', '2.2px 4px'); document.documentElement.style.setProperty('--report-line-height', '1.18'); }
-					store.set('ims_rd', v); debouncedSync();
+					if (!v) v = 'standard';
+					document.documentElement.setAttribute('data-report-density', v);
+					if (v === 'compact') {
+						document.documentElement.style.setProperty('--report-cell-padding', '1.2px 2.8px');
+						document.documentElement.style.setProperty('--report-line-height', '1.08');
+					} else if (v === 'comfortable') {
+						document.documentElement.style.setProperty('--report-cell-padding', '4.8px 6.5px');
+						document.documentElement.style.setProperty('--report-line-height', '1.32');
+					} else {
+						document.documentElement.style.setProperty('--report-cell-padding', '2.4px 4.2px');
+						document.documentElement.style.setProperty('--report-line-height', '1.18');
+					}
+					store.set('ims_rd', v);
+					['reportDensitySelect', 'reportDensitySelectBanner'].forEach(id => {
+						const el = document.getElementById(id);
+						if (el && el.value !== v) el.value = v;
+					});
+					debouncedSync();
+				}
+
+				window.currentReportHfStyle = localStorage.getItem('ims_rhf') || 'none';
+				function setReportHeaderFill(v) {
+					if (!v) v = 'none';
+					window.currentReportHfStyle = v;
+					if (v === 'none') {
+						document.documentElement.removeAttribute('data-report-hf-style');
+						store.set('ims_rhf', 'none');
+					} else {
+						document.documentElement.setAttribute('data-report-hf-style', v);
+						store.set('ims_rhf', v);
+					}
+					['reportHeaderFillToolbar', 'reportHeaderFillSelect', 'brand_headerFill'].forEach(id => {
+						const el = document.getElementById(id);
+						if (el && el.value !== v) el.value = v;
+					});
+					if (typeof renderPreview === 'function') renderPreview();
+					debouncedSync();
 				}
 				async function resetApplication() {
 					if (!confirm('Erase ALL saved records, photos, signatures and settings?\n\nThis cannot be undone.')) return;
@@ -879,14 +982,61 @@
 				}
 				function resetAppStyling() {
 					['--app-font-family', '--app-font-size', '--report-font-family', '--report-font-size', '--report-cell-padding', '--report-line-height'].forEach(p => document.documentElement.style.removeProperty(p));
-					['ims_ui_font', 'ims_ui_size', 'ims_rf', 'ims_rs', 'ims_rd', 'ims_report_theme'].forEach(k => store.del(k));
+					document.body.style.removeProperty('font-family');
+					document.body.style.removeProperty('--app-font-family');
+					document.documentElement.removeAttribute('data-report-hf-style');
+					['ims_ui_font', 'ims_ui_size', 'ims_rf', 'ims_rs', 'ims_rd', 'ims_report_theme', 'ims_rhf'].forEach(k => store.del(k));
+					const gfs = document.getElementById('globalFontSelect');
+					if (gfs) gfs.selectedIndex = 0;
+					const gss = document.getElementById('globalSizeSelect');
+					if (gss) gss.value = '13px';
+					const rfs = document.getElementById('reportFontSelect');
+					if (rfs) rfs.selectedIndex = 0;
+					const rss = document.getElementById('reportSizeSelect');
+					if (rss) rss.value = '7.1pt';
+					const rds = document.getElementById('reportDensitySelect');
+					if (rds) rds.value = 'standard';
+					['reportHeaderFillToolbar', 'reportHeaderFillSelect', 'brand_headerFill'].forEach(id => {
+						const el = document.getElementById(id);
+						if (el) el.value = 'none';
+					});
 					setReportTheme('swiss');
 					setTheme('dark');
 					debouncedSync(); showToast('Styles reset.', 'info');
 				}
 
 
-				/* FIELD PILLS */
+				/* FIELD & SECTION PILLS */
+				const ALL_LOLER_SECTIONS = ['sec_loler_1', 'sec_loler_2', 'sec_loler_3', 'sec_loler_4', 'sec_loler_5'];
+				const ALL_NDT_SECTIONS = ['sec_ndt_1', 'sec_ndt_2', 'sec_ndt_3', 'sec_ndt_4', 'sec_ndt_5', 'sec_ndt_6'];
+
+				function toggleSectionPill(secKey) {
+					const r = activeRec(); if (!r) return;
+					if (!r.sectionToggles) r.sectionToggles = {};
+					r.sectionToggles[secKey] = r.sectionToggles[secKey] === false;
+					updateFieldStates();
+					debouncedSync();
+				}
+
+				function updateSectionStates() {
+					const r = activeRec(); if (!r) return;
+					if (!r.sectionToggles) r.sectionToggles = {};
+					const secs = currentEngine === 'LIFTING' ? ALL_LOLER_SECTIONS : ALL_NDT_SECTIONS;
+					secs.forEach(k => {
+						const on = r.sectionToggles[k] !== false;
+						const p = document.getElementById('pill_' + k);
+						if (p) {
+							p.className = 'micro-toggle ' + (on ? 'on' : 'off');
+							p.innerHTML = '<span class="toggle-dot"></span>' + (on ? 'ON' : 'OFF');
+							p.setAttribute('aria-checked', on ? 'true' : 'false');
+						}
+						const card = document.getElementById('card_' + k);
+						if (card) {
+							card.classList.toggle('section-off', !on);
+						}
+					});
+				}
+
 				function toggleFieldPill(k) {
 					const r = liftingBatch[activeIdx];
 					if (!r.fieldToggles) r.fieldToggles = {};
@@ -916,21 +1066,25 @@
 				function toggleEvidencePage() { const r = activeRec(); r.includePhotos = !r.includePhotos; updateFieldStates(); debouncedSync(); }
 
 				function updateFieldStates() {
-					const r = liftingBatch[activeIdx]; if (!r) return;
-					if (!r.fieldToggles) r.fieldToggles = {};
-					ALL_LIFTING_TOGGLES.forEach(k => {
-						const on = r.fieldToggles[k] !== false;
-						const p = document.getElementById('pill_' + k);
-						const inp = document.getElementById('in_' + k);
-						const fg = inp ? inp.closest('.fg') : document.getElementById('fg_' + k);
-						if (p) { p.className = 'micro-toggle ' + (on ? 'on' : 'off'); p.innerHTML = '<span class="toggle-dot"></span>' + (on ? 'ON' : 'OFF'); p.setAttribute('aria-checked', on ? 'true' : 'false'); }
-						if (fg) { const input = fg.querySelector('input, select, textarea'); if (input) input.disabled = !on; }
-					});
 					if (currentEngine === 'LIFTING') {
-						const pp = document.getElementById('pill_puwerPage');
-						if (pp) { const on = r.includePuwer === true; pp.className = 'micro-toggle ' + (on ? 'on' : 'off'); pp.innerHTML = '<span class="toggle-dot"></span>ANNEXURE: ' + (on ? 'ON' : 'OFF'); }
+						const r = liftingBatch[activeIdx];
+						if (r) {
+							if (!r.fieldToggles) r.fieldToggles = {};
+							ALL_LIFTING_TOGGLES.forEach(k => {
+								const on = r.fieldToggles[k] !== false;
+								const p = document.getElementById('pill_' + k);
+								const inp = document.getElementById('in_' + k);
+								const fg = inp ? inp.closest('.fg') : document.getElementById('fg_' + k);
+								if (p) { p.className = 'micro-toggle ' + (on ? 'on' : 'off'); p.innerHTML = '<span class="toggle-dot"></span>' + (on ? 'ON' : 'OFF'); p.setAttribute('aria-checked', on ? 'true' : 'false'); }
+								if (fg) { const input = fg.querySelector('input, select, textarea'); if (input) input.disabled = !on; }
+							});
+							const pp = document.getElementById('pill_puwerPage');
+							if (pp) { const on = r.includePuwer === true; pp.className = 'micro-toggle ' + (on ? 'on' : 'off'); pp.innerHTML = '<span class="toggle-dot"></span>ANNEXURE: ' + (on ? 'ON' : 'OFF'); }
+						}
+					} else {
+						updateNdtFieldStates();
 					}
-					if (currentEngine === 'NDT') updateNdtFieldStates();
+					updateSectionStates();
 					const rec = activeRec();
 					const cp = document.getElementById('pill_checklistToggle');
 					if (cp) { const on = rec.includeChecklist === true; cp.className = 'micro-toggle ' + (on ? 'on' : 'off'); cp.innerHTML = '<span class="toggle-dot"></span>CHECKLIST: ' + (on ? 'ON' : 'OFF'); }
@@ -1031,6 +1185,7 @@
 				}
 			
 				function resetPreviewZoom() { manualZoom = null; applyZoom(); }
+				function setZoom100() { manualZoom = 1.0; applyZoom(); }
 
 				function installTrackpadZoom() {
 					let pendingDelta = 0;
@@ -1056,16 +1211,51 @@
 						}
 					};
 
-					// Single listener on window capturing Ctrl+wheel over preview elements
+					let formPendingDelta = 0;
+					let formRafId = null;
+					let formZoom = 1.0;
+
+					const onFormWheelZoom = function(e) {
+						if (!e.ctrlKey) return;
+						e.preventDefault();
+						formPendingDelta += e.deltaY;
+
+						if (!formRafId) {
+							formRafId = requestAnimationFrame(() => {
+								const factor = Math.exp(-formPendingDelta * 0.005);
+								let next = formZoom * factor;
+								next = Math.max(0.7, Math.min(2.5, Math.round(next * 100) / 100));
+								formZoom = next;
+								const fs = document.getElementById('formScrollBody');
+								if (fs) fs.style.setProperty('--form-zoom', formZoom);
+								formPendingDelta = 0;
+								formRafId = null;
+							});
+						}
+					};
+
+					// Single listener on window capturing Ctrl+wheel over preview elements or form pane
 					window.addEventListener('wheel', function(e) {
-						if (e.ctrlKey && e.target && e.target.closest && (e.target.closest('#previewPane') || e.target.closest('#enginePreviewContainer') || e.target.closest('.a4-page-frame'))) {
+						if (!e.ctrlKey || !e.target || !e.target.closest) return;
+						if (e.target.closest('#previewPane') || e.target.closest('#enginePreviewContainer') || e.target.closest('.a4-page-frame')) {
 							onWheelZoom(e);
+						} else if (e.target.closest('#leftPane')) {
+							onFormWheelZoom(e);
 						}
 					}, { passive: false });
 				}
 
 				window.currentReportTheme = localStorage.getItem('ims_report_theme') || 'swiss';
 				const REPORT_THEME_CLASS_MAP = {
+					'dnv': 'swiss',
+					'leea': 'leea-statutory',
+					'tuv': 'tuv-din',
+					'bv': 'classic',
+					'asme': 'asme-osha',
+					'sgs': 'sgs-precision',
+					'lloyds': 'lloyds-marine',
+					'minimal': 'minimal',
+					'custom': 'custom-brand',
 					'amber': 'offshore',
 					'obsidian': 'obsidian-rep',
 					'holographic': 'laser-ndt',
@@ -1077,7 +1267,24 @@
 					'aurora': 'cert-aurora',
 					'neubrutalist': 'cert-neubrutalist',
 					'bento': 'cert-bento',
-					'luxury': 'cert-luxury'
+					'luxury': 'cert-luxury',
+					'maritime': 'maritime',
+					'cad': 'cad',
+					'f91': 'f91',
+					'split-rail': 'split-rail',
+					'security-bond': 'security-bond',
+					'loft-register': 'loft-register',
+					'nordic': 'nordic',
+					'defstan': 'defstan',
+					'telemetry': 'telemetry',
+					'editorial': 'editorial',
+					'obsidian': 'obsidian',
+					'japanese': 'japanese',
+					'crypto': 'crypto',
+					'amber': 'amber',
+					'emerald': 'emerald',
+					'burgundy': 'burgundy',
+					'crimson': 'crimson'
 				};
 
 				function getCanonicalReportTheme(name) {
@@ -1256,12 +1463,23 @@
 				}
 			}
 				function cyclePreviewLayout() {
-					const startEffective = getEffectiveLayout();
-					for (let step = 1; step <= layoutModes.length; step++) {
-						const candidate = (currentLayoutIdx + step) % layoutModes.length;
-						if (effectiveLayoutFor(candidate) !== startEffective) {
-							currentLayoutIdx = candidate;
-							break;
+					const isMobile = !MQ_BESIDE_OK.matches;
+					if (isMobile) {
+						// On mobile screens (<700px), toggle directly between layout-below (visible) and layout-folded (hidden)
+						const currentEffective = getEffectiveLayout();
+						if (currentEffective === 'layout-folded') {
+							currentLayoutIdx = layoutModes.indexOf('layout-below');
+						} else {
+							currentLayoutIdx = layoutModes.indexOf('layout-folded');
+						}
+					} else {
+						const startEffective = getEffectiveLayout();
+						for (let step = 1; step <= layoutModes.length; step++) {
+							const candidate = (currentLayoutIdx + step) % layoutModes.length;
+							if (effectiveLayoutFor(candidate) !== startEffective) {
+								currentLayoutIdx = candidate;
+								break;
+							}
 						}
 					}
 					store.set('ims_layout', String(currentLayoutIdx));
@@ -1323,15 +1541,18 @@
 						store.set('ims_theme', name);
 						const sel = document.getElementById('themeSelect');
 						if (sel && sel.value !== name) sel.value = name;
+						const selTb = document.getElementById('themeSelectToolbar');
+						if (selTb && selTb.value !== name) selTb.value = name;
 					};
-					// A view transition is skipped (and its promise rejected) when the
-					// document is hidden or another transition is already running.
-					// Apply immediately in those cases so the theme always lands.
+					// Apply classes synchronously so DOM state is always updated immediately
+					apply();
 					if (document.startViewTransition && document.visibilityState === 'visible') {
-						const t = document.startViewTransition(apply);
-						t.ready.catch(function () {});
-						t.finished.catch(function () { apply(); });
-					} else apply();
+						try {
+							const t = document.startViewTransition(() => {});
+							t.ready.catch(() => {});
+							t.finished.catch(() => {});
+						} catch (e) {}
+					}
 				}
 
 				const FORM_STYLES = [
@@ -1738,7 +1959,9 @@
 					const frameClass   = (opts.frameClass || 'a4-page-frame') + ' ' + activeReportTheme;
 					const pageOffset   = opts.pageOffset || 0;
 
-					if (blocks.length === 0 && !sigHTML) {
+					const allowEmpty   = opts.allowEmpty !== undefined ? !!opts.allowEmpty : true;
+
+					if (blocks.length === 0 && !sigHTML && !allowEmpty) {
 						return { html: '', pageCount: 0 };
 					}
 
@@ -2044,6 +2267,90 @@
 								'</div>' +
 							'</div>' +
 						'</div>' +
+						'<div class="card" id="card_whiteLabelCustomizer">' +
+							'<h3><span>Enterprise Certificate Customizer</span><span class="micro-toggle ' + (store.get('ims_custom_colors_on') === '1' ? 'on' : 'off') + '" id="pill_customColors" onclick="toggleCustomColors()"><span class="toggle-dot"></span>CUSTOM: ' + (store.get('ims_custom_colors_on') === '1' ? 'ON' : 'OFF') + '</span></h3>' +
+							'<div class="row cols-4">' +
+								'<div class="fg">' +
+									'<div class="fg-hdr"><span class="fg-title">Section Banners &amp; Titles</span></div>' +
+									'<div style="display:flex;gap:6px;align-items:center;">' +
+										'<input type="color" id="cp_cert_primary" value="#0f2847" style="width:36px;height:28px;padding:1px;border-radius:4px;border:1px solid var(--hairline);cursor:pointer;" onchange="updateCustomColor(\'primary\',this.value)">' +
+										'<input type="text" id="cp_cert_primary_hex" value="#0f2847" class="mono" style="font-size:11px;" onchange="updateCustomColor(\'primary\',this.value)">' +
+									'</div>' +
+								'</div>' +
+								'<div class="fg">' +
+									'<div class="fg-hdr"><span class="fg-title">Certificate Outer Border</span></div>' +
+									'<div style="display:flex;gap:6px;align-items:center;">' +
+										'<input type="color" id="cp_cert_border" value="#0f172a" style="width:36px;height:28px;padding:1px;border-radius:4px;border:1px solid var(--hairline);cursor:pointer;" onchange="updateCustomColor(\'border\',this.value)">' +
+										'<input type="text" id="cp_cert_border_hex" value="#0f172a" class="mono" style="font-size:11px;" onchange="updateCustomColor(\'border\',this.value)">' +
+									'</div>' +
+								'</div>' +
+								'<div class="fg">' +
+									'<div class="fg-hdr"><span class="fg-title">Table Grid Lines</span></div>' +
+									'<div style="display:flex;gap:6px;align-items:center;">' +
+										'<input type="color" id="cp_cert_grid" value="#334155" style="width:36px;height:28px;padding:1px;border-radius:4px;border:1px solid var(--hairline);cursor:pointer;" onchange="updateCustomColor(\'grid\',this.value)">' +
+										'<input type="text" id="cp_cert_grid_hex" value="#334155" class="mono" style="font-size:11px;" onchange="updateCustomColor(\'grid\',this.value)">' +
+									'</div>' +
+								'</div>' +
+								'<div class="fg">' +
+									'<div class="fg-hdr"><span class="fg-title">Field Label Micro-Ink</span></div>' +
+									'<div style="display:flex;gap:6px;align-items:center;">' +
+										'<input type="color" id="cp_cert_lbl" value="#475569" style="width:36px;height:28px;padding:1px;border-radius:4px;border:1px solid var(--hairline);cursor:pointer;" onchange="updateCustomColor(\'lbl\',this.value)">' +
+										'<input type="text" id="cp_cert_lbl_hex" value="#475569" class="mono" style="font-size:11px;" onchange="updateCustomColor(\'lbl\',this.value)">' +
+									'</div>' +
+								'</div>' +
+							'</div>' +
+							'<div class="row cols-2" style="margin-top:8px;">' +
+								'<div class="fg">' +
+									'<div class="fg-hdr"><span class="fg-title">Header / Footer Fill Area</span></div>' +
+									'<select id="brand_headerFill" onchange="setReportHeaderFill(this.value)" style="height:28px;font-size:11px;">' +
+										'<option value="none">White Background (No Fill / Default)</option>' +
+										'<option value="tint">Subtle Theme Tint</option>' +
+										'<option value="solid">Solid Theme Fill (Brand Background)</option>' +
+										'<option value="accent">Top & Bottom Accent Stripe</option>' +
+									'</select>' +
+								'</div>' +
+							'</div>' +
+							'<div class="row" style="margin-top:8px;">' +
+								'<div class="fg" style="grid-column:span 12;width:100%;">' +
+									'<div class="fg-hdr"><span class="fg-title">Quick Palette Presets</span></div>' +
+									'<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">' +
+										'<select id="brandThemePresetSelect" onchange="if(this.value) applyCorporatePreset(this.value)" style="height:28px;font-size:11px;min-width:180px;max-width:240px;flex:1;text-overflow:ellipsis;">' +
+											'<option value="">-- Load Theme Palette (15 Themes) --</option>' +
+											'<optgroup label="Statutory &amp; Class">' +
+												'<option value="maritime">01. Maritime Class</option>' +
+												'<option value="swiss">02. Swiss International</option>' +
+												'<option value="cad">03. ISO 7200 CAD</option>' +
+												'<option value="f91">04. UK HSE F91 Heritage</option>' +
+											'</optgroup>' +
+											'<optgroup label="Industrial &amp; Operations">' +
+												'<option value="split-rail">06. Asymmetric Split-Rail</option>' +
+												'<option value="security-bond">07. Security Bond</option>' +
+												'<option value="loft-register">08. Rigging Loft Matrix</option>' +
+											'</optgroup>' +
+											'<optgroup label="Contemporary Modern">' +
+												'<option value="nordic">09. Scandinavian Spec</option>' +
+												'<option value="defstan">10. Def-Stan 05-21</option>' +
+												'<option value="telemetry">11. Aerospace Telemetry</option>' +
+												'<option value="editorial">12. Editorial Monograph</option>' +
+											'</optgroup>' +
+											'<optgroup label="Architectural">' +
+												'<option value="obsidian">13. Obsidian Spine</option>' +
+												'<option value="brutalist">14. Neo-Brutalist</option>' +
+												'<option value="japanese">15. Japanese Precision</option>' +
+												'<option value="crypto">16. Cryptographic Trust</option>' +
+											'</optgroup>' +
+											'<optgroup label="Statutory Color Archetypes">' +
+												'<option value="amber">17. Safety Amber &amp; High-Vis Gold</option>' +
+												'<option value="emerald">18. Maritime Signal Emerald</option>' +
+												'<option value="burgundy">19. Bureau Veritas Burgundy</option>' +
+												'<option value="crimson">20. Offshore Safety Crimson</option>' +
+											'</optgroup>' +
+										'</select>' +
+										'<button type="button" class="btn btn-danger" style="font-size:11px;height:28px;min-height:28px;padding:2px 14px;margin-left:auto;" onclick="resetCustomColors()">Reset</button>' +
+									'</div>' +
+								'</div>' +
+							'</div>' +
+						'</div>' +
 						'<div class="card">' +
 							'<h3><span>ISO Document Control</span><span class="micro-toggle on" id="pill_docControl" onclick="toggleDocControl()"><span class="toggle-dot"></span>ON</span></h3>' +
 							'<div class="row cols-4">' +
@@ -2065,19 +2372,19 @@
 								'</div>' +
 							'</div>' +
 							'<div class="row cols-3">' +
-								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Phone</span></div><input type="text" id="waPhone" value="+201000000000" oninput="debouncedSync();updateQrBudget()"></div>' +
-								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Email</span></div><input type="email" id="waEmail" value="verify@vanguard-inspection.com" oninput="debouncedSync();updateQrBudget()"></div>' +
-								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Prefix</span></div><input type="text" id="waMsg" value="Verification Inquiry for Report No:" oninput="debouncedSync();updateQrBudget()"></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Phone (WhatsApp)</span></div><input type="text" id="waPhone" value="+441224598800" placeholder="+441224598800" oninput="debouncedSync();updateQrBudget()"></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Email (Dispatch)</span></div><input type="email" id="waEmail" value="verify@integin-inspection.com" placeholder="verify@integin-inspection.com" oninput="debouncedSync();updateQrBudget()"></div>' +
+								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Prefix / Inquiry Text</span></div><input type="text" id="waMsg" value="Official Verification Request for Certificate:" oninput="debouncedSync();updateQrBudget()"></div>' +
 							'</div>' +
 							'<div class="row">' +
 								'<div class="fg" style="grid-column:span 12;">' +
-									'<div class="fg-hdr"><span class="fg-title">Dispatch Link</span></div>' +
+									'<div class="fg-hdr"><span class="fg-title">Active Dispatch Link</span></div>' +
 									'<input type="text" id="qrLinkPreview" class="mono" readonly>' +
 									'<div id="qrBudget" style="margin-top:4px;font-family:var(--font-data);font-size:var(--ui-font-xs);color:var(--ink-muted);" aria-live="polite"></div>' +
 								'</div>' +
 							'</div>' +
 							'<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
-								'<button class="btn btn-accent" style="width:100%;font-weight:700;" onclick="dispatchVerification()">▶ Test QR</button>' +
+								'<button class="btn btn-accent" style="width:100%;font-weight:700;" onclick="dispatchVerification()">📷 Test &amp; Scan QR (Real Scanner Box)</button>' +
 							'</div>' +
 						'</div>';
 					container.dataset.rendered = 'true';
@@ -2094,8 +2401,147 @@
 						if (g('dc_rev')) g('dc_rev').value = docControl.rev || '03';
 						if (g('dc_revDate')) g('dc_revDate').value = docControl.revDate || '2026-01-15';
 						if (g('dc_reportNoPattern')) g('dc_reportNoPattern').value = docControl.reportNoPattern || '{PREFIX}-{DATE}-0{SEQ}';
+						restoreCustomColorsUI();
 					}
 					if (typeof renderAssetThumbs === 'function') renderAssetThumbs();
+				}
+
+				function restoreCustomColorsUI() {
+					const g = id => document.getElementById(id);
+					const p = store.get('ims_cc_primary') || '#0f2847';
+					const b = store.get('ims_cc_border') || '#0f172a';
+					const gr = store.get('ims_cc_grid') || '#334155';
+					const l = store.get('ims_cc_lbl') || '#475569';
+					if (g('cp_cert_primary')) g('cp_cert_primary').value = p;
+					if (g('cp_cert_primary_hex')) g('cp_cert_primary_hex').value = p;
+					if (g('cp_cert_border')) g('cp_cert_border').value = b;
+					if (g('cp_cert_border_hex')) g('cp_cert_border_hex').value = b;
+					if (g('cp_cert_grid')) g('cp_cert_grid').value = gr;
+					if (g('cp_cert_grid_hex')) g('cp_cert_grid_hex').value = gr;
+					if (g('cp_cert_lbl')) g('cp_cert_lbl').value = l;
+					if (g('cp_cert_lbl_hex')) g('cp_cert_lbl_hex').value = l;
+					if (g('brand_headerFill')) g('brand_headerFill').value = window.currentReportHfStyle || 'none';
+
+					const on = store.get('ims_custom_colors_on') === '1';
+					if (on) {
+						document.documentElement.setAttribute('data-report-custom-colors', 'true');
+						document.documentElement.style.setProperty('--custom-cert-primary', p);
+						document.documentElement.style.setProperty('--custom-cert-fill-tint', p + '14');
+						document.documentElement.style.setProperty('--custom-cert-border', b);
+						document.documentElement.style.setProperty('--custom-cert-grid', gr);
+						document.documentElement.style.setProperty('--custom-cert-lbl', l);
+					} else {
+						document.documentElement.removeAttribute('data-report-custom-colors');
+						document.documentElement.style.setProperty('--custom-cert-fill-tint', '#f1f5f9');
+					}
+				}
+
+				function toggleCustomColors() {
+					const cur = store.get('ims_custom_colors_on') === '1';
+					const nxt = !cur;
+					store.set('ims_custom_colors_on', nxt ? '1' : '0');
+					const pill = document.getElementById('pill_customColors');
+					if (pill) {
+						pill.className = 'micro-toggle ' + (nxt ? 'on' : 'off');
+						pill.innerHTML = '<span class="toggle-dot"></span>CUSTOM: ' + (nxt ? 'ON' : 'OFF');
+					}
+					restoreCustomColorsUI();
+					if (nxt && typeof setReportTheme === 'function') setReportTheme('custom');
+					if (typeof renderPreview === 'function') renderPreview();
+					showToast('Custom Colors ' + (nxt ? 'ON' : 'OFF'), 'info');
+				}
+
+				function updateCustomColor(kind, val) {
+					if (!val) return;
+					const g = id => document.getElementById(id);
+					if (kind === 'primary') {
+						store.set('ims_cc_primary', val);
+						if (g('cp_cert_primary')) g('cp_cert_primary').value = val;
+						if (g('cp_cert_primary_hex')) g('cp_cert_primary_hex').value = val;
+						document.documentElement.style.setProperty('--custom-cert-primary', val);
+						document.documentElement.style.setProperty('--custom-cert-fill-tint', val + '14');
+					} else if (kind === 'border') {
+						store.set('ims_cc_border', val);
+						if (g('cp_cert_border')) g('cp_cert_border').value = val;
+						if (g('cp_cert_border_hex')) g('cp_cert_border_hex').value = val;
+						document.documentElement.style.setProperty('--custom-cert-border', val);
+					} else if (kind === 'grid') {
+						store.set('ims_cc_grid', val);
+						if (g('cp_cert_grid')) g('cp_cert_grid').value = val;
+						if (g('cp_cert_grid_hex')) g('cp_cert_grid_hex').value = val;
+						document.documentElement.style.setProperty('--custom-cert-grid', val);
+					} else if (kind === 'lbl') {
+						store.set('ims_cc_lbl', val);
+						if (g('cp_cert_lbl')) g('cp_cert_lbl').value = val;
+						if (g('cp_cert_lbl_hex')) g('cp_cert_lbl_hex').value = val;
+						document.documentElement.style.setProperty('--custom-cert-lbl', val);
+					}
+					store.set('ims_custom_colors_on', '1');
+					document.documentElement.setAttribute('data-report-custom-colors', 'true');
+					const pill = document.getElementById('pill_customColors');
+					if (pill) {
+						pill.className = 'micro-toggle on';
+						pill.innerHTML = '<span class="toggle-dot"></span>CUSTOM: ON';
+					}
+					if (typeof renderPreview === 'function') renderPreview();
+				}
+
+				const CORP_PRESETS = {
+					maritime: { name: "Maritime Class Society (Lloyd's/DNV)", primary: '#0f2942', border: '#0f2942', grid: '#0f2942', lbl: '#475569' },
+					swiss: { name: "Swiss International (Die Neue Graphik)", primary: '#111111', border: '#111111', grid: '#111111', lbl: '#555555' },
+					cad: { name: "ISO 7200 CAD Drafting Blueprint", primary: '#0a2540', border: '#0a2540', grid: '#0a2540', lbl: '#0a2540' },
+					f91: { name: "UK HSE F91 Statutory Heritage", primary: '#000000', border: '#000000', grid: '#000000', lbl: '#000000' },
+					'split-rail': { name: "Asymmetric Split-Rail (DNV Modern)", primary: '#0f172a', border: '#0f172a', grid: '#0f172a', lbl: '#475569' },
+					'security-bond': { name: "Security Bond / Anti-Counterfeit", primary: '#334155', border: '#334155', grid: '#334155', lbl: '#475569' },
+					'loft-register': { name: "High-Density Rigging Loft Matrix", primary: '#0f172a', border: '#000000', grid: '#000000', lbl: '#000000' },
+					nordic: { name: "Minimalist Scandinavian Spec Sheet", primary: '#737373', border: '#e5e5e5', grid: '#e5e5e5', lbl: '#888888' },
+					defstan: { name: "Military Def-Stan 05-21 Spec", primary: '#18181b', border: '#18181b', grid: '#18181b', lbl: '#18181b' },
+					telemetry: { name: "Aerospace Telemetry (Mission Control)", primary: '#090a0f', border: '#090a0f', grid: '#94a3b8', lbl: '#0284c7' },
+					editorial: { name: "High-End Editorial Monograph", primary: '#000000', border: '#1c1917', grid: '#000000', lbl: '#555555' },
+					obsidian: { name: "Asymmetric Obsidian Spine", primary: '#090d16', border: '#000000', grid: '#e2e8f0', lbl: '#64748b' },
+					brutalist: { name: "Neo-Brutalist Technical", primary: '#000000', border: '#000000', grid: '#000000', lbl: '#000000' },
+					japanese: { name: "Japanese Industrial Precision", primary: '#1e293b', border: '#94a3b8', grid: '#94a3b8', lbl: '#64748b' },
+					crypto: { name: "Cryptographic Trust Document", primary: '#030712', border: '#030712', grid: '#e2e8f0', lbl: '#0284c7' },
+					dnv: { name: "DNV Deep Navy (Legacy)", primary: '#0f2847', border: '#0f172a', grid: '#334155', lbl: '#475569' },
+					leea: { name: "LEEA UK Royal Navy (Legacy)", primary: '#002b49', border: '#002b49', grid: '#1e293b', lbl: '#334155' },
+					tuv: { name: "TÜV Blue Steel (Legacy)", primary: '#1e3a8a', border: '#1e293b', grid: '#475569', lbl: '#475569' },
+					bv: { name: "Bureau Veritas Gold (Legacy)", primary: '#78350f', border: '#1c1917', grid: '#292524', lbl: '#44403c' },
+					amber: { name: "Safety Amber & High-Vis Gold", primary: '#d97706', border: '#b45309', grid: '#d97706', lbl: '#92400e' },
+					emerald: { name: "Maritime Signal Emerald (ISO 14001)", primary: '#047857', border: '#065f46', grid: '#047857', lbl: '#065f46' },
+					burgundy: { name: "Bureau Veritas Heritage Burgundy", primary: '#78350f', border: '#78350f', grid: '#92400e', lbl: '#57534e' },
+					crimson: { name: "Offshore Safety Crimson Zone", primary: '#be123c', border: '#9f1239', grid: '#e11d48', lbl: '#9f1239' }
+				};
+
+				function applyCorporatePreset(name) {
+					const pr = CORP_PRESETS[name];
+					if (!pr) return;
+					updateCustomColor('primary', pr.primary);
+					updateCustomColor('border', pr.border);
+					updateCustomColor('grid', pr.grid);
+					updateCustomColor('lbl', pr.lbl);
+					const sel = document.getElementById('brandThemePresetSelect');
+					if (sel) sel.value = name;
+					if (typeof setReportTheme === 'function') {
+						const canonicalThemes = ['maritime', 'swiss', 'cad', 'f91', 'split-rail', 'security-bond', 'loft-register', 'nordic', 'defstan', 'telemetry', 'editorial', 'obsidian', 'brutalist', 'japanese', 'crypto', 'amber', 'emerald', 'burgundy', 'crimson'];
+						if (canonicalThemes.includes(name)) setReportTheme(name);
+						else setReportTheme('custom');
+					}
+					showToast('Applied ' + (pr.name || name.toUpperCase()) + ' Palette', 'success');
+				}
+
+				function resetCustomColors() {
+					['ims_cc_primary', 'ims_cc_border', 'ims_cc_grid', 'ims_cc_lbl', 'ims_custom_colors_on'].forEach(k => store.del(k));
+					document.documentElement.removeAttribute('data-report-custom-colors');
+					['--custom-cert-primary', '--custom-cert-border', '--custom-cert-grid', '--custom-cert-lbl'].forEach(p => document.documentElement.style.removeProperty(p));
+					const pill = document.getElementById('pill_customColors');
+					if (pill) {
+						pill.className = 'micro-toggle off';
+						pill.innerHTML = '<span class="toggle-dot"></span>CUSTOM: OFF';
+					}
+					restoreCustomColorsUI();
+					if (typeof setReportTheme === 'function') setReportTheme('swiss');
+					if (typeof renderPreview === 'function') renderPreview();
+					showToast('Custom colors reset.', 'info');
 				}
 
 				function renderChecklistTab() {

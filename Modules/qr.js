@@ -225,13 +225,13 @@
 				var docControl = { on: true, docNo: 'QMS-CERT-LOLER-044', rev: '03', revDate: '2026-01-15', reportNoPattern: '{PREFIX}-{DATE}-0{SEQ}' };
 				var featureToggles = { qr: true, corp: true, overlays: true };
 				var corpInfo = {
-					body: 'Integin Ltd.',
-					accred: '',
-					addr: 'xxxx xxxx, xxxxx, xxxx, xxxx',
-					phone: 'xxxxxxxxxxxxxxx',
-					email: 'xxxxxxxxxxxxxxx',
-					web: 'xxxxxxxxxxxxxxx',
-					footnote: 'This certificate is issued under the conditions of our accreditation. Reproduction other than in full requires written approval.'
+					body: 'Integin Global Inspection Services Ltd.',
+					accred: 'LEEA Member No. 0842 · ISO/IEC 17020 Type-A Accredited Inspection Body',
+					addr: 'Techniplex Business Centre, Quay West, Aberdeen AB11 5PQ, United Kingdom',
+					phone: '+44 (0) 1224 598800',
+					email: 'operations@integin-inspection.com',
+					web: 'www.integin-inspection.com',
+					footnote: 'This certificate of thorough examination complies with LOLER 1998 Regulation 10 & PUWER 1998 Regulation 6. Issued under the authority of our UKAS / LEEA accreditation.'
 				};
 				var viewerState = { type: 'none', photoIndex: -1, sigTarget: '', assetKey: '' };
 				var activeIdx = 0;
@@ -350,15 +350,111 @@
 						showToast('Verification QR could not be encoded — the dispatch link may be too long. Shorten the Prefix or Serial field.', 'warn');
 					}
 				}
+				function showEmailVerificationDialog(details) {
+					let dlg = document.getElementById('emailVerificationModal');
+					if (!dlg) {
+						dlg = document.createElement('dialog');
+						dlg.id = 'emailVerificationModal';
+						dlg.style.cssText = 'border:1px solid var(--hairline);border-radius:var(--radius-3);background:var(--surface);color:var(--ink);padding:0;max-width:540px;width:92%;box-shadow:var(--shadow-lg, 0 10px 25px rgba(0,0,0,0.5));';
+						document.body.appendChild(dlg);
+					}
+					const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+					const to = details.to || '';
+					const subject = details.subject || '';
+					const body = details.body || '';
+					const mailtoUri = details.mailto || ('mailto:' + encodeURIComponent(to) + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body));
+					const gmailUri = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(to) + '&su=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+					const outlookUri = 'https://outlook.office.com/mail/deeplink/compose?to=' + encodeURIComponent(to) + '&subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+
+					dlg.innerHTML =
+						'<div style="padding:var(--space-4) var(--space-5);border-bottom:1px solid var(--hairline);display:flex;justify-content:space-between;align-items:center;">' +
+							'<h3 style="margin:0;font-size:var(--ui-font-base);font-weight:700;display:flex;align-items:center;gap:6px;">✉ Email Verification Dispatch</h3>' +
+							'<button type="button" class="btn" style="padding:2px 8px;min-height:auto;" onclick="document.getElementById(\'emailVerificationModal\').close()">✕</button>' +
+						'</div>' +
+						'<div style="padding:var(--space-5);">' +
+							'<div style="margin-bottom:var(--space-4);font-size:var(--ui-font-sm);color:var(--ink-muted);line-height:1.4;">' +
+								'Verify inspection record directly via your installed email client or webmail service:' +
+							'</div>' +
+							'<div style="background:var(--panel);border:1px solid var(--hairline);border-radius:var(--radius-2);padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4);font-size:var(--ui-font-sm);">' +
+								'<div style="margin-bottom:4px;"><strong>To:</strong> <span class="mono">' + esc(to) + '</span></div>' +
+								'<div style="margin-bottom:4px;"><strong>Subject:</strong> <span>' + esc(subject) + '</span></div>' +
+								'<div><strong>Message:</strong> <div style="margin-top:2px;padding:6px;background:var(--surface);border-radius:var(--radius-1);white-space:pre-wrap;font-family:var(--font-data);">' + esc(body) + '</div></div>' +
+							'</div>' +
+							'<div style="display:flex;flex-direction:column;gap:8px;">' +
+								'<a href="' + esc(mailtoUri) + '" class="btn btn-accent" style="text-align:center;text-decoration:none;font-weight:700;padding:8px 12px;" onclick="document.getElementById(\'emailVerificationModal\').close()">🚀 Open Default Mail App (Outlook / Thunderbird / Mail)</a>' +
+								'<div style="display:flex;gap:8px;">' +
+									'<a href="' + esc(gmailUri) + '" target="_blank" rel="noopener noreferrer" class="btn" style="flex:1;text-align:center;text-decoration:none;padding:8px;" onclick="document.getElementById(\'emailVerificationModal\').close()">🌐 Open in Gmail Web</a>' +
+									'<a href="' + esc(outlookUri) + '" target="_blank" rel="noopener noreferrer" class="btn" style="flex:1;text-align:center;text-decoration:none;padding:8px;" onclick="document.getElementById(\'emailVerificationModal\').close()">🌐 Open in Outlook Web</a>' +
+								'</div>' +
+								'<button type="button" class="btn" style="padding:8px;" onclick="copyVerificationLink();document.getElementById(\'emailVerificationModal\').close()">📋 Copy Verification Link / Body</button>' +
+							'</div>' +
+						'</div>' +
+						'<div style="padding:var(--space-3) var(--space-5);border-top:1px solid var(--hairline);display:flex;justify-content:flex-end;">' +
+							'<button type="button" class="btn" onclick="document.getElementById(\'emailVerificationModal\').close()">Close</button>' +
+						'</div>';
+
+					if (typeof dlg.showModal === 'function') {
+						dlg.showModal();
+					} else {
+						dlg.setAttribute('open', '');
+					}
+				}
+
+				function showQrScanModal(details) {
+					let dlg = document.getElementById('qrScanModal');
+					if (!dlg) {
+						dlg = document.createElement('dialog');
+						dlg.id = 'qrScanModal';
+						dlg.style.cssText = 'border:1px solid var(--hairline);border-radius:var(--radius-3);background:var(--surface);color:var(--ink);padding:0;max-width:480px;width:92%;box-shadow:var(--shadow-lg, 0 10px 25px rgba(0,0,0,0.5));';
+						document.body.appendChild(dlg);
+					}
+					const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+					const isEmail = details.channel === 'EMAIL';
+					const channelName = isEmail ? '✉ Email Dispatch' : '📱 WhatsApp Dispatch';
+					const link = details.link || '';
+
+					dlg.innerHTML =
+						'<div style="padding:var(--space-4) var(--space-5);border-bottom:1px solid var(--hairline);display:flex;justify-content:space-between;align-items:center;">' +
+							'<h3 style="margin:0;font-size:var(--ui-font-base);font-weight:700;display:flex;align-items:center;gap:6px;">' + channelName + ' — Live QR Scanner</h3>' +
+							'<button type="button" class="btn" style="padding:2px 8px;min-height:auto;" onclick="document.getElementById(\'qrScanModal\').close()">✕</button>' +
+						'</div>' +
+						'<div style="padding:var(--space-5);display:flex;flex-direction:column;align-items:center;text-align:center;">' +
+							'<div style="margin-bottom:12px;font-size:var(--ui-font-sm);color:var(--ink-muted);">' +
+								'Scan this live QR code directly with your phone camera or barcode scanner app:' +
+							'</div>' +
+							'<div style="background:#ffffff;padding:12px;border-radius:var(--radius-2);border:2px solid var(--hairline);display:inline-flex;justify-content:center;align-items:center;margin-bottom:14px;box-shadow:0 4px 12px rgba(0,0,0,0.15);">' +
+								'<svg id="modalTestQrSvg" width="220" height="220" style="display:block;fill:#000000;"></svg>' +
+							'</div>' +
+							'<div style="width:100%;background:var(--panel);border:1px solid var(--hairline);border-radius:var(--radius-2);padding:var(--space-3) var(--space-4);margin-bottom:14px;text-align:left;font-size:var(--ui-font-sm);word-break:break-all;">' +
+								'<div style="margin-bottom:4px;font-size:11px;font-weight:700;color:var(--ink-muted);">ENCODED DISPATCH LINK:</div>' +
+								'<div class="mono" style="font-size:11px;color:var(--accent);">' + esc(link) + '</div>' +
+							'</div>' +
+							'<div style="display:flex;gap:8px;width:100%;flex-wrap:wrap;">' +
+								'<a href="' + esc(link) + '" target="_blank" rel="noopener noreferrer" class="btn btn-accent" style="flex:1;min-width:140px;text-align:center;text-decoration:none;font-weight:700;padding:8px 12px;">' + (isEmail ? '✉ Open Email Client' : '📱 Open WhatsApp') + '</a>' +
+								'<button type="button" class="btn" style="padding:8px 12px;" onclick="copyVerificationLink()">📋 Copy Link</button>' +
+							'</div>' +
+						'</div>' +
+						'<div style="padding:var(--space-3) var(--space-5);border-top:1px solid var(--hairline);display:flex;justify-content:flex-end;">' +
+							'<button type="button" class="btn" onclick="document.getElementById(\'qrScanModal\').close()">Close</button>' +
+						'</div>';
+
+					if (typeof dlg.showModal === 'function') {
+						dlg.showModal();
+					} else {
+						dlg.setAttribute('open', '');
+					}
+
+					// Render the SVG into the modal
+					const svgEl = document.getElementById('modalTestQrSvg');
+					if (svgEl) generateTrueQrSvg(link, svgEl);
+				}
+
 				function dispatchVerification() {
 					try {
-						const l = buildVerificationLink(activeRec());
-						if (qrChannel === 'EMAIL') {
-							window.location.href = l;
-						} else {
-							const a = document.createElement('a'); a.href = l; a.target = '_blank'; a.rel = 'noopener'; document.body.appendChild(a); a.click(); a.remove();
-						}
-						showToast('Verification dispatched: ' + (qrChannel === 'EMAIL' ? 'Email client opened.' : 'WhatsApp opened.'), 'success');
+						const r = activeRec();
+						const l = buildVerificationLink(r);
+						showQrScanModal({ channel: qrChannel, link: l, reportNo: r.reportNo || '' });
+						showToast('Test QR opened: Scan with phone or barcode reader.', 'info');
 					} catch (e) { showToast('Dispatch failed.', 'error'); }
 				}
 				function copyVerificationLink() {
@@ -366,3 +462,4 @@
 					if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(l).then(() => showToast('Link copied.', 'success'));
 					else showToast('Copy unsupported.', 'error');
 				}
+

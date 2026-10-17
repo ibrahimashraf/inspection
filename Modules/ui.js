@@ -227,15 +227,10 @@
         Object.assign(banner.style, {
             position: 'sticky',
             top: '0',
-            left: '0',
             zIndex: '200',
-            width: 'min(100%, 794px)',
-            marginLeft: 'auto',
-            marginRight: 'auto',
             backdropFilter: 'blur(8px)',
             WebkitBackdropFilter: 'blur(8px)'
         });
-    
     }
 
     /* ==============================================================
@@ -281,6 +276,110 @@
     }
 
     /* ==============================================================
+       MOBILE SELECT PICKER (Bottom Sheet Dialog)
+       ============================================================== */
+    let _activeMobileSelect = null;
+
+    function openMobileSelectDialog(selectEl) {
+        if (!selectEl) return;
+        const dialog = document.getElementById('mobileSelectDialog');
+        const list = document.getElementById('mobileSelectOptionsList');
+        const titleEl = document.getElementById('mobileSelectTitle');
+        if (!dialog || !list) return;
+
+        _activeMobileSelect = selectEl;
+
+        // Find label text if available
+        let title = 'Select Option';
+        if (selectEl.id) {
+            const lbl = document.querySelector('label[for="' + selectEl.id + '"]');
+            if (lbl && lbl.textContent) title = lbl.textContent.replace(':', '').trim();
+        }
+        if (titleEl) titleEl.textContent = title;
+
+        list.innerHTML = '';
+
+        // Build options list respecting optgroups
+        Array.from(selectEl.children).forEach(child => {
+            if (child.tagName === 'OPTGROUP') {
+                const groupTitle = document.createElement('div');
+                groupTitle.className = 'mobile-select-optgroup';
+                groupTitle.textContent = child.label;
+                list.appendChild(groupTitle);
+
+                Array.from(child.children).forEach(opt => {
+                    _appendOptionButton(list, opt, selectEl);
+                });
+            } else if (child.tagName === 'OPTION') {
+                _appendOptionButton(list, child, selectEl);
+            }
+        });
+
+        if (typeof dialog.showModal === 'function') {
+            dialog.showModal();
+        } else {
+            dialog.setAttribute('open', '');
+        }
+
+        // Scroll selected item into view
+        const selBtn = list.querySelector('.mobile-select-option-item.selected');
+        if (selBtn) {
+            selBtn.scrollIntoView({ block: 'nearest' });
+            selBtn.focus();
+        }
+    }
+
+    function _appendOptionButton(container, optionEl, selectEl) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'mobile-select-option-item' + (optionEl.selected ? ' selected' : '');
+        
+        const spanLabel = document.createElement('span');
+        spanLabel.textContent = optionEl.text;
+        btn.appendChild(spanLabel);
+
+        if (optionEl.selected) {
+            const check = document.createElement('span');
+            check.className = 'check-glyph';
+            check.textContent = '✓';
+            btn.appendChild(check);
+        }
+
+        btn.onclick = () => {
+            selectEl.value = optionEl.value;
+            selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+            closeMobileSelectDialog();
+        };
+
+        container.appendChild(btn);
+    }
+
+    function closeMobileSelectDialog() {
+        const dialog = document.getElementById('mobileSelectDialog');
+        if (!dialog) return;
+        if (typeof dialog.close === 'function') {
+            dialog.close();
+        } else {
+            dialog.removeAttribute('open');
+        }
+        if (_activeMobileSelect) {
+            try { _activeMobileSelect.focus(); } catch (e) {}
+            _activeMobileSelect = null;
+        }
+    }
+
+    function installMobileSelectInterceptors() {
+        // Intercept clicks on selects in formatting-toolbar and gauge banner across desktop and mobile
+        document.addEventListener('pointerdown', (e) => {
+            const sel = e.target && e.target.closest && e.target.closest('.formatting-toolbar select, .a4-gauge-banner select');
+            if (!sel || sel.style.display === 'none') return;
+            e.preventDefault();
+            e.stopPropagation();
+            openMobileSelectDialog(sel);
+        }, true);
+    }
+
+    /* ==============================================================
        PUBLIC API
        ============================================================== */
     Object.assign(window, {
@@ -289,7 +388,10 @@
         renderRequiredFields,
         installFocusTrap,
         installStickyBanner,
-        installKeyboardShortcuts
+        installKeyboardShortcuts,
+        openMobileSelectDialog,
+        closeMobileSelectDialog,
+        installMobileSelectInterceptors
     });
 
     Object.defineProperty(window, '_IMS_UI_DEBUG', {

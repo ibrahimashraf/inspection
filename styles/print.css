@@ -1,13 +1,19 @@
-		/* ── 22. PRINT ──────────────────────────────────────────────── */
+		/* ── 22. PRINT & STATUTORY REPRODUCTION ──────────────────────── */
 		#printContainer { display: none; }
 		@page { size: 210mm 297mm; margin: 0; }
 		@media print {
+			*, *::before, *::after {
+				-webkit-print-color-adjust: exact !important;
+				print-color-adjust: exact !important;
+			}
+
 			html, body {
 				width: 210mm !important;
 				height: auto !important;
 				margin: 0 !important;
 				padding: 0 !important;
-				background: #fff !important;
+				background: #ffffff !important;
+				color: #000000 !important;
 				overflow: visible !important;
 			}
 			.master-switch-bar,
@@ -36,14 +42,39 @@
 				min-height: 0 !important;
 				zoom: 1 !important;
 				box-shadow: none !important;
-				border: 1.5px solid currentColor !important;
+				border: 1.5px solid #000000 !important;
+				border-bottom: none !important;
 				padding: 6mm 8mm !important;
 				margin: 0 !important;
 				page-break-after: always !important;
 				break-after: page !important;
 				overflow: hidden !important;
 				box-sizing: border-box !important;
+				background: #ffffff !important;
+				color: #000000 !important;
 			}
+
+			/* ── LASER / PHOTOCOPIER MONOCHROME CALIBRATION ──────────── */
+			/* 1. Prevent inverted/dark themes from flooding toner cartridges */
+			.a4-page-frame.theme-report-cert-luxury,
+			.a4-page-frame.theme-report-blueprint,
+			.a4-page-frame[style*="background: #0a0a0a"] {
+				background: #ffffff !important;
+				color: #000000 !important;
+			}
+			.a4-page-frame.theme-report-cert-luxury .val,
+			.a4-page-frame.theme-report-blueprint .val {
+				color: #000000 !important;
+			}
+			.a4-page-frame.theme-report-cert-luxury .corp-header,
+			.a4-page-frame.theme-report-cert-luxury .corp-footer,
+			.a4-page-frame.theme-report-blueprint .corp-header,
+			.a4-page-frame.theme-report-blueprint .corp-footer {
+				background: #ffffff !important;
+				color: #000000 !important;
+			}
+
+			/* 2. Optical Grid Contrast: Ensure table grids never vanish on 300/600 DPI laser */
 			.a4-page-frame .ctbl {
 				width: 100% !important;
 				border-collapse: collapse !important;
@@ -53,7 +84,32 @@
 			.a4-page-frame .ctbl td,
 			.a4-page-frame .ctbl th {
 				box-sizing: border-box !important;
+				border-color: #262626 !important; /* Minimum contrast threshold for monochrome */
 			}
+
+			/* 3. Section Bar Statutory Contrast: Guarantee text readability even if halftoned */
+			.a4-page-frame .csec {
+				-webkit-print-color-adjust: exact !important;
+				print-color-adjust: exact !important;
+			}
+
+			/* If background graphics are stripped by user printer driver, fallback to high-contrast */
+			@supports not (print-color-adjust: exact) {
+				.a4-page-frame .csec {
+					border: 1.5px solid #000000 !important;
+					color: #000000 !important;
+					background: #f4f4f5 !important;
+				}
+			}
+
+			/* 4. Labels and Values: Sharp contrast for legal photocopy reproduction */
+			.a4-page-frame .lbl {
+				color: #27272a !important; /* Crisp dark charcoal */
+			}
+			.a4-page-frame .val {
+				color: #000000 !important; /* Pure black text */
+			}
+
 			.a4-page-frame:last-child {
 				page-break-after: avoid !important;
 				break-after: avoid !important;

@@ -169,22 +169,49 @@
 
 				function restorePreferences() {
 					const g = id => document.getElementById(id);
-					setTheme(store.get('ims_theme') || 'dark');
-					const uf = store.get('ims_ui_font');
+					const d = window.APP_DEFAULTS || {};
+					setTheme(store.get('ims_theme') || d.appTheme || 'dark');
+					const uf = store.get('ims_ui_font') || d.appFont;
 					if (uf) { updateAppFont(uf); if (g('globalFontSelect')) g('globalFontSelect').value = uf; }
-					const us = store.get('ims_ui_size');
+					const us = store.get('ims_ui_size') || d.appSize;
 					if (us) { g('globalSizeSelect').value = us; document.documentElement.style.setProperty('--app-font-size', us); }
-					const rf = store.get('ims_rf');
+					const rf = store.get('ims_rf') || d.reportFont;
 					if (rf) { updateReportFont(rf); const rfel = g('reportFontSelect'); if (rfel) rfel.value = rf; }
-					const rs = store.get('ims_rs');
+					const rs = store.get('ims_rs') || d.reportSize;
 					if (rs) { document.documentElement.style.setProperty('--report-font-size', rs); g('reportSizeSelect').value = rs; }
-					const dn = store.get('ims_rd');
+					const dn = store.get('ims_rd') || d.reportDensity;
 					if (dn) { updateReportDensity(dn); g('reportDensitySelect').value = dn; }
-					const ch = store.get('ims_qr');
+					const rhf = store.get('ims_rhf') || d.reportHeaderFill;
+					if (rhf && typeof setReportHeaderFill === 'function') setReportHeaderFill(rhf);
+					const ch = store.get('ims_qr') || d.qrChannel;
 					if (ch === 'EMAIL' || ch === 'WHATSAPP') qrChannel = ch;
-					try { const dc = JSON.parse(store.get('ims_dc') || 'null'); if (dc) { if (typeof dc.on === 'boolean') docControl.on = dc.on; if (dc.docNo) docControl.docNo = dc.docNo; if (dc.rev) docControl.rev = dc.rev; if (dc.revDate) docControl.revDate = dc.revDate; if (dc.reportNoPattern) docControl.reportNoPattern = dc.reportNoPattern; } } catch (e) {}
-					try { const ci = JSON.parse(store.get('ims_ci') || 'null'); if (ci) Object.keys(corpInfo).forEach(k => { if (ci[k] !== undefined) corpInfo[k] = ci[k]; }); } catch (e) {}
-					try { const ft = JSON.parse(store.get('ims_ft') || 'null'); if (ft) Object.keys(featureToggles).forEach(k => { if (typeof ft[k] === 'boolean') featureToggles[k] = ft[k]; }); } catch (e) {}
+					try {
+						const dc = JSON.parse(store.get('ims_dc') || 'null');
+						if (dc) {
+							if (typeof dc.on === 'boolean') docControl.on = dc.on;
+							if (dc.docNo) docControl.docNo = dc.docNo;
+							if (dc.rev) docControl.rev = dc.rev;
+							if (dc.revDate) docControl.revDate = dc.revDate;
+							if (dc.reportNoPattern) docControl.reportNoPattern = dc.reportNoPattern;
+						} else if (d.docControl) {
+							Object.assign(docControl, d.docControl);
+						}
+					} catch (e) {}
+					try {
+						const ci = JSON.parse(store.get('ims_ci') || 'null');
+						if (ci) {
+							Object.keys(corpInfo).forEach(k => {
+								if (ci[k] !== undefined && !/^x+([ ,x]+)?$/i.test(ci[k])) {
+									corpInfo[k] = ci[k];
+								}
+							});
+						}
+					} catch (e) {}
+					try {
+						const ft = JSON.parse(store.get('ims_ft') || 'null');
+						if (ft) Object.keys(featureToggles).forEach(k => { if (typeof ft[k] === 'boolean') featureToggles[k] = ft[k]; });
+						else if (d.featureToggles) Object.assign(featureToggles, d.featureToggles);
+					} catch (e) {}
 					['dc_docNo', 'in_main_docNo', 'ndt_main_docNo'].forEach(id => { if (g(id)) g(id).value = docControl.docNo; });
 					['dc_rev', 'in_main_docRev', 'ndt_main_docRev'].forEach(id => { if (g(id)) g(id).value = docControl.rev; });
 					['dc_revDate', 'in_main_docRevDate', 'ndt_main_docRevDate'].forEach(id => { if (g(id)) g(id).value = docControl.revDate; });
@@ -202,10 +229,11 @@
 					});
 					const ly = parseInt(store.get('ims_layout') || '0', 10);
 					if (!isNaN(ly) && ly >= 0 && ly < layoutModes.length) currentLayoutIdx = ly;
-					const rTheme = store.get('ims_report_theme');
+					const rTheme = store.get('ims_report_theme') || d.reportTheme;
 					if (rTheme && typeof setReportTheme === 'function') setReportTheme(rTheme);
 					const fStyle = store.get('ims_form_style');
 					if (fStyle && typeof setFormStyle === 'function') setFormStyle(fStyle);
+					if (typeof restoreCustomColorsUI === 'function') restoreCustomColorsUI();
 					applyLayout();
 					updateFeaturePills();
 					refreshQrUI();
@@ -393,6 +421,7 @@
 					try { if (typeof installStickyBanner === 'function') installStickyBanner(); } catch (e) {}
 					try { if (typeof installKeyboardShortcuts === 'function') installKeyboardShortcuts(); } catch (e) {}
 					try { if (typeof installTrackpadZoom === 'function') installTrackpadZoom(); } catch (e) {}
+					try { if (typeof installMobileSelectInterceptors === 'function') installMobileSelectInterceptors(); } catch (e) {}
 					try { MQ_BESIDE_OK.addEventListener('change', applyLayout); } catch (e) {}
 					try { window.addEventListener('resize', applyZoom, { passive: true }); } catch (e) {}
 					try { applyLayout(); } catch (e) {}

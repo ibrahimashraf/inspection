@@ -595,6 +595,60 @@
             }
         });
 
+        /* ---- SECTION TOGGLES ------------------------------------------- */
+        await T('SECTION-1', 'section toggle collapses card and excludes block from report preview', async () => {
+            const wasEng = currentEngine;
+            try {
+                // 1. Test Lifting section toggle
+                switchEngine('LIFTING');
+                const lr = activeRec();
+                lr.sectionToggles = lr.sectionToggles || {};
+                
+                // Toggle sec_loler_1 OFF
+                toggleSectionPill('sec_loler_1');
+                const card1 = document.getElementById('card_sec_loler_1');
+                const isCard1Off = card1 && card1.classList.contains('section-off');
+                renderPreview();
+                const prevHtml1 = (document.getElementById('enginePreviewContainer') || {}).innerHTML || '';
+                const omitsHeader1 = !prevHtml1.includes('Premises Where Examination Made');
+
+                // Toggle sec_loler_1 back ON
+                toggleSectionPill('sec_loler_1');
+                const isCard1On = card1 && !card1.classList.contains('section-off');
+                renderPreview();
+                const prevHtml2 = (document.getElementById('enginePreviewContainer') || {}).innerHTML || '';
+                const includesHeader1 = prevHtml2.includes('Premises Where Examination Made');
+
+                // 2. Test NDT section toggle
+                switchEngine('NDT');
+                const nr = activeRec();
+                nr.sectionToggles = nr.sectionToggles || {};
+
+                // Toggle sec_ndt_1 OFF
+                toggleSectionPill('sec_ndt_1');
+                const cardN1 = document.getElementById('card_sec_ndt_1');
+                const isCardN1Off = cardN1 && cardN1.classList.contains('section-off');
+                renderPreview();
+                const prevHtmlN1 = (document.getElementById('enginePreviewContainer') || {}).innerHTML || '';
+                const omitsNdtPart = !prevHtmlN1.includes('Inspection Identification &amp; Test Particulars');
+
+                // Toggle sec_ndt_1 back ON
+                toggleSectionPill('sec_ndt_1');
+                const isCardN1On = cardN1 && !cardN1.classList.contains('section-off');
+                renderPreview();
+                const prevHtmlN2 = (document.getElementById('enginePreviewContainer') || {}).innerHTML || '';
+                const includesNdtPart = prevHtmlN2.includes('Inspection Identification &amp; Test Particulars');
+
+                const ok = isCard1Off && omitsHeader1 && isCard1On && includesHeader1 && isCardN1Off && omitsNdtPart && isCardN1On && includesNdtPart;
+                return {
+                    ok,
+                    msg: 'card1Off=' + isCard1Off + ', omitsLift=' + omitsHeader1 + ', card1On=' + isCard1On + ', incLift=' + includesHeader1 + ', cardN1Off=' + isCardN1Off + ', omitsNdt=' + omitsNdtPart + ', cardN1On=' + isCardN1On + ', incNdt=' + includesNdtPart
+                };
+            } finally {
+                switchEngine(wasEng);
+            }
+        });
+
 
         /* ---- REPORT ---------------------------------------------------- */
         const glyph = r => r.ok === true ? 'PASS' : (r.ok === 'skip' ? 'SKIP' : 'FAIL');

@@ -3,48 +3,48 @@
 		   Structural, layout, border, padding, and typography transformations.
 		   ============================================================== */
 
-		/* ── THEME 1: CLASSIC STATUTORY (Formal Legal Serif, Heavy Double Borders) ── */
+		/* ── THEME 1: CLASSIC STATUTORY (European Legal Heritage, Editorial Serif, Precision Grid) ── */
 		.a4-page-frame.theme-report-classic {
-			font-family: "Times New Roman", Times, Georgia, "Liberation Serif", serif;
-			border: 2.5px solid #000000;
+			font-family: "Charter", "Bitstream Charter", "Cambria", "Georgia", "Liberation Serif", serif;
+			border: 1px solid #1c1917;
 		}
 		.a4-page-frame.theme-report-classic .sheet-body {
 			padding: 1px 0;
 		}
 		.a4-page-frame.theme-report-classic .corp-header,
 		.a4-page-frame.theme-report-classic .corp-footer {
-			border: 1.5px solid #000000;
-			font-family: "Times New Roman", Times, Georgia, serif;
+			border: 1px solid #1c1917;
+			font-family: "Charter", "Bitstream Charter", "Georgia", serif;
 		}
 		.a4-page-frame.theme-report-classic .corp-header .ch-name {
-			color: #000000;
-			font-size: 13pt;
-			letter-spacing: .04em;
+			color: #1c1917;
+			font-size: 11pt;
+			letter-spacing: .05em;
 			text-transform: uppercase;
 		}
 		.a4-page-frame.theme-report-classic .corp-header .ch-accred,
 		.a4-page-frame.theme-report-classic .corp-header .ch-right,
 		.a4-page-frame.theme-report-classic .corp-footer {
-			color: #1e293b;
+			color: #44403c;
 		}
 		.a4-page-frame.theme-report-classic .ctbl {
 			border-collapse: collapse;
 		}
 		.a4-page-frame.theme-report-classic .ctbl th,
 		.a4-page-frame.theme-report-classic .ctbl td {
-			border: 1.2px solid #000000;
-			padding: 2.2px 3.8px;
+			border: 0.85px solid #292524;
+			padding: 2.2px 4px;
 		}
 		.a4-page-frame.theme-report-classic .csec {
-			background: #000000 !important;
-			color: #ffffff !important;
-			font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-			font-weight: 900;
-			font-size: 6.4pt;
+			background: #1c1917 !important;
+			color: #f5f5f4 !important;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+			font-weight: 800;
+			font-size: 6.2pt;
 			text-transform: uppercase;
-			padding: 2.5px 5px;
+			padding: 2.2px 5.5px;
 			letter-spacing: .08em;
-			border: 1px solid #000000 !important;
+			border: 1px solid #1c1917 !important;
 		}
 		.a4-page-frame.theme-report-classic .report-main-title {
 			color: #000000;
@@ -915,7 +915,10 @@
 		.a4-page-frame.theme-report-cert-neubrutalist .lbl { color: #000; font-weight: 900; }
 		.a4-page-frame.theme-report-cert-neubrutalist .val { color: #000; }
 		.a4-page-frame.theme-report-cert-neubrutalist .dc-strip td { background: #fef08a; border: 1.5px solid #000; color: #000; font-weight: 700; }
-		.a4-page-frame.theme-report-cert-neubrutalist .verdict-box { border: 2.5px solid #000; background: #86efac; box-shadow: 2px 2px 0 #000; }
+		.a4-page-frame.theme-report-cert-neubrutalist .verdict-box { border: 2.5px solid #000; background: #000000 !important; color: #ffffff !important; box-shadow: none !important; }
+		.a4-page-frame.theme-report-cert-neubrutalist .verdict-box .lbl,
+		.a4-page-frame.theme-report-cert-neubrutalist .verdict-box .verdict-big,
+		.a4-page-frame.theme-report-cert-neubrutalist .verdict-box .pass-text { color: #ffffff !important; }
 
 		/* ── THEME 22: APPLE BENTO MODULAR (Modern Clean Framed Grid) ── */
 		.a4-page-frame.theme-report-cert-bento {
@@ -1006,3 +1009,897 @@
 		.a4-page-frame.theme-report-bauhaus .val { color: #000000; }
 		.a4-page-frame.theme-report-bauhaus .dc-strip td { background: #fef08a; border: 1.5px solid #000; color: #000; }
 		.a4-page-frame.theme-report-bauhaus .verdict-box { border: 2px solid #000; background: #ffffff; box-shadow: 2px 2px 0px #000; }
+
+		/* ── STATUTORY ACCREDITATION ARCHETYPES (INTERNATIONAL COMPLIANCE) ── */
+
+		/* 1. LEEA UK STATUTORY (Lifting Equipment Engineers Association UK) */
+		.a4-page-frame.theme-report-leea-statutory {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+			border: 1.5px solid #002b49;
+		}
+		.a4-page-frame.theme-report-leea-statutory .corp-header,
+		.a4-page-frame.theme-report-leea-statutory .corp-footer {
+			border-color: #002b49;
+		}
+		.a4-page-frame.theme-report-leea-statutory .corp-header .ch-name {
+			color: #002b49;
+			font-weight: 900;
+			letter-spacing: .03em;
+		}
+		.a4-page-frame.theme-report-leea-statutory .csec {
+			background: #002b49 !important;
+			color: #ffffff !important;
+			border: 1px solid #002b49 !important;
+			border-bottom: 2.5px solid #c59b27 !important;
+			font-weight: 800;
+			letter-spacing: .07em;
+		}
+		.a4-page-frame.theme-report-leea-statutory .report-main-title {
+			color: #002b49;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-leea-statutory .report-main-subtitle {
+			color: #002b49;
+			border-bottom: 2px solid #c59b27;
+			padding-bottom: 2px;
+		}
+		.a4-page-frame.theme-report-leea-statutory .ctbl th,
+		.a4-page-frame.theme-report-leea-statutory .ctbl td {
+			border: 0.85px solid #1e293b;
+		}
+		.a4-page-frame.theme-report-leea-statutory .verdict-box {
+			border: 2px solid #002b49;
+			border-left: 6px solid #c59b27;
+			background: #f8fafc;
+		}
+
+		/* 2. TÜV RHEINLAND / DIN 15018 (German Precision Monolith) */
+		.a4-page-frame.theme-report-tuv-din {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+			border: 1px solid #1e293b;
+		}
+		.a4-page-frame.theme-report-tuv-din .corp-header,
+		.a4-page-frame.theme-report-tuv-din .corp-footer {
+			border-color: #1e293b;
+		}
+		.a4-page-frame.theme-report-tuv-din .corp-header .ch-name {
+			color: #0f172a;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-tuv-din .csec {
+			background: #1e3a8a !important;
+			color: #ffffff !important;
+			border-color: #1e3a8a !important;
+			border-left: 4px solid #2563eb !important;
+			font-weight: 800;
+			letter-spacing: .08em;
+		}
+		.a4-page-frame.theme-report-tuv-din .report-main-title {
+			color: #0f172a;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-tuv-din .report-main-subtitle {
+			color: #1e3a8a;
+			border-bottom: 1.5px solid #1e3a8a;
+			padding-bottom: 2px;
+		}
+		.a4-page-frame.theme-report-tuv-din .ctbl th,
+		.a4-page-frame.theme-report-tuv-din .ctbl td {
+			border: 0.85px solid #475569;
+		}
+		.a4-page-frame.theme-report-tuv-din .verdict-box {
+			border: 2px solid #1e3a8a;
+			background: #f8fafc;
+		}
+
+		/* 3. ASME / OSHA COMPLIANCE (US Heavy Industrial Standard) */
+		.a4-page-frame.theme-report-asme-osha {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+			border: 1.2px solid #1c1917;
+		}
+		.a4-page-frame.theme-report-asme-osha .corp-header,
+		.a4-page-frame.theme-report-asme-osha .corp-footer {
+			border-color: #1c1917;
+		}
+		.a4-page-frame.theme-report-asme-osha .corp-header .ch-name {
+			color: #0c0a09;
+			font-weight: 900;
+			letter-spacing: .04em;
+		}
+		.a4-page-frame.theme-report-asme-osha .csec {
+			background: #78350f !important;
+			color: #ffffff !important;
+			border-color: #78350f !important;
+			border-left: 5px solid #d97706 !important;
+			font-weight: 800;
+			letter-spacing: .06em;
+		}
+		.a4-page-frame.theme-report-asme-osha .report-main-title {
+			color: #78350f;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-asme-osha .report-main-subtitle {
+			color: #b45309;
+			border-bottom: 1.5px solid #78350f;
+			padding-bottom: 2px;
+		}
+		.a4-page-frame.theme-report-asme-osha .ctbl th,
+		.a4-page-frame.theme-report-asme-osha .ctbl td {
+			border: 0.85px solid #292524;
+		}
+		.a4-page-frame.theme-report-asme-osha .verdict-box {
+			border: 2px solid #78350f;
+			background: #fffbeb;
+		}
+
+		/* 4. SGS INDUSTRIAL PRECISION (Ultra-Clean Swiss Sans) */
+		.a4-page-frame.theme-report-sgs-precision {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+			border: 0.85px solid #64748b;
+		}
+		.a4-page-frame.theme-report-sgs-precision .corp-header,
+		.a4-page-frame.theme-report-sgs-precision .corp-footer {
+			border-color: #cbd5e1;
+		}
+		.a4-page-frame.theme-report-sgs-precision .corp-header .ch-name {
+			color: #0f172a;
+			font-weight: 800;
+		}
+		.a4-page-frame.theme-report-sgs-precision .csec {
+			background: #f1f5f9 !important;
+			color: #0f172a !important;
+			border: 0.85px solid #cbd5e1 !important;
+			font-weight: 800;
+			letter-spacing: .06em;
+		}
+		.a4-page-frame.theme-report-sgs-precision .report-main-title {
+			color: #0f172a;
+			font-weight: 800;
+		}
+		.a4-page-frame.theme-report-sgs-precision .report-main-subtitle {
+			color: #64748b;
+			border-bottom: 1px solid #cbd5e1;
+			padding-bottom: 2px;
+		}
+		.a4-page-frame.theme-report-sgs-precision .ctbl th,
+		.a4-page-frame.theme-report-sgs-precision .ctbl td {
+			border: 0.75px solid #cbd5e1;
+		}
+		.a4-page-frame.theme-report-sgs-precision .verdict-box {
+			border: 1px solid #64748b;
+			background: #ffffff;
+		}
+
+		/* 5. LLOYD'S REGISTER MARINE */
+		.a4-page-frame.theme-report-lloyds-marine {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+			border: 1px solid #0e7490;
+		}
+		.a4-page-frame.theme-report-lloyds-marine .corp-header,
+		.a4-page-frame.theme-report-lloyds-marine .corp-footer {
+			border-color: #0e7490;
+		}
+		.a4-page-frame.theme-report-lloyds-marine .corp-header .ch-name {
+			color: #155e75;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-lloyds-marine .csec {
+			background: #0e7490 !important;
+			color: #ffffff !important;
+			border-color: #0e7490 !important;
+			font-weight: 800;
+			letter-spacing: .07em;
+		}
+		.a4-page-frame.theme-report-lloyds-marine .report-main-title {
+			color: #155e75;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-lloyds-marine .report-main-subtitle {
+			color: #0e7490;
+			border-bottom: 1.5px solid #0e7490;
+			padding-bottom: 2px;
+		}
+		.a4-page-frame.theme-report-lloyds-marine .ctbl th,
+		.a4-page-frame.theme-report-lloyds-marine .ctbl td {
+			border: 0.85px solid #164e63;
+		}
+		.a4-page-frame.theme-report-lloyds-marine .verdict-box {
+			border: 2px solid #0e7490;
+			background: #ecfeff;
+		}
+
+		/* 6. ENTERPRISE CUSTOM BRAND */
+		.a4-page-frame.theme-report-custom-brand {
+			border: 1px solid var(--custom-cert-border, #0f172a);
+		}
+		.a4-page-frame.theme-report-custom-brand .corp-header,
+		.a4-page-frame.theme-report-custom-brand .corp-footer {
+			border-color: var(--custom-cert-border, #0f172a);
+		}
+		.a4-page-frame.theme-report-custom-brand .csec {
+			background: var(--custom-cert-primary, #0f2847) !important;
+			color: #ffffff !important;
+			border-color: var(--custom-cert-primary, #0f2847) !important;
+		}
+		.a4-page-frame.theme-report-custom-brand .report-main-title {
+			color: var(--custom-cert-primary, #0f2847);
+		}
+		.a4-page-frame.theme-report-custom-brand .report-main-subtitle {
+			border-bottom: 1.5px solid var(--custom-cert-primary, #0f2847);
+			padding-bottom: 2px;
+		}
+		.a4-page-frame.theme-report-custom-brand .ctbl th,
+		.a4-page-frame.theme-report-custom-brand .ctbl td {
+			border: 0.85px solid var(--custom-cert-grid, #334155);
+		}
+		.a4-page-frame.theme-report-custom-brand .verdict-box {
+			border: 2px solid var(--custom-cert-primary, #0f2847);
+		}
+
+		/* ═════════════════════════════════════════════════════════════════════
+		   15 CERTIFICATE STUDIO THEMES (UNIFIED ARCHITECTURAL SPECIFICATION)
+		   (No. 5 Offshore High-Vis dropped per instruction)
+		   ═════════════════════════════════════════════════════════════════════ */
+
+		/* 01. MARITIME CLASS SOCIETY (Lloyd's / DNV Heritage) */
+		.a4-page-frame.theme-report-maritime,
+		.a4-page-frame.theme-report-lloyds-marine {
+			font-family: 'Times New Roman', serif;
+			color: #000000;
+			border: 2pt solid #0f2942;
+			outline: 0.75pt solid #0f2942;
+			outline-offset: -3mm;
+			padding: 7.5mm 8.5mm;
+		}
+		.a4-page-frame.theme-report-maritime .csec,
+		.a4-page-frame.theme-report-lloyds-marine .csec {
+			background: #0f2942 !important;
+			color: #ffffff !important;
+			border: 0.5pt solid #0f2942 !important;
+			letter-spacing: 0.08em;
+			font-weight: 800;
+		}
+		.a4-page-frame.theme-report-maritime .ctbl th,
+		.a4-page-frame.theme-report-maritime .ctbl td,
+		.a4-page-frame.theme-report-lloyds-marine .ctbl th,
+		.a4-page-frame.theme-report-lloyds-marine .ctbl td {
+			border: 0.5pt solid #0f2942;
+		}
+		.a4-page-frame.theme-report-maritime .verdict-box,
+		.a4-page-frame.theme-report-lloyds-marine .verdict-box {
+			border: 1.5pt solid #0f2942;
+			background: #f8fafc;
+			font-weight: bold;
+		}
+
+		/* 02. SWISS INTERNATIONAL (Die Neue Graphik) */
+		.a4-page-frame.theme-report-swiss-intl,
+		.a4-page-frame.theme-report-swiss {
+			font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+			color: #111111;
+			border: 1px solid #111111;
+		}
+		.a4-page-frame.theme-report-swiss-intl .ctbl th,
+		.a4-page-frame.theme-report-swiss-intl .ctbl td,
+		.a4-page-frame.theme-report-swiss .ctbl th,
+		.a4-page-frame.theme-report-swiss .ctbl td {
+			border-top: 0.5pt solid #111111 !important;
+			border-bottom: 0.5pt solid #111111 !important;
+			border-left: none !important;
+			border-right: none !important;
+		}
+		.a4-page-frame.theme-report-swiss-intl .csec,
+		.a4-page-frame.theme-report-swiss .csec {
+			background: #111111 !important;
+			color: #ffffff !important;
+			font-weight: 900;
+			border: 1px solid #111111 !important;
+			letter-spacing: 0.06em;
+		}
+		.a4-page-frame.theme-report-swiss-intl .verdict-box,
+		.a4-page-frame.theme-report-swiss .verdict-box {
+			border-top: 2pt solid #111111 !important;
+			border-bottom: 2pt solid #111111 !important;
+			border-left: none !important;
+			border-right: none !important;
+			background: #ffffff;
+			font-weight: 900;
+		}
+
+		/* 03. ISO 7200 CAD DRAFTING BLUEPRINT */
+		.a4-page-frame.theme-report-cad,
+		.a4-page-frame.theme-report-blueprint {
+			font-family: 'Share Tech Mono', 'JetBrains Mono', Consolas, monospace;
+			color: #0a2540;
+			border: 1.5pt solid #0a2540;
+			background-color: #ffffff;
+			background-image: radial-gradient(#cbd5e1 0.75px, transparent 0.75px);
+			background-size: 4mm 4mm;
+		}
+		.a4-page-frame.theme-report-cad .csec,
+		.a4-page-frame.theme-report-blueprint .csec {
+			background: #0a2540 !important;
+			color: #ffffff !important;
+			border: 1px solid #0a2540 !important;
+			letter-spacing: 0.08em;
+		}
+		.a4-page-frame.theme-report-cad .ctbl th,
+		.a4-page-frame.theme-report-cad .ctbl td,
+		.a4-page-frame.theme-report-blueprint .ctbl th,
+		.a4-page-frame.theme-report-blueprint .ctbl td {
+			border: 1pt solid #0a2540 !important;
+			background: #ffffff !important;
+		}
+		.a4-page-frame.theme-report-cad .verdict-box,
+		.a4-page-frame.theme-report-blueprint .verdict-box {
+			border: 1.5pt solid #0a2540 !important;
+			background: #ffffff !important;
+			font-weight: bold;
+		}
+
+		/* 04. UK HSE F91 STATUTORY HERITAGE LEDGER */
+		.a4-page-frame.theme-report-f91 {
+			font-family: 'Times New Roman', Georgia, serif;
+			color: #000000;
+			border: 1px solid #000000;
+		}
+		.a4-page-frame.theme-report-f91 .csec {
+			background: #ffffff !important;
+			color: #000000 !important;
+			border: 0.5pt solid #000000 !important;
+			border-bottom: 1.5pt solid #000000 !important;
+			padding: 2.2px 5.5px !important;
+			font-weight: 900;
+			letter-spacing: 0.05em;
+		}
+		.a4-page-frame.theme-report-f91 .ctbl th,
+		.a4-page-frame.theme-report-f91 .ctbl td {
+			border: 0.5pt solid #000000;
+		}
+		.a4-page-frame.theme-report-f91 .verdict-box {
+			border: 1pt solid #000000;
+			font-weight: bold;
+			background: #ffffff;
+		}
+
+		/* 06. ASYMMETRIC SPLIT-RAIL (DNV Modern) */
+		.a4-page-frame.theme-report-split-rail {
+			font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+			border: 1.5pt solid #0f172a;
+			color: #0f172a;
+		}
+		.a4-page-frame.theme-report-split-rail .csec {
+			background: #f1f5f9 !important;
+			color: #0f172a !important;
+			border: 0.5pt solid #0f172a !important;
+			box-shadow: inset 4px 0 0 #0f172a !important;
+			padding-left: 8px !important;
+			font-weight: 800;
+			letter-spacing: 0.06em;
+		}
+		.a4-page-frame.theme-report-split-rail .ctbl th,
+		.a4-page-frame.theme-report-split-rail .ctbl td {
+			border: 0.5pt solid #0f172a;
+		}
+		.a4-page-frame.theme-report-split-rail .verdict-box {
+			border: 1pt solid #0f172a;
+			box-shadow: inset 5px 0 0 #0f172a;
+			padding-left: 8px;
+			background: #f8fafc;
+		}
+
+		/* 07. SECURITY BOND / ANTI-COUNTERFEIT */
+		.a4-page-frame.theme-report-security-bond {
+			font-family: 'Georgia', 'Times New Roman', serif;
+			color: #1e293b;
+			border: 4pt solid #334155;
+			outline: 1pt dashed #94a3b8;
+			outline-offset: -2.5mm;
+			padding: 7.5mm 8.5mm;
+			background: #fdfdfc;
+		}
+		.a4-page-frame.theme-report-security-bond .csec {
+			background: #334155 !important;
+			color: #ffffff !important;
+			border: 1px solid #334155 !important;
+			letter-spacing: 0.1em;
+		}
+		.a4-page-frame.theme-report-security-bond .ctbl th,
+		.a4-page-frame.theme-report-security-bond .ctbl td {
+			border: 0.5pt solid #334155;
+		}
+		.a4-page-frame.theme-report-security-bond .verdict-box {
+			border: 1.5pt solid #334155;
+			background: #f8fafc;
+			font-weight: bold;
+		}
+
+		/* 08. HIGH-DENSITY RIGGING LOFT MATRIX */
+		.a4-page-frame.theme-report-loft-register {
+			font-family: 'JetBrains Mono', Consolas, monospace;
+			font-size: 6.5pt;
+			border: 1.5pt solid #000000;
+			color: #000000;
+		}
+		.a4-page-frame.theme-report-loft-register .ctbl td,
+		.a4-page-frame.theme-report-loft-register .ctbl th {
+			border: 0.5pt solid #000000;
+			padding: 0.8mm 1.4mm !important;
+		}
+		.a4-page-frame.theme-report-loft-register .csec {
+			background: #0f172a !important;
+			color: #ffffff !important;
+			font-size: 6pt;
+			letter-spacing: 0.05em;
+		}
+		.a4-page-frame.theme-report-loft-register .lbl {
+			color: #000000;
+			font-size: 5pt;
+		}
+		.a4-page-frame.theme-report-loft-register .verdict-box {
+			border: 1pt solid #000000;
+			padding: 1mm 2mm;
+			font-weight: bold;
+		}
+
+		/* 09. MINIMALIST SCANDINAVIAN SPEC SHEET */
+		.a4-page-frame.theme-report-nordic,
+		.a4-page-frame.theme-report-minimal {
+			font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+			color: #1e1e1e;
+			border: none !important;
+			box-shadow: 0 0 0 1px #e5e5e5;
+		}
+		.a4-page-frame.theme-report-nordic .ctbl td,
+		.a4-page-frame.theme-report-nordic .ctbl th,
+		.a4-page-frame.theme-report-minimal .ctbl td,
+		.a4-page-frame.theme-report-minimal .ctbl th {
+			border: none !important;
+			border-bottom: 0.5pt solid #e5e5e5 !important;
+		}
+		.a4-page-frame.theme-report-nordic .csec,
+		.a4-page-frame.theme-report-minimal .csec {
+			background: transparent !important;
+			color: #737373 !important;
+			border: none !important;
+			border-bottom: 0.5pt solid #737373 !important;
+			font-weight: 600;
+			letter-spacing: 0.15em;
+			padding: 2.2px 4px !important;
+		}
+		.a4-page-frame.theme-report-nordic .lbl,
+		.a4-page-frame.theme-report-minimal .lbl {
+			color: #888888;
+			font-weight: 500;
+		}
+		.a4-page-frame.theme-report-nordic .verdict-box,
+		.a4-page-frame.theme-report-minimal .verdict-box {
+			border: none !important;
+			border-top: 0.5pt solid #e5e5e5 !important;
+			border-bottom: 1.5pt solid #1e1e1e !important;
+			background: #ffffff;
+		}
+		.a4-page-frame.theme-report-nordic .corp-header,
+		.a4-page-frame.theme-report-nordic .corp-footer,
+		.a4-page-frame.theme-report-minimal .corp-header,
+		.a4-page-frame.theme-report-minimal .corp-footer {
+			border: none !important;
+			border-bottom: 0.5pt solid #e5e5e5 !important;
+			background: transparent;
+		}
+		.a4-page-frame.theme-report-nordic .corp-footer,
+		.a4-page-frame.theme-report-minimal .corp-footer {
+			border-top: 0.5pt solid #e5e5e5 !important;
+			border-bottom: none !important;
+		}
+		.a4-page-frame.theme-report-nordic .dc-strip td,
+		.a4-page-frame.theme-report-minimal .dc-strip td {
+			border: none !important;
+			border-bottom: 0.5pt solid #e5e5e5 !important;
+		}
+
+		/* 10. MILITARY DEF-STAN 05-21 SPEC */
+		.a4-page-frame.theme-report-defstan {
+			font-family: 'Share Tech Mono', 'JetBrains Mono', Consolas, monospace;
+			border: 2pt solid #18181b;
+			color: #18181b;
+		}
+		.a4-page-frame.theme-report-defstan .ctbl th,
+		.a4-page-frame.theme-report-defstan .ctbl td {
+			border: 1pt solid #18181b;
+		}
+		.a4-page-frame.theme-report-defstan .csec {
+			background: #18181b !important;
+			color: #ffffff !important;
+			font-size: 6.5pt;
+			letter-spacing: 0.08em;
+		}
+		.a4-page-frame.theme-report-defstan .verdict-box {
+			border: 1.5pt solid #18181b;
+			background: #ffffff;
+			font-weight: bold;
+		}
+
+		/* 11. AEROSPACE TELEMETRY (Mission Control) */
+		.a4-page-frame.theme-report-telemetry,
+		.a4-page-frame.theme-report-laser-ndt {
+			font-family: 'JetBrains Mono', Consolas, monospace;
+			color: #090a0f;
+			border: 1.5pt solid #090a0f;
+		}
+		.a4-page-frame.theme-report-telemetry .ctbl th,
+		.a4-page-frame.theme-report-telemetry .ctbl td,
+		.a4-page-frame.theme-report-laser-ndt .ctbl th,
+		.a4-page-frame.theme-report-laser-ndt .ctbl td {
+			border: 0.5pt solid #94a3b8;
+		}
+		.a4-page-frame.theme-report-telemetry .csec,
+		.a4-page-frame.theme-report-laser-ndt .csec {
+			background: #090a0f !important;
+			color: #38bdf8 !important;
+			border-bottom: 1.5pt solid #38bdf8 !important;
+			letter-spacing: 0.08em;
+		}
+		.a4-page-frame.theme-report-telemetry .lbl,
+		.a4-page-frame.theme-report-laser-ndt .lbl {
+			color: #0284c7;
+		}
+		.a4-page-frame.theme-report-telemetry .verdict-box,
+		.a4-page-frame.theme-report-laser-ndt .verdict-box {
+			border: 1pt solid #090a0f;
+			background: #f8fafc;
+		}
+
+		/* 12. HIGH-END EDITORIAL MONOGRAPH */
+		.a4-page-frame.theme-report-editorial {
+			font-family: 'Georgia', 'Times New Roman', serif;
+			border: 1px solid #1c1917;
+		}
+		.a4-page-frame.theme-report-editorial .ctbl th,
+		.a4-page-frame.theme-report-editorial .ctbl td {
+			border-top: 0.5pt solid #000000 !important;
+			border-bottom: 0.5pt solid #000000 !important;
+			border-left: none !important;
+			border-right: none !important;
+		}
+		.a4-page-frame.theme-report-editorial .csec {
+			background: transparent !important;
+			color: #000000 !important;
+			border: none !important;
+			border-bottom: 1pt solid #000000 !important;
+			font-family: 'Inter', -apple-system, sans-serif;
+			font-size: 6.5pt;
+			letter-spacing: 0.1em;
+			padding: 2.2px 4px !important;
+		}
+		.a4-page-frame.theme-report-editorial .lbl {
+			color: #555555;
+			font-family: 'Inter', -apple-system, sans-serif;
+		}
+		.a4-page-frame.theme-report-editorial .verdict-box {
+			border-left: none !important;
+			border-right: none !important;
+			border-top: 1.5pt solid #000000 !important;
+			border-bottom: 1.5pt solid #000000 !important;
+			background: #ffffff;
+			font-family: 'Inter', -apple-system, sans-serif;
+			font-weight: bold;
+		}
+		.a4-page-frame.theme-report-editorial .corp-header,
+		.a4-page-frame.theme-report-editorial .corp-footer {
+			border-left: none !important;
+			border-right: none !important;
+			border-top: 0.5pt solid #000000 !important;
+			border-bottom: 0.5pt solid #000000 !important;
+			background: transparent;
+		}
+		.a4-page-frame.theme-report-editorial .dc-strip td {
+			border-left: none !important;
+			border-right: none !important;
+			border-bottom: 0.5pt solid #000000 !important;
+		}
+
+		/* 13. ASYMMETRIC OBSIDIAN SPINE */
+		.a4-page-frame.theme-report-obsidian,
+		.a4-page-frame.theme-report-obsidian-rep {
+			font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+			border: 1.5pt solid #000000;
+			border-left: 6mm solid #090d16 !important;
+			background: #ffffff;
+		}
+		.a4-page-frame.theme-report-obsidian .ctbl th,
+		.a4-page-frame.theme-report-obsidian .ctbl td,
+		.a4-page-frame.theme-report-obsidian-rep .ctbl th,
+		.a4-page-frame.theme-report-obsidian-rep .ctbl td {
+			border: 0.5pt solid #cbd5e1;
+		}
+		.a4-page-frame.theme-report-obsidian .csec,
+		.a4-page-frame.theme-report-obsidian-rep .csec {
+			background: #090d16 !important;
+			color: #ffffff !important;
+			border: 1px solid #090d16 !important;
+		}
+		.a4-page-frame.theme-report-obsidian .lbl,
+		.a4-page-frame.theme-report-obsidian-rep .lbl {
+			color: #64748b;
+		}
+		.a4-page-frame.theme-report-obsidian .verdict-box,
+		.a4-page-frame.theme-report-obsidian-rep .verdict-box {
+			border: 1.5pt solid #090d16;
+			background: #f8fafc;
+			font-weight: bold;
+		}
+
+		/* 14. NEO-BRUTALIST TECHNICAL */
+		.a4-page-frame.theme-report-brutalist,
+		.a4-page-frame.theme-report-monolith {
+			font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+			color: #000000;
+			border: 2.5pt solid #000000 !important;
+		}
+		.a4-page-frame.theme-report-brutalist .ctbl th,
+		.a4-page-frame.theme-report-brutalist .ctbl td,
+		.a4-page-frame.theme-report-monolith .ctbl th,
+		.a4-page-frame.theme-report-monolith .ctbl td {
+			border: 1.5pt solid #000000 !important;
+		}
+		.a4-page-frame.theme-report-brutalist .csec,
+		.a4-page-frame.theme-report-monolith .csec {
+			background: #000000 !important;
+			color: #ffffff !important;
+			font-weight: 900;
+			letter-spacing: 0.08em;
+		}
+		.a4-page-frame.theme-report-brutalist .lbl,
+		.a4-page-frame.theme-report-monolith .lbl {
+			color: #000000;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-brutalist .verdict-box,
+		.a4-page-frame.theme-report-monolith .verdict-box {
+			border: 2pt solid #000000 !important;
+			background: #000000 !important;
+			color: #ffffff !important;
+		}
+		.a4-page-frame.theme-report-brutalist .verdict-box .lbl,
+		.a4-page-frame.theme-report-monolith .verdict-box .lbl,
+		.a4-page-frame.theme-report-brutalist .verdict-box .verdict-big,
+		.a4-page-frame.theme-report-monolith .verdict-box .verdict-big,
+		.a4-page-frame.theme-report-brutalist .verdict-box .pass-text,
+		.a4-page-frame.theme-report-monolith .verdict-box .pass-text {
+			color: #ffffff !important;
+		}
+
+		/* 15. JAPANESE INDUSTRIAL PRECISION */
+		.a4-page-frame.theme-report-japanese {
+			font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+			color: #1e293b;
+			border: 1px solid #94a3b8;
+		}
+		.a4-page-frame.theme-report-japanese .ctbl th,
+		.a4-page-frame.theme-report-japanese .ctbl td {
+			border: 0.5pt solid #94a3b8;
+		}
+		.a4-page-frame.theme-report-japanese .csec {
+			background: #f8fafc !important;
+			color: #1e293b !important;
+			border: 0.5pt solid #94a3b8 !important;
+			font-weight: 800;
+			letter-spacing: 0.06em;
+		}
+		.a4-page-frame.theme-report-japanese .lbl {
+			color: #64748b;
+			font-weight: 700;
+		}
+		.a4-page-frame.theme-report-japanese .verdict-box {
+			border: 1pt solid #1e293b;
+			background: #f8fafc;
+		}
+
+		/* 16. CRYPTOGRAPHIC TRUST DOCUMENT */
+		.a4-page-frame.theme-report-crypto {
+			font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+			border: 1.5pt solid #030712;
+			color: #0f172a;
+		}
+		.a4-page-frame.theme-report-crypto .ctbl th,
+		.a4-page-frame.theme-report-crypto .ctbl td {
+			border: 0.5pt solid #e2e8f0;
+		}
+		.a4-page-frame.theme-report-crypto .csec {
+			background: #030712 !important;
+			color: #ffffff !important;
+			border-bottom: 1.5pt solid #0284c7 !important;
+			letter-spacing: 0.07em;
+		}
+		.a4-page-frame.theme-report-crypto .lbl {
+			color: #64748b;
+		}
+		.a4-page-frame.theme-report-crypto .verdict-box {
+			border: 1.5pt solid #0284c7 !important;
+			background: #f0fdf4 !important;
+			color: #065f46 !important;
+		}
+
+		/* 17. SAFETY AMBER & HIGH-VIS GOLD (Lifting Plant & Construction) */
+		.a4-page-frame.theme-report-amber {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+			border: 2px solid #b45309;
+			color: #1c1917;
+		}
+		.a4-page-frame.theme-report-amber .corp-header,
+		.a4-page-frame.theme-report-amber .corp-footer {
+			border-color: #b45309;
+		}
+		.a4-page-frame.theme-report-amber .corp-header .ch-name {
+			color: #78350f;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-amber .ctbl th,
+		.a4-page-frame.theme-report-amber .ctbl td {
+			border: 1px solid #d97706;
+			padding: 2.2px 4.5px;
+		}
+		.a4-page-frame.theme-report-amber .csec {
+			background: #d97706 !important;
+			color: #ffffff !important;
+			font-weight: 900;
+			font-size: 6.8pt;
+			text-transform: uppercase;
+			padding: 2.6px 6px;
+			letter-spacing: .08em;
+			border: 1px solid #b45309 !important;
+		}
+		.a4-page-frame.theme-report-amber .lbl {
+			color: #92400e;
+			font-weight: 800;
+		}
+		.a4-page-frame.theme-report-amber .val {
+			color: #1c1917;
+		}
+		.a4-page-frame.theme-report-amber .report-main-title {
+			color: #78350f;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-amber .verdict-box {
+			border: 2px solid #d97706;
+			background: #fffbeb;
+		}
+
+		/* 18. MARITIME EMERALD (ISO 14001 Environmental & Green Flag Fleet) */
+		.a4-page-frame.theme-report-emerald {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+			border: 2px solid #065f46;
+			color: #064e3b;
+		}
+		.a4-page-frame.theme-report-emerald .corp-header,
+		.a4-page-frame.theme-report-emerald .corp-footer {
+			border-color: #065f46;
+		}
+		.a4-page-frame.theme-report-emerald .corp-header .ch-name {
+			color: #064e3b;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-emerald .ctbl th,
+		.a4-page-frame.theme-report-emerald .ctbl td {
+			border: 1px solid #047857;
+			padding: 2.2px 4.5px;
+		}
+		.a4-page-frame.theme-report-emerald .csec {
+			background: #047857 !important;
+			color: #ffffff !important;
+			font-weight: 900;
+			font-size: 6.8pt;
+			text-transform: uppercase;
+			padding: 2.6px 6px;
+			letter-spacing: .08em;
+			border: 1px solid #065f46 !important;
+		}
+		.a4-page-frame.theme-report-emerald .lbl {
+			color: #065f46;
+			font-weight: 800;
+		}
+		.a4-page-frame.theme-report-emerald .val {
+			color: #022c22;
+		}
+		.a4-page-frame.theme-report-emerald .report-main-title {
+			color: #064e3b;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-emerald .verdict-box {
+			border: 2px solid #047857;
+			background: #ecfdf5;
+		}
+
+		/* 19. BUREAU VERITAS BURGUNDY & WARM SLATE */
+		.a4-page-frame.theme-report-burgundy {
+			font-family: "Charter", "Bitstream Charter", "Cambria", Georgia, serif;
+			border: 2px solid #78350f;
+			color: #1c1917;
+		}
+		.a4-page-frame.theme-report-burgundy .corp-header,
+		.a4-page-frame.theme-report-burgundy .corp-footer {
+			border-color: #78350f;
+		}
+		.a4-page-frame.theme-report-burgundy .corp-header .ch-name {
+			color: #78350f;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-burgundy .ctbl th,
+		.a4-page-frame.theme-report-burgundy .ctbl td {
+			border: 1px solid #92400e;
+			padding: 2.2px 4.5px;
+		}
+		.a4-page-frame.theme-report-burgundy .csec {
+			background: #78350f !important;
+			color: #ffffff !important;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+			font-weight: 900;
+			font-size: 6.8pt;
+			text-transform: uppercase;
+			padding: 2.6px 6px;
+			letter-spacing: .08em;
+			border: 1px solid #451a03 !important;
+		}
+		.a4-page-frame.theme-report-burgundy .lbl {
+			color: #57534e;
+			font-weight: 800;
+		}
+		.a4-page-frame.theme-report-burgundy .val {
+			color: #1c1917;
+		}
+		.a4-page-frame.theme-report-burgundy .report-main-title {
+			color: #78350f;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-burgundy .verdict-box {
+			border: 2px solid #78350f;
+			background: #fdf8f6;
+		}
+
+		/* 20. OFFSHORE CRIMSON & SAFETY ZONE */
+		.a4-page-frame.theme-report-crimson {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+			border: 2px solid #be123c;
+			color: #0f172a;
+		}
+		.a4-page-frame.theme-report-crimson .corp-header,
+		.a4-page-frame.theme-report-crimson .corp-footer {
+			border-color: #be123c;
+		}
+		.a4-page-frame.theme-report-crimson .corp-header .ch-name {
+			color: #be123c;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-crimson .ctbl th,
+		.a4-page-frame.theme-report-crimson .ctbl td {
+			border: 1px solid #e11d48;
+			padding: 2.2px 4.5px;
+		}
+		.a4-page-frame.theme-report-crimson .csec {
+			background: #be123c !important;
+			color: #ffffff !important;
+			font-weight: 900;
+			font-size: 6.8pt;
+			text-transform: uppercase;
+			padding: 2.6px 6px;
+			letter-spacing: .08em;
+			border: 1px solid #9f1239 !important;
+		}
+		.a4-page-frame.theme-report-crimson .lbl {
+			color: #9f1239;
+			font-weight: 800;
+		}
+		.a4-page-frame.theme-report-crimson .val {
+			color: #0f172a;
+		}
+		.a4-page-frame.theme-report-crimson .report-main-title {
+			color: #be123c;
+			font-weight: 900;
+		}
+		.a4-page-frame.theme-report-crimson .verdict-box {
+			border: 2px solid #be123c;
+			background: #fff1f2;
+		}
+
+

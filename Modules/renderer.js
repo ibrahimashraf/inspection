@@ -135,7 +135,8 @@
 						overlayHTML: '',
 						firstFrameId: null,
 						pageOffset: o.pageOffset || 0,
-						frameClass: 'a4-page-frame a4-annexure-frame'
+						frameClass: 'a4-page-frame a4-annexure-frame',
+						allowEmpty: false
 					});
 					const grand = (o.pageOffset || 0) + pages.pageCount;
 					return o.mainHtml.replace(
@@ -157,6 +158,7 @@
 						if (!r.puwerRows) r.puwerRows = defaultPuwerRows();
 						if (!r.examParticulars) r.examParticulars = DEFAULT_EXAM_PARTICULARS;
 						const tg = r.fieldToggles || {}, isOn = k => tg[k] !== false;
+						const secTg = r.sectionToggles || {}, isSecOn = k => secTg[k] !== false;
 						const isImm = r.dangerImm === 'YES', isSafe = r.isSafe === 'YES' && !isImm;
 						const annPage = !!(r.includePuwer === true && r.puwerRows && r.puwerRows.length)
              || !!(r.includeChecklist === true && r.checklist && r.checklist.length)
@@ -165,7 +167,8 @@
 						const ft = totalPages;
 
 						let t1 = '';
-						{ const rows = [];
+						if (isSecOn('sec_loler_1')) {
+							const rows = [];
 							const r0 = [];
 							if (isOn('employer') && r.employer) {
 								r0.push(lblSpan('Employer / Client') + valRaw('employer', sanitizeForReport(r.employer)));
@@ -191,7 +194,8 @@
 							if (rows.length) t1 = '<table class="ctbl"><colgroup><col style="width:25%"><col style="width:25%"><col style="width:25%"><col style="width:25%"></colgroup>' + rows.join('') + '</table>';
 						}
 						let t2 = '';
-						{ const rows = [];
+						if (isSecOn('sec_loler_2')) {
+							const rows = [];
 							const hasDesc = isOn('description');
 							const hasSwl = isOn('swl');
 							const hasQty = isOn('quantity');
@@ -234,7 +238,8 @@
 							if (rows.length) t2 = '<table class="ctbl"><colgroup><col style="width:25%"><col style="width:25%"><col style="width:25%"><col style="width:25%"></colgroup><tr><td colspan="4" class="csec">Equipment Specification &amp; Governing Standards</td></tr>' + rows.join('') + '</table>';
 						}
 						let t3 = '';
-						{ const line = (l, y) => '<div class="qline"><span class="ql">' + l + '</span><span class="qt">YES' + tick(y) + 'NO' + tick(!y) + '</span></div>';
+						if (isSecOn('sec_loler_3')) {
+							const line = (l, y) => '<div class="qline"><span class="ql">' + l + '</span><span class="qt">YES' + tick(y) + 'NO' + tick(!y) + '</span></div>';
 							const init = [], int = [];
 							if (isOn('q_firstExam')) init.push(line('First examination after installation?', r.q_firstExam === 'YES'));
 							if (isOn('q_installedCorrectly')) init.push(line('If new installation, installed correctly?', r.q_installedCorrectly === 'YES'));
@@ -249,7 +254,8 @@
 							if (rh) t3 = '<table class="ctbl"><colgroup><col style="width:50%"><col style="width:50%"></colgroup><tr><td colspan="2" class="csec">Reason for Thorough Examination</td></tr>' + rh + '</table>';
 						}
 						let t4 = '';
-						{ const rows = [];
+						if (isSecOn('sec_loler_4')) {
+							const rows = [];
 							if (isOn('examParticulars')) rows.push('<tr><td colspan="2">' + lblSpan('Particulars of Examination Carried Out') + valRaw('examParticulars', sanitizeForReport(r.examParticulars)) + '</td></tr>');
 							if (isOn('additionalTesting')) {
 								const ay = r.additionalTesting === 'YES';
@@ -266,7 +272,7 @@
 						// Only render the proof/calibration block when the record
 						// actually contains proof traceability. Blank N/A rows on
 						// a routine LOLER exam are misleading to a reader.
-						const _hasProofData = !!(
+						const _hasProofData = isSecOn('sec_loler_4') && !!(
 							(r.proofLoadApplied && r.proofLoadApplied.trim() && r.proofLoadApplied !== 'Visual & Dimensional') ||
 							(r.lastProofDetails && r.lastProofDetails.trim() && r.lastProofDetails !== 'N/A') ||
 							(r.nextProofDate && r.nextProofDate.trim())
@@ -275,8 +281,9 @@
 							? '<table class="ctbl"><colgroup><col style="width:40%"><col style="width:30%"><col style="width:30%"></colgroup><tr><td colspan="3" class="csec">Proof Testing &amp; Calibration Traceability</td></tr><tr><td>' + lblSpan('Tests Applied') + valSpan('proofLoadApplied', r.proofLoadApplied || 'Visual & Dimensional') + '</td><td>' + lblSpan('Last Proof') + valSpan('lastProofDetails', r.lastProofDetails || 'N/A') + '</td><td>' + lblSpan('Next Proof Due') + valSpan('nextProofDate', r.nextProofDate || 'N/A') + '</td></tr></table>'
 							: '';
 
-										let t6 = '';
-						{ const rows = [];
+						let t6 = '';
+						if (isSecOn('sec_loler_4')) {
+							const rows = [];
 							if (isOn('defectDesc')) rows.push('<tr><td colspan="3">' + lblSpan('Identification of Any Part Found Defective (state NONE)') + valRaw('defectDesc', sanitizeForReport(r.defectDesc)) + '</td></tr>');
 							const risk = [];
 							if (isOn('dangerImm')) risk.push(lblSpan('Existing or imminent danger to persons? (reportable)') + '<div><strong>YES ' + tick(isImm) + ' &nbsp; NO ' + tick(!isImm) + '</strong></div>');
@@ -305,9 +312,9 @@
 						const ql = qrChannel === 'EMAIL' ? 'Email Verify' : 'WhatsApp Verify';
 						const iS = (r.inspectorSigMode === 'UPLOAD' && r.inspectorSigUpload) ? r.inspectorSigUpload : r.inspectorSigLive;
 						const aS = (r.authSigMode === 'UPLOAD' && r.authSigUpload) ? r.authSigUpload : r.authSigLive;
-						const qC = '<td class="qr-cell" style="text-align:center;vertical-align:middle;padding:3px;"><svg id="waQrSvg" width="90" height="90" role="img" aria-label="QR"></svg><div class="report-caption" style="font-size:4.6pt;margin-top:1px;">' + ql + '</div></td>';
+						const qC = '<td class="qr-cell" style="text-align:center;vertical-align:middle;padding:3px;cursor:pointer;" onclick="dispatchVerification()" title="Click to test / dispatch verification"><svg id="waQrSvg" width="90" height="90" role="img" aria-label="QR"></svg><div class="report-caption" style="font-size:4.6pt;margin-top:1px;">' + ql + '</div></td>';
 						let sig = '';
-						if (isOn('examinerName') && isOn('authName')) {
+						if (isSecOn('sec_loler_5') && isOn('examinerName') && isOn('authName')) {
 							sig = showQr ?
 								'<table class="ctbl sig-block"><colgroup><col style="width:38%"><col style="width:38%"><col style="width:24%"></colgroup><tr><td>' + lblSpan('Person Making this Report') + valSpan('examinerName', r.examinerName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;">' + (iS ? '<img src="' + iS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '<i>Signature on File</i>') + '</div></td><td>' + lblSpan('Person Authenticating') + valSpan('authName', r.authName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;">' + (aS ? '<img src="' + aS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '<i>Signature on File</i>') + '</div></td>' + qC + '</tr></table>' :
 								'<table class="ctbl sig-block"><colgroup><col style="width:50%"><col style="width:50%"></colgroup><tr><td>' + lblSpan('Person Making this Report') + valSpan('examinerName', r.examinerName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;">' + (iS ? '<img src="' + iS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '') + '</div></td><td>' + lblSpan('Person Authenticating') + valSpan('authName', r.authName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;">' + (aS ? '<img src="' + aS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '') + '</div></td></tr></table>';
@@ -356,7 +363,9 @@
 						const r=record||ndtBatch[activeIdx]||{};
 						if (!Array.isArray(r.photos)) r.photos = [];
 						if (!r.fieldToggles) r.fieldToggles = {};
+						if (!r.sectionToggles) r.sectionToggles = {};
 						const isOn = k => r.fieldToggles[k] !== false;
+						const isSecOn = k => r.sectionToggles[k] !== false;
 						const annex = (r.includeChecklist === true && r.checklist && r.checklist.length > 0)
            || (r.includePhotos === true && (r.photos || []).some(p => p));
 						const ft = annex ? 2 : 1;
@@ -365,7 +374,8 @@
 						const C2 = '<colgroup><col style="width:50%"><col style="width:50%"></colgroup>';
 
 						let hRows = '';
-						{ const r1 = [];
+						if (isSecOn('sec_ndt_1')) {
+							const r1 = [];
 							if (isOn('client')) r1.push({ s: 2, h: lblSpan('Client / Operator') + valSpan('client', r.client) });
 							if (isOn('reportNo')) r1.push({ s: 1, h: lblSpan('Report No') + valSpan('reportNo', r.reportNo, '', true) });
 							r1.push({ s: 1, h: lblSpan('Method') + valSpan('method', r.method, 'font-weight:900;color:var(--report-accent);') });
@@ -380,10 +390,11 @@
 							if (isOn('location')) r3.push({ s: 2, h: lblSpan('Location / Rig') + valSpan('location', r.location) });
 							if (r3.length) hRows += normRow(r3, 4);
 						}
-						const headT = hRows ? '<table class="ctbl">' + C4 + '<tr><td colspan="4" class="csec">Inspection Identification &amp; Test Particulars</td></tr>' + hRows + '</table>' : '';
+						const headT = (isSecOn('sec_ndt_1') && hRows) ? '<table class="ctbl">' + C4 + '<tr><td colspan="4" class="csec">Inspection Identification &amp; Test Particulars</td></tr>' + hRows + '</table>' : '';
 
 						let pRows = '';
-						{ const r1 = [];
+						if (isSecOn('sec_ndt_2')) {
+							const r1 = [];
 							if (isOn('certLevel')) r1.push({ s: 1, h: lblSpan('Certification Level') + valSpan('certLevel', r.certLevel) });
 							if (isOn('certNo')) r1.push({ s: 1, h: lblSpan('Certificate No') + valSpan('certNo', r.certNo, '', true) });
 							if (isOn('certExpiry')) r1.push({ s: 1, h: lblSpan('Cert Expiry') + valSpan('certExpiry', r.certExpiry) });
@@ -394,10 +405,11 @@
 							if (isOn('acceptCriteria')) r2.push({ s: 2, h: lblSpan('Acceptance Criteria') + valSpan('acceptCriteria', r.acceptCriteria) });
 							if (r2.length) pRows += normRow(r2, 4);
 						}
-						const perT = pRows ? '<table class="ctbl">' + C4 + '<tr><td colspan="4" class="csec">Personnel Qualification &amp; Procedure Control (ISO 9712 / SNT-TC-1A)</td></tr>' + pRows + '</table>' : '';
+						const perT = (isSecOn('sec_ndt_2') && pRows) ? '<table class="ctbl">' + C4 + '<tr><td colspan="4" class="csec">Personnel Qualification &amp; Procedure Control (ISO 9712 / SNT-TC-1A)</td></tr>' + pRows + '</table>' : '';
 
 						let cRows = '';
-						{ const r1 = [];
+						if (isSecOn('sec_ndt_3')) {
+							const r1 = [];
 							if (isOn('calDue')) r1.push({ s: 1, h: lblSpan('Equipment Cal Due') + valSpan('calDue', r.calDue) });
 							if (isOn('refBlock')) r1.push({ s: 1, h: lblSpan('Reference Block / IQI') + valSpan('refBlock', r.refBlock) });
 							if (isOn('surfaceCond')) r1.push({ s: 1, h: lblSpan('Surface Condition') + valSpan('surfaceCond', r.surfaceCond) });
@@ -408,6 +420,8 @@
 							if (isOn('couplant')) r2.push({ s: 1, h: lblSpan('Couplant / Developer') + valSpan('couplant', r.couplant) });
 							if (isOn('coverage')) r2.push({ s: 2, h: lblSpan('Examination Coverage') + valSpan('coverage', r.coverage) });
 							if (r2.length) cRows += normRow(r2, 4);
+						}
+						if (isSecOn('sec_ndt_4')) {
 							const mp = [];
 							const mth = r.method || 'MPI';
 							if (mth === 'MPI') {
@@ -424,12 +438,13 @@
 							}
 							cRows += normRow(mp, 4);
 						}
-						const calT = '<table class="ctbl">' + C4 + '<tr><td colspan="4" class="csec">Equipment, Calibration &amp; Environmental Controls</td></tr>' + cRows + '</table>';
+						const calT = cRows ? '<table class="ctbl">' + C4 + '<tr><td colspan="4" class="csec">Equipment, Calibration &amp; Environmental Controls</td></tr>' + cRows + '</table>' : '';
 
-						const findT = '<table class="ctbl">' + C4 + '<tr><td colspan="4" class="csec">Discontinuity / Joint Examination Findings</td></tr><tr class="report-tbl-head"><td>Joint #</td><td>Area</td><td>Findings</td><td>Result</td></tr>' + (r.indications || []).map(x => '<tr><td>' + sanitizeForReport(x.joint) + '</td><td>' + sanitizeForReport(x.area) + '</td><td>' + sanitizeForReport(x.finding) + '</td><td style="font-weight:bold;color:' + (x.result === 'PASS' ? '#16a34a' : '#dc2626') + ';">' + sanitizeForReport(x.result) + '</td></tr>').join('') + '</table>';
+						const findT = isSecOn('sec_ndt_5') ? ('<table class="ctbl">' + C4 + '<tr><td colspan="4" class="csec">Discontinuity / Joint Examination Findings</td></tr><tr class="report-tbl-head"><td>Joint #</td><td>Area</td><td>Findings</td><td>Result</td></tr>' + (r.indications || []).map(x => '<tr><td>' + sanitizeForReport(x.joint) + '</td><td>' + sanitizeForReport(x.area) + '</td><td>' + sanitizeForReport(x.finding) + '</td><td style="font-weight:bold;color:' + (x.result === 'PASS' ? '#16a34a' : '#dc2626') + ';">' + sanitizeForReport(x.result) + '</td></tr>').join('') + '</table>') : '';
 
 						let eRows = '';
-						{ const cs = [];
+						if (isSecOn('sec_ndt_6')) {
+							const cs = [];
 							if (isOn('result')) {
 								const hd = (r.verdictLabel && r.verdictLabel.trim()) ? r.verdictLabel.trim() : 'TEST DETERMINATION';
 								const dp = (r.verdictText && r.verdictText.trim()) ? r.verdictText.trim() : (r.result || 'PASSED / ACCEPTABLE');
@@ -439,10 +454,10 @@
 							if (isOn('remarks')) cs.push({ s: 1, h: lblSpan('Remarks / Findings Summary') + valSpan('remarks', r.remarks) });
 							if (cs.length) eRows = normRow(cs, 2);
 						}
-						const evalT = eRows ? '<table class="ctbl">' + C2 + '<tr><td colspan="2" class="csec">Evaluation &amp; Disposition</td></tr>' + eRows + '</table>' : '';
+						const evalT = (isSecOn('sec_ndt_6') && eRows) ? '<table class="ctbl">' + C2 + '<tr><td colspan="2" class="csec">Evaluation &amp; Disposition</td></tr>' + eRows + '</table>' : '';
 
 						let exT = ''; const ex = r.extraCells || [];
-						if (ex.length) {
+						if (isSecOn('sec_ndt_6') && ex.length) {
 							let rw = '';
 							for (let i = 0; i < ex.length; i += 2) {
 								const cs = [];
@@ -456,10 +471,11 @@
 						const wS = (r.witSigMode === 'UPLOAD' && r.witSigUpload) ? r.witSigUpload : r.witSigLive;
 						const ql = qrChannel === 'EMAIL' ? 'Email Verify' : 'WhatsApp Verify';
 						let sigT = '';
-						{ const cs = [];
+						if (isSecOn('sec_ndt_6')) {
+							const cs = [];
 							if (isOn('inspectorName')) cs.push({ s: 1, h: lblSpan('Tested By (Inspector)') + valSpan('inspectorName', r.inspectorName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;margin-top:2px;">' + (iS ? '<img src="' + iS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '<span style="font-style:italic;color:#64748b;font-size:6pt;">Signature on File</span>') + '</div>' });
 							if (isOn('witnessName')) cs.push({ s: 1, h: lblSpan('Witnessed By') + valSpan('witnessName', r.witnessName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;margin-top:2px;">' + (wS ? '<img src="' + wS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '<span style="font-style:italic;color:#64748b;font-size:6pt;">Signature on File</span>') + '</div>' });
-							if (showQr) cs.push({ s: 1, h: '<div class="qr-cell" style="text-align:center;vertical-align:middle;padding:3px;"><svg id="waQrSvg" width="90" height="90" role="img" aria-label="QR"></svg><div class="report-caption" style="font-size:4.6pt;margin-top:1px;">' + ql + '</div></div>' });
+							if (showQr) cs.push({ s: 1, h: '<div class="qr-cell" style="text-align:center;vertical-align:middle;padding:3px;cursor:pointer;" onclick="dispatchVerification()" title="Click to test / dispatch verification"><svg id="waQrSvg" width="90" height="90" role="img" aria-label="QR"></svg><div class="report-caption" style="font-size:4.6pt;margin-top:1px;">' + ql + '</div></div>' });
 							if (cs.length) {
 								const tot = cs.length;
 								const cg = tot === 3 ? '<colgroup><col style="width:38%"><col style="width:38%"><col style="width:24%"></colgroup>' : (tot === 2 ? '<colgroup><col style="width:50%"><col style="width:50%"></colgroup>' : '<colgroup><col style="width:100%"></colgroup>');

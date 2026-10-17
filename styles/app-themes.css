@@ -1,26 +1,26 @@
 		/* ── 21. THEMES ─────────────────────────────────────────────── */
-		/* Nordic Frost (Clean Modern Engineering Light) */
+		/* Swiss Tech Light (Clean European Studio / Precision White) */
 		body.theme-light, :root.theme-light {
 			color-scheme: light;
 			--bg:            #f8fafc;
 			--surface:       #ffffff;
 			--panel:         #f1f5f9;
-			--cell:          #f8fafc;
-			--cell-hover:    #f1f5f9;
+			--cell:          #ffffff;
+			--cell-hover:    #f8fafc;
 			--ink:           #0f172a;
 			--ink-muted:     #475569;
 			--ink-subtle:    #64748b;
 			--hairline:      #e2e8f0;
-			--hairline-soft: #edf2f7;
+			--hairline-soft: #f1f5f9;
 			--hairline-strong: #cbd5e1;
-			--accent:        #2563eb;
-			--accent-hover:  #1d4ed8;
-			--accent-subtle: rgba(37, 99, 235, .10);
-			--pass:          #16a34a;
+			--accent:        #0284c7;
+			--accent-hover:  #0369a1;
+			--accent-subtle: rgba(2, 132, 199, .08);
+			--pass:          #059669;
 			--warn:          #d97706;
-			--fail:          #dc2626;
-			--del-red:       #b91c1c;
-			--preview-bg:    #cbd5e1;
+			--fail:          #e11d48;
+			--del-red:       #be123c;
+			--preview-bg:    #e2e8f0;
 		}
 		/* Industrial Warm / Amber Technical */
 		body.theme-sunlight, :root.theme-sunlight {
@@ -138,28 +138,28 @@
 			--preview-bg:    #000000;
 		}
 
-		/* 06. Draftsman Blueprint (Cad-Night Cobalt) */
+		/* 06. Draftsman Blueprint (Modern Technical Navy & Cyan) */
 		body.theme-blueprint, :root.theme-blueprint {
 			color-scheme: dark;
-			--bg:            #0a1128;
-			--surface:       #001f54;
-			--panel:         #034078;
-			--cell:          #07193f;
-			--cell-hover:    #0a2864;
-			--ink:           #f0fdf4;
-			--ink-muted:     #90e0ef;
-			--ink-subtle:    #64b5f6;
-			--hairline:      #1282a2;
-			--hairline-soft: #0a4f70;
-			--hairline-strong: #00f0ff;
-			--accent:        #00f0ff;
-			--accent-hover:  #00c4d4;
-			--accent-subtle: rgba(0, 240, 255, 0.18);
-			--pass:          #00f0ff;
-			--warn:          #ffd166;
-			--fail:          #ef476f;
-			--del-red:       #e63946;
-			--preview-bg:    #050b1a;
+			--bg:            #0b132b;
+			--surface:       #131d3d;
+			--panel:         #1c2a54;
+			--cell:          #162347;
+			--cell-hover:    #1e3060;
+			--ink:           #f1f5f9;
+			--ink-muted:     #94a3b8;
+			--ink-subtle:    #64748b;
+			--hairline:      #263b6e;
+			--hairline-soft: #1e2c52;
+			--hairline-strong: #38bdf8;
+			--accent:        #38bdf8;
+			--accent-hover:  #0ea5e9;
+			--accent-subtle: rgba(56, 189, 248, 0.15);
+			--pass:          #10b981;
+			--warn:          #f59e0b;
+			--fail:          #f43f5e;
+			--del-red:       #e11d48;
+			--preview-bg:    #070d1e;
 		}
 
 		/* 07. JIS Precision Metric (High-Def Technical Laboratory) */
@@ -550,9 +550,14 @@
 			--del-red:       #dc2626;
 			--preview-bg:    #060a10;
 		}
-		body.theme-offshore .btn-accent, :root.theme-offshore .btn-accent { color: #000000 !important; }
-
-		/* 23. US OSHA Hazard Chevron (Emergency Black & Yellow) */
+		body.theme-offshore .btn-accent, :root.theme-offshore .btn-accent,
+		body.theme-offshore .btn-accent:hover, :root.theme-offshore .btn-accent:hover,
+		body.theme-offshore .engine-tab-btn.active, :root.theme-offshore .engine-tab-btn.active,
+		body.theme-offshore .peek-handle.on, :root.theme-offshore .peek-handle.on,
+		body.theme-offshore .micro-toggle.on, :root.theme-offshore .micro-toggle.on,
+		body.theme-offshore .skip-link, :root.theme-offshore .skip-link {
+			color: #000000 !important;
+		}
 		body.theme-osha, :root.theme-osha {
 			color-scheme: dark;
 			--bg:            #111111;
