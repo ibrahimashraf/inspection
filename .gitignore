@@ -1,1 +1,5 @@
 node_modules/
+*.bak
+*.pdf
+.DS_Store
+dist/
