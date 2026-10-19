@@ -50,7 +50,7 @@ const FIELD_RULES = {
 
     /* ── LIFTING enums ── */
     markingsLegible:       { type: 'enum', values: ['YES', 'NO', 'RESTAMPED'] },
-    dangerImm:             { type: 'enum', values: ['YES', 'NO'] },
+    dangerImm:             { type: 'enum', values: ['NO', 'YES'] },
     isSafe:                { type: 'enum', values: ['YES', 'NO'] },
     q_firstExam:           { type: 'enum', values: ['NO', 'YES'] },
     q_installedCorrectly:  { type: 'enum', values: ['N/A', 'YES'] },

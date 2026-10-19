@@ -111,6 +111,17 @@
 					else if (i12.value === 'YES') nx.value = calculateNextDate(ex.value, 12);
 					debouncedSync();
 				}
+				function handleSafetyVerdictChange(source) {
+					const di = document.getElementById('in_dangerImm');
+					const sf = document.getElementById('in_isSafe');
+					if (!di || !sf) { debouncedSync(); return; }
+					if (source === 'danger') {
+						sf.value = (di.value === 'YES') ? 'NO' : 'YES';
+					} else if (source === 'safe') {
+						di.value = (sf.value === 'YES') ? 'NO' : 'YES';
+					}
+					debouncedSync();
+				}
 				function handleQuestionnaireChange() { document.getElementById('in_q_installedCorrectly').value = document.getElementById('in_q_firstExam').value === 'YES' ? 'YES' : 'N/A'; debouncedSync(); }
 
 

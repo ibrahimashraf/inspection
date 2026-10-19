@@ -37,15 +37,15 @@
 			     ============================================================== -->
 			<script>
 				window.APP_DEFAULTS = {
-					appTheme: 'dark',                  // 'dark', 'light', 'sunlight', 'night', 'cbsafe', 'hc', 'blueprint', etc.
+					appTheme: 'light',                  // 'dark', 'light', 'sunlight', 'night', 'cbsafe', 'hc', 'blueprint', etc.
 					appFont: 'system',                 // 'system', 'geometric', 'mono', 'serif', 'grotesque'
-					appSize: '13px',                   // '11px', '12px', '13px', '14px', '15px', '16px'
+					appSize: '12px',                   // '11px', '12px', '13px', '14px', '15px', '16px'
 					reportTheme: 'maritime',           // 'maritime', 'swiss', 'amber', 'emerald', 'burgundy', 'crimson', etc.
 					reportFont: 'swiss',               // 'swiss', 'serif', 'mono', 'technical', 'theme-default'
 					reportSize: '7.1pt',               // '6.8pt', '7.1pt', '7.4pt', '8pt'
 					reportDensity: 'standard',         // 'compact', 'standard', 'comfortable'
 					reportHeaderFill: 'none',          // 'none', 'tint', 'solid', 'accent'
-					qrChannel: 'WHATSAPP',             // 'WHATSAPP' or 'EMAIL'
+					qrChannel: 'EMAIL',             // 'WHATSAPP' or 'EMAIL'
 					docControl: {
 						on: true,
 						docNo: 'QMS-CERT-LOLER-044',
@@ -242,6 +242,7 @@
 						<div class="batch-strip-actions">
 							<button type="button" class="btn" onclick="stepBatch(-1)">&larr; Prev</button>
 							<button type="button" class="btn" onclick="stepBatch(1)">Next &rarr;</button>
+							<button type="button" class="btn" onclick="openGoToRecordDialog()" title="Jump to record index or report number">Go to &hellip;</button>
 							<button type="button" class="btn btn-accent" onclick="addBatchRecord()">+ Add New</button>
 						</div>
 					</div>
@@ -251,7 +252,7 @@
 						<div class="card" id="card_sec_loler_1">
 							<h3><span>1. Report Identity, Parties &amp; Premises</span><span class="micro-toggle on" id="pill_sec_loler_1" onclick="toggleSectionPill('sec_loler_1')"><span class="toggle-dot"></span>ON</span></h3>
 							<div class="card-body">
-							<div class="row cols-3">
+							<div class="row cols-4">
 								<div class="fg">
 									<div class="fg-hdr"><span class="fg-title">Report Number</span><span class="micro-toggle on" id="pill_reportNo" onclick="toggleFieldPill('reportNo')"><span class="toggle-dot"></span>ON</span></div>
 									<div class="voice-input-wrapper">
@@ -265,29 +266,41 @@
 									</div>
 								</div>
 								<div class="fg">
+									<div class="fg-hdr"><span class="fg-title">Date of Report</span><span class="micro-toggle on" id="pill_reportDate" onclick="toggleFieldPill('reportDate')"><span class="toggle-dot"></span>ON</span></div>
+									<input type="date" id="in_reportDate" oninput="debouncedSync()">
+								</div>
+								<div class="fg">
 									<div class="fg-hdr"><span class="fg-title">Job Reference</span><span class="micro-toggle on" id="pill_jobRef" onclick="toggleFieldPill('jobRef')"><span class="toggle-dot"></span>ON</span></div>
 									<input type="text" id="in_jobRef" oninput="debouncedSync()">
 								</div>
 								<div class="fg">
-									<div class="fg-hdr"><span class="fg-title">Inspection Body</span><span class="micro-toggle on" id="pill_companyAccred" onclick="toggleFieldPill('companyAccred')"><span class="toggle-dot"></span>ON</span></div>
-									<input type="text" id="in_companyAccred" oninput="debouncedSync()">
+									<div class="fg-hdr"><span class="fg-title">P.O. Ref</span><span class="micro-toggle on" id="pill_poRef" onclick="toggleFieldPill('poRef')"><span class="toggle-dot"></span>ON</span></div>
+									<input type="text" id="in_poRef" oninput="debouncedSync()">
 								</div>
 							</div>
 							<div class="row cols-2">
 								<div class="fg">
-									<div class="fg-hdr"><span class="fg-title">Employer / Client</span><span class="micro-toggle on" id="pill_employer" onclick="toggleFieldPill('employer')"><span class="toggle-dot"></span>ON</span></div>
-									<textarea id="in_employer" rows="2" oninput="debouncedSync()"></textarea>
+									<div class="fg-hdr"><span class="fg-title">Inspection Body</span><span class="micro-toggle on" id="pill_companyAccred" onclick="toggleFieldPill('companyAccred')"><span class="toggle-dot"></span>ON</span></div>
+									<input type="text" id="in_companyAccred" oninput="debouncedSync()">
 								</div>
 								<div class="fg">
-									<div class="fg-hdr"><span class="fg-title">Premises / Location</span><span class="micro-toggle on" id="pill_premises" onclick="toggleFieldPill('premises')"><span class="toggle-dot"></span>ON</span></div>
-									<textarea id="in_premises" rows="2" oninput="debouncedSync()"></textarea>
+									<div class="fg-hdr"><span class="fg-title">Employer / Client</span><span class="micro-toggle on" id="pill_employer" onclick="toggleFieldPill('employer')"><span class="toggle-dot"></span>ON</span></div>
+									<textarea id="in_employer" rows="2" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea>
 								</div>
 							</div>
-							<div class="row cols-4">
-								<div class="fg"><div class="fg-hdr"><span class="fg-title">P.O. Ref</span><span class="micro-toggle on" id="pill_poRef" onclick="toggleFieldPill('poRef')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="in_poRef" oninput="debouncedSync()"></div>
-								<div class="fg"><div class="fg-hdr"><span class="fg-title">Sub-Location</span><span class="micro-toggle on" id="pill_subLocation" onclick="toggleFieldPill('subLocation')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="in_subLocation" oninput="debouncedSync()"></div>
-								<div class="fg"><div class="fg-hdr"><span class="fg-title">Colour Code</span><span class="micro-toggle on" id="pill_colourCode" onclick="toggleFieldPill('colourCode')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="in_colourCode" oninput="debouncedSync()"></div>
-								<div class="fg"><div class="fg-hdr"><span class="fg-title">Date of Report</span><span class="micro-toggle on" id="pill_reportDate" onclick="toggleFieldPill('reportDate')"><span class="toggle-dot"></span>ON</span></div><input type="date" id="in_reportDate" oninput="debouncedSync()"></div>
+							<div class="row cols-3">
+								<div class="fg">
+									<div class="fg-hdr"><span class="fg-title">Premises / Location</span><span class="micro-toggle on" id="pill_premises" onclick="toggleFieldPill('premises')"><span class="toggle-dot"></span>ON</span></div>
+									<textarea id="in_premises" rows="1" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea>
+								</div>
+								<div class="fg">
+									<div class="fg-hdr"><span class="fg-title">Sub-Location</span><span class="micro-toggle on" id="pill_subLocation" onclick="toggleFieldPill('subLocation')"><span class="toggle-dot"></span>ON</span></div>
+									<textarea id="in_subLocation" rows="1" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea>
+								</div>
+								<div class="fg">
+									<div class="fg-hdr"><span class="fg-title">Colour Code</span><span class="micro-toggle on" id="pill_colourCode" onclick="toggleFieldPill('colourCode')"><span class="toggle-dot"></span>ON</span></div>
+									<input type="text" id="in_colourCode" oninput="debouncedSync()">
+								</div>
 							</div>
 							</div>
 						</div>
@@ -296,7 +309,7 @@
 							<h3><span>2. Equipment Specification &amp; Standards</span><span class="micro-toggle on" id="pill_sec_loler_2" onclick="toggleSectionPill('sec_loler_2')"><span class="toggle-dot"></span>ON</span></h3>
 							<div class="card-body">
 							<div class="row cols-4">
-								<div class="fg span-6"><div class="fg-hdr"><span class="fg-title">Description</span><span class="micro-toggle on" id="pill_description" onclick="toggleFieldPill('description')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="in_description" oninput="debouncedSync()"></div>
+								<div class="fg span-6"><div class="fg-hdr"><span class="fg-title">Description</span><span class="micro-toggle on" id="pill_description" onclick="toggleFieldPill('description')"><span class="toggle-dot"></span>ON</span></div><textarea id="in_description" rows="1" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea></div>
 								<div class="fg span-3"><div class="fg-hdr"><span class="fg-title">SWL / WLL</span><span class="micro-toggle on" id="pill_swl" onclick="toggleFieldPill('swl')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="in_swl" style="font-weight:bold;color:var(--accent);" oninput="debouncedSync()"></div>
 								<div class="fg span-3"><div class="fg-hdr"><span class="fg-title">Quantity</span><span class="micro-toggle on" id="pill_quantity" onclick="toggleFieldPill('quantity')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="in_quantity" value="1" oninput="debouncedSync()"></div>
 							</div>
@@ -312,8 +325,8 @@
 								<div class="fg"><div class="fg-hdr"><span class="fg-title">Markings Legible</span><span class="micro-toggle on" id="pill_markingsLegible" onclick="toggleFieldPill('markingsLegible')"><span class="toggle-dot"></span>ON</span></div><select id="in_markingsLegible" onchange="debouncedSync()"><option>YES</option><option>NO</option><option>RESTAMPED</option></select></div>
 							</div>
 							<div class="row cols-2">
-								<div class="fg"><div class="fg-hdr"><span class="fg-title">Standards</span><span class="micro-toggle on" id="pill_standards" onclick="toggleFieldPill('standards')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="in_standards" oninput="debouncedSync()"></div>
-								<div class="fg"><div class="fg-hdr"><span class="fg-title">SOP Reference</span><span class="micro-toggle on" id="pill_sopRef" onclick="toggleFieldPill('sopRef')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="in_sopRef" oninput="debouncedSync()"></div>
+								<div class="fg"><div class="fg-hdr"><span class="fg-title">Standards</span><span class="micro-toggle on" id="pill_standards" onclick="toggleFieldPill('standards')"><span class="toggle-dot"></span>ON</span></div><textarea id="in_standards" rows="1" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea></div>
+								<div class="fg"><div class="fg-hdr"><span class="fg-title">SOP Reference</span><span class="micro-toggle on" id="pill_sopRef" onclick="toggleFieldPill('sopRef')"><span class="toggle-dot"></span>ON</span></div><textarea id="in_sopRef" rows="1" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea></div>
 							</div>
 							</div>
 						</div>
@@ -348,24 +361,24 @@
 							<div class="row">
 								<div class="fg" style="grid-column:span 12;">
 									<div class="fg-hdr"><span class="fg-title">Particulars of Examination Carried Out</span><span class="micro-toggle on" id="pill_examParticulars" onclick="toggleFieldPill('examParticulars')"><span class="toggle-dot"></span>ON</span></div>
-									<textarea id="in_examParticulars" rows="2" oninput="debouncedSync()"></textarea>
+									<textarea id="in_examParticulars" rows="2" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea>
 								</div>
 							</div>
 							<div class="row cols-2">
 								<div class="fg"><div class="fg-hdr"><span class="fg-title">Additional Testing?</span><span class="micro-toggle on" id="pill_additionalTesting" onclick="toggleFieldPill('additionalTesting')"><span class="toggle-dot"></span>ON</span></div><select id="in_additionalTesting" onchange="debouncedSync()"><option>NO</option><option>YES</option></select></div>
-								<div class="fg"><div class="fg-hdr"><span class="fg-title">Additional Testing Particulars</span><span class="micro-toggle on" id="pill_additionalTestingDetails" onclick="toggleFieldPill('additionalTestingDetails')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="in_additionalTestingDetails" oninput="debouncedSync()"></div>
+								<div class="fg"><div class="fg-hdr"><span class="fg-title">Additional Testing Particulars</span><span class="micro-toggle on" id="pill_additionalTestingDetails" onclick="toggleFieldPill('additionalTestingDetails')"><span class="toggle-dot"></span>ON</span></div><textarea id="in_additionalTestingDetails" rows="1" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea></div>
 							</div>
 							<div class="row">
 								<div class="fg" style="grid-column:span 12;">
 									<div class="fg-hdr"><span class="fg-title">Defect Description (or NONE)</span><span class="micro-toggle on" id="pill_defectDesc" onclick="toggleFieldPill('defectDesc')"><span class="toggle-dot"></span>ON</span></div>
-									<textarea id="in_defectDesc" rows="2" oninput="debouncedSync()"></textarea>
+									<textarea id="in_defectDesc" rows="2" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea>
 								</div>
 							</div>
 											   <div class="row cols-4">
-								<div class="fg"><div class="fg-hdr"><span class="fg-title">Imminent Danger?</span><span class="micro-toggle on" id="pill_dangerImm" onclick="toggleFieldPill('dangerImm')"><span class="toggle-dot"></span>ON</span></div><select id="in_dangerImm" onchange="debouncedSync()"><option>NO</option><option>YES</option></select></div>
+								<div class="fg"><div class="fg-hdr"><span class="fg-title">Imminent Danger?</span><span class="micro-toggle on" id="pill_dangerImm" onclick="toggleFieldPill('dangerImm')"><span class="toggle-dot"></span>ON</span></div><select id="in_dangerImm" onchange="handleSafetyVerdictChange('danger')"><option>NO</option><option>YES</option></select></div>
 								<div class="fg"><div class="fg-hdr"><span class="fg-title">Date Could Become Danger</span><span class="micro-toggle off" id="pill_dangerTimeText" onclick="toggleFieldPill('dangerTimeText')"><span class="toggle-dot"></span>OFF</span></div><input type="text" id="in_dangerTimeText" value="N/A" oninput="debouncedSync()"></div>
-								<div class="fg"><div class="fg-hdr"><span class="fg-title">Safe to Operate?</span><span class="micro-toggle on" id="pill_isSafe" onclick="toggleFieldPill('isSafe')"><span class="toggle-dot"></span>ON</span></div><select id="in_isSafe" onchange="debouncedSync()"><option>YES</option><option>NO</option></select></div>
-								<div class="fg"><div class="fg-hdr"><span class="fg-title">Remedial Action</span><span class="micro-toggle on" id="pill_remedies" onclick="toggleFieldPill('remedies')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="in_remedies" oninput="debouncedSync()"></div>
+								<div class="fg"><div class="fg-hdr"><span class="fg-title">Safe to Operate?</span><span class="micro-toggle on" id="pill_isSafe" onclick="toggleFieldPill('isSafe')"><span class="toggle-dot"></span>ON</span></div><select id="in_isSafe" onchange="handleSafetyVerdictChange('safe')"><option>YES</option><option>NO</option></select></div>
+								<div class="fg"><div class="fg-hdr"><span class="fg-title">Remedial Action</span><span class="micro-toggle on" id="pill_remedies" onclick="toggleFieldPill('remedies')"><span class="toggle-dot"></span>ON</span></div><textarea id="in_remedies" rows="1" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea></div>
 							</div>
 							<div class="row cols-2">
 								<div class="fg"><div class="fg-hdr"><span class="fg-title">Examination Date</span><span class="micro-toggle on" id="pill_examDate" onclick="toggleFieldPill('examDate')"><span class="toggle-dot"></span>ON</span></div><input type="date" id="in_examDate" onchange="handleExamDateChange()"></div>
@@ -391,7 +404,7 @@
 							<div class="card-body">
 							<div class="row cols-2">
 								<div class="fg">
-									<div class="fg-hdr"><span class="fg-title">Inspector Name</span><span class="micro-toggle on" id="pill_examinerName" onclick="toggleFieldPill('examinerName')"><span class="toggle-dot"></span>ON</span></div>
+									<div class="fg-hdr"><span class="fg-title">Inspector Name</span></div>
 									<input type="text" id="in_examinerName" oninput="debouncedSync()">
 									<div class="sig-upload" id="sigWrap_insp">
 										<input type="file" id="sigFileInsp" accept="image/*" style="display:none;" tabindex="-1" onchange="handleSignatureUpload(event,'inspector')">
@@ -407,7 +420,7 @@
 									</div>
 								</div>
 								<div class="fg">
-									<div class="fg-hdr"><span class="fg-title">Authenticator Name</span><span class="micro-toggle on" id="pill_authName" onclick="toggleFieldPill('authName')"><span class="toggle-dot"></span>ON</span></div>
+									<div class="fg-hdr"><span class="fg-title">Authenticator Name</span></div>
 									<input type="text" id="in_authName" oninput="debouncedSync()">
 									<div class="sig-upload" id="sigWrap_auth">
 										<input type="file" id="sigFileAuth" accept="image/*" style="display:none;" tabindex="-1" onchange="handleSignatureUpload(event,'authenticator')">
@@ -492,13 +505,13 @@
 								<div class="fg" id="fg_ndt_result"><div class="fg-hdr"><span class="fg-title">Determination</span><span class="micro-toggle on" id="pill_ndt_result" onclick="toggleNdtFieldPill('result')"><span class="toggle-dot"></span>ON</span></div><select id="ndt_in_result" onchange="debouncedSync()"><option>PASSED / ACCEPTABLE</option><option>REJECTED / UNACCEPTABLE</option></select></div>
 							</div>
 							<div class="row cols-2">
-								<div class="fg" id="fg_ndt_itemDesc"><div class="fg-hdr"><span class="fg-title">Item</span><span class="micro-toggle on" id="pill_ndt_itemDesc" onclick="toggleNdtFieldPill('itemDesc')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="ndt_in_itemDesc" oninput="debouncedSync()"></div>
-								<div class="fg" id="fg_ndt_material"><div class="fg-hdr"><span class="fg-title">Material</span><span class="micro-toggle on" id="pill_ndt_material" onclick="toggleNdtFieldPill('material')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="ndt_in_material" oninput="debouncedSync()"></div>
+								<div class="fg" id="fg_ndt_itemDesc"><div class="fg-hdr"><span class="fg-title">Item</span><span class="micro-toggle on" id="pill_ndt_itemDesc" onclick="toggleNdtFieldPill('itemDesc')"><span class="toggle-dot"></span>ON</span></div><textarea id="ndt_in_itemDesc" rows="1" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea></div>
+								<div class="fg" id="fg_ndt_material"><div class="fg-hdr"><span class="fg-title">Material</span><span class="micro-toggle on" id="pill_ndt_material" onclick="toggleNdtFieldPill('material')"><span class="toggle-dot"></span>ON</span></div><textarea id="ndt_in_material" rows="1" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea></div>
 							</div>
 							<div class="row">
 								<div class="fg" id="fg_ndt_remarks" style="grid-column:span 12;">
 									<div class="fg-hdr"><span class="fg-title">Remarks</span><span class="micro-toggle on" id="pill_ndt_remarks" onclick="toggleNdtFieldPill('remarks')"><span class="toggle-dot"></span>ON</span></div>
-									<input type="text" id="ndt_in_remarks" oninput="debouncedSync()">
+									<textarea id="ndt_in_remarks" rows="2" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea>
 								</div>
 							</div>
 							</div>
@@ -514,8 +527,8 @@
 							</div>
 							<div class="row cols-3">
 								<div class="fg" id="fg_ndt_visionTest"><div class="fg-hdr"><span class="fg-title">Vision Test</span><span class="micro-toggle on" id="pill_ndt_visionTest" onclick="toggleNdtFieldPill('visionTest')"><span class="toggle-dot"></span>ON</span></div><input type="date" id="ndt_in_visionTest" oninput="debouncedSync()"></div>
-								<div class="fg" id="fg_ndt_procedureNo"><div class="fg-hdr"><span class="fg-title">Procedure No</span><span class="micro-toggle on" id="pill_ndt_procedureNo" onclick="toggleNdtFieldPill('procedureNo')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="ndt_in_procedureNo" oninput="debouncedSync()"></div>
-								<div class="fg" id="fg_ndt_acceptCriteria"><div class="fg-hdr"><span class="fg-title">Acceptance Criteria</span><span class="micro-toggle on" id="pill_ndt_acceptCriteria" onclick="toggleNdtFieldPill('acceptCriteria')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="ndt_in_acceptCriteria" oninput="debouncedSync()"></div>
+								<div class="fg" id="fg_ndt_procedureNo"><div class="fg-hdr"><span class="fg-title">Procedure No</span><span class="micro-toggle on" id="pill_ndt_procedureNo" onclick="toggleNdtFieldPill('procedureNo')"><span class="toggle-dot"></span>ON</span></div><textarea id="ndt_in_procedureNo" rows="1" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea></div>
+								<div class="fg" id="fg_ndt_acceptCriteria"><div class="fg-hdr"><span class="fg-title">Acceptance Criteria</span><span class="micro-toggle on" id="pill_ndt_acceptCriteria" onclick="toggleNdtFieldPill('acceptCriteria')"><span class="toggle-dot"></span>ON</span></div><textarea id="ndt_in_acceptCriteria" rows="1" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea></div>
 							</div>
 							</div>
 						</div>
@@ -525,14 +538,14 @@
 							<div class="card-body">
 							<div class="row cols-3">
 								<div class="fg" id="fg_ndt_calDue"><div class="fg-hdr"><span class="fg-title">Cal Due</span><span class="micro-toggle on" id="pill_ndt_calDue" onclick="toggleNdtFieldPill('calDue')"><span class="toggle-dot"></span>ON</span></div><input type="date" id="ndt_in_calDue" oninput="debouncedSync()"></div>
-								<div class="fg" id="fg_ndt_refBlock"><div class="fg-hdr"><span class="fg-title">Reference / IQI</span><span class="micro-toggle on" id="pill_ndt_refBlock" onclick="toggleNdtFieldPill('refBlock')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="ndt_in_refBlock" oninput="debouncedSync()"></div>
-								<div class="fg" id="fg_ndt_surfaceCond"><div class="fg-hdr"><span class="fg-title">Surface Condition</span><span class="micro-toggle on" id="pill_ndt_surfaceCond" onclick="toggleNdtFieldPill('surfaceCond')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="ndt_in_surfaceCond" oninput="debouncedSync()"></div>
+								<div class="fg" id="fg_ndt_refBlock"><div class="fg-hdr"><span class="fg-title">Reference / IQI</span><span class="micro-toggle on" id="pill_ndt_refBlock" onclick="toggleNdtFieldPill('refBlock')"><span class="toggle-dot"></span>ON</span></div><textarea id="ndt_in_refBlock" rows="1" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea></div>
+								<div class="fg" id="fg_ndt_surfaceCond"><div class="fg-hdr"><span class="fg-title">Surface Condition</span><span class="micro-toggle on" id="pill_ndt_surfaceCond" onclick="toggleNdtFieldPill('surfaceCond')"><span class="toggle-dot"></span>ON</span></div><textarea id="ndt_in_surfaceCond" rows="1" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea></div>
 							</div>
 							<div class="row cols-4">
 								<div class="fg" id="fg_ndt_surfaceTemp"><div class="fg-hdr"><span class="fg-title">Temp °C</span><span class="micro-toggle on" id="pill_ndt_surfaceTemp" onclick="toggleNdtFieldPill('surfaceTemp')"><span class="toggle-dot"></span>ON</span></div><input type="number" id="ndt_in_surfaceTemp" value="24" oninput="debouncedSync()"></div>
 								<div class="fg" id="fg_ndt_lightIntensity"><div class="fg-hdr"><span class="fg-title">Light</span><span class="micro-toggle on" id="pill_ndt_lightIntensity" onclick="toggleNdtFieldPill('lightIntensity')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="ndt_in_lightIntensity" oninput="debouncedSync()"></div>
-								<div class="fg" id="fg_ndt_couplant"><div class="fg-hdr"><span class="fg-title">Couplant</span><span class="micro-toggle on" id="pill_ndt_couplant" onclick="toggleNdtFieldPill('couplant')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="ndt_in_couplant" oninput="debouncedSync()"></div>
-								<div class="fg" id="fg_ndt_coverage"><div class="fg-hdr"><span class="fg-title">Coverage</span><span class="micro-toggle on" id="pill_ndt_coverage" onclick="toggleNdtFieldPill('coverage')"><span class="toggle-dot"></span>ON</span></div><input type="text" id="ndt_in_coverage" oninput="debouncedSync()"></div>
+								<div class="fg" id="fg_ndt_couplant"><div class="fg-hdr"><span class="fg-title">Couplant</span><span class="micro-toggle on" id="pill_ndt_couplant" onclick="toggleNdtFieldPill('couplant')"><span class="toggle-dot"></span>ON</span></div><textarea id="ndt_in_couplant" rows="1" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea></div>
+								<div class="fg" id="fg_ndt_coverage"><div class="fg-hdr"><span class="fg-title">Coverage</span><span class="micro-toggle on" id="pill_ndt_coverage" onclick="toggleNdtFieldPill('coverage')"><span class="toggle-dot"></span>ON</span></div><textarea id="ndt_in_coverage" rows="1" class="auto-expand" oninput="autoExpandTextarea(this);debouncedSync()"></textarea></div>
 							</div>
 							</div>
 						</div>
@@ -553,10 +566,10 @@
 						</div>
 
 						<div class="card" id="card_sec_ndt_5">
-							<h3><span>5. Joint Evaluation Matrix</span><span class="micro-toggle on" id="pill_sec_ndt_5" onclick="toggleSectionPill('sec_ndt_5')"><span class="toggle-dot"></span>ON</span></h3>
+							<h3><span>5. Item Evaluation Matrix</span><span class="micro-toggle on" id="pill_sec_ndt_5" onclick="toggleSectionPill('sec_ndt_5')"><span class="toggle-dot"></span>ON</span></h3>
 							<div class="card-body">
 							<div id="ndt_indication_list" style="margin-bottom:8px;"></div>
-							<button class="btn btn-accent" onclick="addNdtIndication()">+ Add Joint Record</button>
+							<button class="btn btn-accent" onclick="addNdtIndication()">+ Add Item Record</button>
 							</div>
 						</div>
 
@@ -573,7 +586,7 @@
 							<button class="btn btn-accent" onclick="addNdtExtraCell()">+ Add Verdict Cell</button>
 							<div class="row cols-2">
 								<div class="fg" id="fg_ndt_inspectorName">
-									<div class="fg-hdr"><span class="fg-title">Tested By</span><span class="micro-toggle on" id="pill_ndt_inspectorName" onclick="toggleNdtFieldPill('inspectorName')"><span class="toggle-dot"></span>ON</span></div>
+									<div class="fg-hdr"><span class="fg-title">Tested By</span></div>
 									<input type="text" id="ndt_in_inspectorName" oninput="debouncedSync()">
 									<div class="sig-upload" id="sigWrap_ndtInsp">
 										<input type="file" id="sigFile_ndtInsp" accept="image/*" style="display:none;" tabindex="-1" onchange="handleNdtSignatureUpload(event,'insp')">
@@ -589,7 +602,7 @@
 									</div>
 								</div>
 								<div class="fg" id="fg_ndt_witnessName">
-									<div class="fg-hdr"><span class="fg-title">Witnessed By</span><span class="micro-toggle on" id="pill_ndt_witnessName" onclick="toggleNdtFieldPill('witnessName')"><span class="toggle-dot"></span>ON</span></div>
+									<div class="fg-hdr"><span class="fg-title">Witnessed By</span></div>
 									<input type="text" id="ndt_in_witnessName" oninput="debouncedSync()">
 									<div class="sig-upload" id="sigWrap_ndtWit">
 										<input type="file" id="sigFile_ndtWit" accept="image/*" style="display:none;" tabindex="-1" onchange="handleNdtSignatureUpload(event,'wit')">
@@ -638,6 +651,7 @@
 									<button type="button" class="btn btn-accent" onclick="applyRangeSelection(true)">Select</button>
 									<button type="button" class="btn btn-danger" onclick="applyRangeSelection(false)">Deselect</button>
 								</span>
+								<span id="rangeSelectionStatus" style="font-size:var(--ui-font-xs);font-weight:600;color:var(--ink-muted);margin-left:8px;white-space:nowrap;"></span>
 							</div>
 							<div class="queue-actions">
 								<div class="queue-action-group">
@@ -673,8 +687,12 @@
 									<option value="reportNo">Report No</option>
 									<option value="serial">Serial</option>
 									<option value="jobRef">Job Ref</option>
+									<option value="poRef">P.O. Ref</option>
 									<option value="description">Description</option>
 									<option value="itemDesc">Item</option>
+									<option value="manufacturer">Manufacturer</option>
+									<option value="model">Model</option>
+									<option value="plantId">Asset ID</option>
 									<option value="client">Client</option>
 									<option value="employer">Employer</option>
 									<option value="location">Location</option>
@@ -687,12 +705,31 @@
 									<tbody id="sheetBody"></tbody>
 								</table>
 							</div>
-							<div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:var(--ui-font-sm);color:var(--ink-muted);font-family:var(--font-data);gap:8px;flex-wrap:wrap;">
-								<div id="batchPaginationInfo" role="status">Showing 1 - 50</div>
+							<div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:var(--ui-font-sm);color:var(--ink-muted);font-family:var(--font-data);gap:8px;">
+								<div id="batchPaginationInfo" role="status" style="white-space:nowrap;">From 1 - 100</div>
 								<div style="display:flex;gap:4px;align-items:center;">
-									<button class="btn" style="padding:3px 8px;" onclick="changeBatchPage(-1)">&larr;</button>
-									<span id="batchPageIndicator" style="padding:4px 9px;font-weight:bold;background:var(--accent);color:#fff;border-radius:var(--radius-sm);">Page 1</span>
-									<button class="btn" style="padding:3px 8px;" onclick="changeBatchPage(1)">&rarr;</button>
+									<button type="button" class="btn" id="btnBatchFirst" style="padding:3px 7px;min-width:24px;text-align:center;" onclick="setBatchPage('first')" title="First Page">&laquo;</button>
+									<button type="button" class="btn" id="btnBatchPrev" style="padding:3px 7px;min-width:24px;text-align:center;" onclick="changeBatchPage(-1)" title="Previous Page">&larr;</button>
+									<span id="batchPageIndicator" style="padding:3px 8px;font-weight:bold;background:var(--accent);color:#fff;border-radius:var(--radius-sm);min-width:70px;text-align:center;display:inline-block;white-space:nowrap;">Page 1 of 1</span>
+									<button type="button" class="btn" id="btnBatchNext" style="padding:3px 7px;min-width:24px;text-align:center;" onclick="changeBatchPage(1)" title="Next Page">&rarr;</button>
+									<button type="button" class="btn" id="btnBatchLast" style="padding:3px 7px;min-width:24px;text-align:center;" onclick="setBatchPage('last')" title="Last Page">&raquo;</button>
+								</div>
+							</div>
+							<div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:6px;border-top:1px dashed var(--hairline);font-size:var(--ui-font-xs);color:var(--ink-muted);">
+								<div style="display:flex;align-items:center;gap:6px;">
+									<label for="batchPageSizeSelect" style="white-space:nowrap;">Per Page:</label>
+									<select id="batchPageSizeSelect" onchange="setBatchPageSize(this.value)" style="font-size:11px;padding:2px 6px;height:24px;border-radius:var(--radius-sm);border:1px solid var(--hairline);background:var(--surface);color:var(--ink);">
+										<option value="25">25</option>
+										<option value="50">50</option>
+										<option value="100" selected>100</option>
+										<option value="200">200</option>
+										<option value="500">500</option>
+									</select>
+								</div>
+								<div style="display:flex;align-items:center;gap:4px;">
+									<label for="batchGoToPageInput" style="white-space:nowrap;">Go to page:</label>
+									<input type="number" id="batchGoToPageInput" min="1" value="1" style="width:48px;height:24px;padding:2px 4px;font-size:11px;border-radius:var(--radius-sm);border:1px solid var(--hairline);background:var(--surface);color:var(--ink);text-align:center;" onkeydown="if(event.key==='Enter'){event.preventDefault();submitBatchGoToPage();}">
+									<button type="button" class="btn btn-accent" style="padding:2px 8px;height:24px;font-size:11px;line-height:1;min-height:auto;" onclick="submitBatchGoToPage()">Go</button>
 								</div>
 							</div>
 						</div>
@@ -807,6 +844,41 @@
 					<button type="button" class="btn" onclick="document.getElementById('applyToAllDialog').close()">Cancel</button>
 					<button type="button" class="btn btn-accent" id="applyFillBtn" onclick="confirmApplyToAll()">Apply to All Records</button>
 				</div>
+			</dialog>
+
+			<!-- Go To Record / Report Jump Dialog -->
+			<dialog id="goToRecordDialog" style="border:1px solid var(--hairline);border-radius:var(--radius-3);background:var(--surface);color:var(--ink);padding:0;max-width:440px;width:92%;">
+				<form id="goToRecordForm" onsubmit="event.preventDefault(); submitGoToRecord();">
+					<div style="padding:var(--space-4) var(--space-5);border-bottom:1px solid var(--hairline);display:flex;justify-content:space-between;align-items:center;">
+						<h3 style="margin:0;font-size:var(--ui-font-base);font-weight:700;display:flex;align-items:center;gap:var(--space-2);">
+							<span>🎯 Go to Record / Report</span>
+						</h3>
+						<button type="button" class="btn" style="padding:2px 8px;min-height:auto;" onclick="document.getElementById('goToRecordDialog').close()">✕</button>
+					</div>
+					<div style="padding:var(--space-5);display:flex;flex-direction:column;gap:var(--space-4);">
+						<div class="fg">
+							<label class="fg-title" for="goToModeSelect">Jump By:</label>
+							<select id="goToModeSelect" class="form-control" onchange="onGoToModeChange()">
+								<option value="record">Record Number (1 to N)</option>
+								<option value="report">Report Number (e.g. LFT-20261018-01)</option>
+							</select>
+						</div>
+						<div class="fg">
+							<label class="fg-title" id="goToInputLabel" for="goToInputValue">Enter Record Number (1 to 1):</label>
+							<input type="text" id="goToInputValue" class="form-control" placeholder="e.g. 57" autocomplete="off" required>
+						</div>
+						<div id="goToRecentReportsBlock" style="display:none;">
+							<label class="fg-title" style="margin-bottom:var(--space-1);display:block;">Or pick from batch:</label>
+							<select id="goToQuickReportSelect" class="form-control" onchange="onQuickReportSelect(this.value)">
+								<option value="">-- Quick select report in current batch --</option>
+							</select>
+						</div>
+					</div>
+					<div style="padding:var(--space-4) var(--space-5);border-top:1px solid var(--hairline);display:flex;justify-content:flex-end;gap:var(--space-3);">
+						<button type="button" class="btn" onclick="document.getElementById('goToRecordDialog').close()">Cancel</button>
+						<button type="submit" class="btn btn-accent">Jump to Target &rarr;</button>
+					</div>
+				</form>
 			</dialog>
 
 			<!-- Mobile Bottom-Sheet Select Picker Dialog -->

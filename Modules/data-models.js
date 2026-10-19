@@ -1,4 +1,10 @@
-function todayISO() { return new Date().toISOString().slice(0, 10); }
+function todayISO() {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+}
 function getNextReportNumber(p) {
     const defPrefix = (typeof currentEngine !== 'undefined' && currentEngine === 'LIFTING' ? 'LFT' : 'NDT');
     const prefix = p ? p.replace(/[-_]$/, '') : defPrefix;
@@ -177,7 +183,7 @@ function getNextReportNumber(p) {
 					procedureNo: "NDT-PROC-07 Rev 4", acceptCriteria: "ISO 5817 Level B / ASME Sec VIII Div 1",
 					calDue: "2026-12-01", refBlock: "IIW V1 / ISO 19232-1 W6", surfaceCond: "As-welded, wire brushed, clean",
 					indications: [
-						{ joint: "Joint C-1010", area: "Threads & Pin Radius", finding: "No cracks / No indications", result: "PASS" },
-						{ joint: "Joint C-1011", area: "Stress Relief Groove", finding: "Clean profile, no discontinuity", result: "PASS" }
+						{ item: "Item C-1010", area: "Threads & Pin Radius", finding: "No cracks / No indications", result: "PASS" },
+						{ item: "Item C-1011", area: "Stress Relief Groove", finding: "Clean profile, no discontinuity", result: "PASS" }
 					]
 				})];

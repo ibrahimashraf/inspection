@@ -222,6 +222,21 @@
 				var clipboardBuffer = [];
 				var batchPage = 0;
 				var qrChannel = 'WHATSAPP';
+				var qrConfig = {
+					phone: '+441224598800',
+					email: 'verify@integin-inspection.com',
+					msg: 'Official Verification Request for Certificate:',
+					customUrl: 'https://verify.integin-inspection.com/{REPORT_NO}'
+				};
+				function readQrConfig() {
+					const el = id => document.getElementById(id);
+					const p = el('waPhone'), e = el('waEmail'), m = el('waMsg'), u = el('qrCustomUrl');
+					if (p && p.value) qrConfig.phone = p.value;
+					if (e && e.value) qrConfig.email = e.value;
+					if (m && m.value) qrConfig.msg = m.value;
+					if (u && u.value) qrConfig.customUrl = u.value;
+					return qrConfig;
+				}
 				var docControl = { on: true, docNo: 'QMS-CERT-LOLER-044', rev: '03', revDate: '2026-01-15', reportNoPattern: '{PREFIX}-{DATE}-0{SEQ}' };
 				var featureToggles = { qr: true, corp: true, overlays: true };
 				var corpInfo = {
@@ -251,12 +266,21 @@
 				// input so renderSheet() doesn't overwrite it on every keystroke.
 				var _rangeToUserEdited = false;
 
-				const batchPageSize = 50, MAX_PRINT_SPOOL_LIMIT = 50;
+				var batchPageSize = 100, MAX_PRINT_SPOOL_LIMIT = 100;
+				function setBatchPageSize(sz) {
+					const n = parseInt(sz, 10);
+					if (!isNaN(n) && n > 0) {
+						batchPageSize = n;
+						batchPage = 0;
+						if (typeof renderSheet === 'function') renderSheet();
+						if (typeof store !== 'undefined' && store.set) store.set('ims_batch_pagesize', String(n));
+					}
+				}
 
 				const ALL_LIFTING_TOGGLES = ['reportNo', 'jobRef', 'companyAccred', 'standards', 'sopRef', 'employer', 'premises', 'poRef', 'subLocation', 'colourCode', 'reportDate', 'description', 'swl', 'quantity', 'manufacturer', 'model', 'serial', 'plantId', 'mfgYear', 'lastExamDate', 'markingsLegible', 'q_firstExam', 'q_installedCorrectly', 'q_int6m', 'q_int12m', 'q_scheme', 'q_exceptional', 'examParticulars', 'additionalTesting', 'additionalTestingDetails', 'defectDesc', 'dangerImm', 'dangerTimeText', 'isSafe', 'remedies', 'examDate', 'nextExamDate', 'examinerName', 'authName'];
 				const ALL_NDT_TOGGLES = ['reportNo', 'client', 'location', 'poRef', 'testSpec', 'result', 'itemDesc', 'material', 'remarks', 'certLevel', 'certNo', 'certExpiry', 'visionTest', 'procedureNo', 'acceptCriteria', 'calDue', 'refBlock', 'surfaceCond', 'surfaceTemp', 'lightIntensity', 'couplant', 'coverage', 'inspectorName', 'witnessName'];
 
-				var columnLocks = { jobRef: true, poRef: true, companyAccred: true, standards: true, sopRef: true, employer: true, premises: true, subLocation: true, colourCode: true, reportDate: true, description: false, swl: false, quantity: false, manufacturer: true, model: false, serial: false, plantId: false, mfgYear: true, lastExamDate: false, markingsLegible: true, q_firstExam: true, q_installedCorrectly: true, q_int6m: true, q_int12m: true, q_scheme: true, q_exceptional: true, proofLoadApplied: true, examParticulars: true, additionalTesting: true, defectDesc: false, dangerImm: false, isSafe: true, remedies: false, examDate: true, nextExamDate: true, examinerName: true, authName: true, method: true, client: true, location: true, itemDesc: false, material: false, testSpec: true, procedureNo: true, acceptCriteria: true, certLevel: true, certNo: true, certExpiry: true, visionTest: true, calDue: true, refBlock: true, surfaceCond: false, surfaceTemp: false, lightIntensity: false, couplant: false, coverage: false, result: true, remarks: false, inspectorName: true, witnessName: true };
+				var columnLocks = { jobRef: true, poRef: true, companyAccred: true, standards: true, sopRef: true, employer: true, premises: true, subLocation: true, colourCode: true, reportDate: true, description: false, swl: false, quantity: false, manufacturer: true, model: false, serial: false, plantId: false, mfgYear: true, lastExamDate: false, markingsLegible: true, q_firstExam: true, q_installedCorrectly: true, q_int6m: true, q_int12m: true, q_scheme: true, q_exceptional: true, proofLoadApplied: true, examParticulars: true, additionalTesting: true, defectDesc: false, dangerImm: false, isSafe: true, remedies: false, examDate: true, nextExamDate: true, examinerName: true, authName: true, extraCells: false, puwerRows: false, checklist: false, verdictText: false, method: true, client: true, location: true, itemDesc: false, material: false, testSpec: true, procedureNo: true, acceptCriteria: true, certLevel: true, certNo: true, certExpiry: true, visionTest: true, calDue: true, refBlock: true, surfaceCond: false, surfaceTemp: false, lightIntensity: false, couplant: false, coverage: false, result: true, remarks: false, indications: false, inspectorName: true, witnessName: true };
 
 				const LIFTING_COLUMNS = [
 					{ key: "reportNo", label: "Report No" }, { key: "reportDate", label: "Report Date" }, { key: "jobRef", label: "Job Ref" },
@@ -272,6 +296,8 @@
 					{ key: "additionalTestingDetails", label: "AddTest Details" }, { key: "defectDesc", label: "Defects" },
 					{ key: "dangerImm", label: "Danger?" }, { key: "dangerTimeText", label: "Danger Date" }, { key: "isSafe", label: "Safe?" },
 					{ key: "remedies", label: "Remedy" }, { key: "examDate", label: "Exam Date" }, { key: "nextExamDate", label: "Next Due" },
+					{ key: "verdictText", label: "Verdict" }, { key: "extraCells", label: "Verdict Cells" },
+					{ key: "puwerRows", label: "PUWER Items" }, { key: "checklist", label: "Checklist" },
 					{ key: "examinerName", label: "Inspector" }, { key: "authName", label: "Authority" }
 				];
 
@@ -283,7 +309,8 @@
 					{ key: "certExpiry", label: "Cert Expiry" }, { key: "visionTest", label: "Vision" }, { key: "calDue", label: "Cal Due" },
 					{ key: "refBlock", label: "Ref/IQI" }, { key: "surfaceCond", label: "Surface" }, { key: "surfaceTemp", label: "Temp°C" },
 					{ key: "lightIntensity", label: "Light" }, { key: "couplant", label: "Couplant" }, { key: "coverage", label: "Coverage" },
-					{ key: "result", label: "Result" }, { key: "remarks", label: "Remarks" },
+					{ key: "result", label: "Result" }, { key: "verdictText", label: "Verdict" }, { key: "remarks", label: "Remarks" },
+					{ key: "indications", label: "Item Matrix" }, { key: "extraCells", label: "Verdict Cells" }, { key: "checklist", label: "Checklist" },
 					{ key: "yokeSerial", label: "Yoke Serial" }, { key: "magCurrent", label: "Mag Current" }, { key: "inkType", label: "Ink/Media" },
 					{ key: "penetrantType", label: "Penetrant Type" }, { key: "penetrantBrand", label: "Penetrant Brand" }, { key: "dwellTime", label: "Dwell Time" },
 					{ key: "utUnit", label: "UT Machine" }, { key: "probeFreq", label: "Probe Freq" },
@@ -294,11 +321,29 @@
 
 
 				/* QR CHANNEL */
-				function setQrChannel(c) { qrChannel = c === 'EMAIL' ? 'EMAIL' : 'WHATSAPP'; refreshQrUI(); debouncedSync(); }
+				function setQrChannel(c) {
+					qrChannel = (c === 'EMAIL' ? 'EMAIL' : (c === 'CUSTOM' ? 'CUSTOM' : 'WHATSAPP'));
+					refreshQrUI();
+					updateQrBudget();
+					debouncedSync();
+				}
 				function refreshQrUI() {
-					const w = document.getElementById('qr_ch_whatsapp'), e = document.getElementById('qr_ch_email');
+					const w = document.getElementById('qr_ch_whatsapp'),
+					      e = document.getElementById('qr_ch_email'),
+					      u = document.getElementById('qr_ch_custom'),
+					      customFg = document.getElementById('fg_qr_customUrl'),
+					      phoneFg = document.getElementById('fg_qr_phone'),
+					      emailFg = document.getElementById('fg_qr_email'),
+					      msgFg = document.getElementById('fg_qr_msg');
+
 					if (w) { w.classList.toggle('btn-accent', qrChannel === 'WHATSAPP'); w.setAttribute('aria-pressed', qrChannel === 'WHATSAPP'); }
 					if (e) { e.classList.toggle('btn-accent', qrChannel === 'EMAIL'); e.setAttribute('aria-pressed', qrChannel === 'EMAIL'); }
+					if (u) { u.classList.toggle('btn-accent', qrChannel === 'CUSTOM'); u.setAttribute('aria-pressed', qrChannel === 'CUSTOM'); }
+
+					if (customFg) customFg.style.display = (qrChannel === 'CUSTOM') ? 'block' : 'none';
+					if (phoneFg) phoneFg.style.display = (qrChannel === 'WHATSAPP') ? 'block' : 'none';
+					if (emailFg) emailFg.style.display = (qrChannel === 'EMAIL') ? 'block' : 'none';
+					if (msgFg) msgFg.style.display = (qrChannel === 'CUSTOM') ? 'none' : 'block';
 				}
 				// The encoder reaches QR version 40: 2331 bytes at ECC-M, 2953 at ECC-L.
 			// Past 2953 the pre-filled message is dropped, which is reported rather
@@ -308,11 +353,16 @@
 				return new TextEncoder().encode(url).length;
 			}
 			function updateQrBudget() {
+				const rec = (typeof activeRec === 'function') ? activeRec() : {};
+				const link = buildVerificationLink(rec);
+				const lp = document.getElementById('qrLinkPreview');
+				if (lp) lp.value = link;
+
 				const el = document.getElementById('qrBudget');
 				if (!el) return;
 				let bytes = 0, msg = '', color = 'var(--pass)';
 				try {
-					bytes = qrPayloadBytes(buildVerificationLink(activeRec()));
+					bytes = qrPayloadBytes(link);
 					if (bytes <= QR_CEIL_M)      { msg = 'QR payload ' + bytes + ' B — fits at ECC-M.'; color = 'var(--pass)'; }
 					else if (bytes <= QR_CEIL_L) { msg = 'QR payload ' + bytes + ' B — over ECC-M, falls back to ECC-L.'; color = 'var(--warn)'; }
 					else { msg = 'QR payload ' + bytes + ' B — too long for this encoder; the message will be dropped and only the bare link encoded. Shorten the prefix.'; color = 'var(--fail)'; }
@@ -322,14 +372,30 @@
 			}
 			function buildVerificationLink(r) {
 					const el = id => document.getElementById(id);
-					const msg = el('waMsg') ? el('waMsg').value : 'Verify:';
-					const no = r.reportNo || '';
+					const cfg = (typeof readQrConfig === 'function') ? readQrConfig() : (window.qrConfig || {});
+					const no = (r && r.reportNo) || '';
+					const serial = (r && (r.serial || r.plantId)) || '';
+
+					if (qrChannel === 'CUSTOM') {
+						const customTpl = (el('qrCustomUrl') && el('qrCustomUrl').value) || cfg.customUrl || 'https://verify.integin-inspection.com/{REPORT_NO}';
+						return customTpl
+							.replace(/{REPORT_NO}/g, encodeURIComponent(no))
+							.replace(/{SERIAL}/g, encodeURIComponent(serial))
+							.replace(/{DATE}/g, encodeURIComponent((r && r.reportDate) || ''));
+					}
+
+					const msg = (el('waMsg') && el('waMsg').value) || cfg.msg || 'Official Verification Request for Certificate:';
 					// Only append the report no when the operator has not already
 					// typed it into the message prefix. The doubled field was
 					// padding the payload and pushing it past the QR ceiling.
 					const body = (no && msg.indexOf(no) === -1) ? msg + ' ' + no : msg;
-					if (qrChannel === 'EMAIL') return 'mailto:' + (el('waEmail') ? el('waEmail').value : '') + '?subject=' + encodeURIComponent('Verification ' + (r.reportNo || '')) + '&body=' + encodeURIComponent(body);
-					return 'https://wa.me/' + String(el('waPhone') ? el('waPhone').value : '').replace(/[^0-9]/g, '') + '?text=' + encodeURIComponent(body);
+					if (qrChannel === 'EMAIL') {
+						const email = (el('waEmail') && el('waEmail').value) || cfg.email || (window.corpInfo && window.corpInfo.email) || 'verify@integin-inspection.com';
+						return 'mailto:' + email + '?subject=' + encodeURIComponent('Verification ' + no) + '&body=' + encodeURIComponent(body);
+					}
+					const rawPhone = (el('waPhone') && el('waPhone').value) || cfg.phone || (window.corpInfo && window.corpInfo.phone) || '+441224598800';
+					const phone = String(rawPhone).replace(/[^0-9]/g, '');
+					return 'https://wa.me/' + phone + '?text=' + encodeURIComponent(body);
 				}
 				function paintQr(el, r) {
 					if (!el) return;
@@ -410,7 +476,8 @@
 					}
 					const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 					const isEmail = details.channel === 'EMAIL';
-					const channelName = isEmail ? '✉ Email Dispatch' : '📱 WhatsApp Dispatch';
+					const isCustom = details.channel === 'CUSTOM';
+					const channelName = isEmail ? '✉ Email Dispatch' : (isCustom ? '🔗 Custom Link Dispatch' : '📱 WhatsApp Dispatch');
 					const link = details.link || '';
 
 					dlg.innerHTML =
@@ -430,7 +497,7 @@
 								'<div class="mono" style="font-size:11px;color:var(--accent);">' + esc(link) + '</div>' +
 							'</div>' +
 							'<div style="display:flex;gap:8px;width:100%;flex-wrap:wrap;">' +
-								'<a href="' + esc(link) + '" target="_blank" rel="noopener noreferrer" class="btn btn-accent" style="flex:1;min-width:140px;text-align:center;text-decoration:none;font-weight:700;padding:8px 12px;">' + (isEmail ? '✉ Open Email Client' : '📱 Open WhatsApp') + '</a>' +
+								'<a href="' + esc(link) + '" target="_blank" rel="noopener noreferrer" class="btn btn-accent" style="flex:1;min-width:140px;text-align:center;text-decoration:none;font-weight:700;padding:8px 12px;">' + (isEmail ? '✉ Open Email Client' : (isCustom ? '🔗 Open Custom Link' : '📱 Open WhatsApp')) + '</a>' +
 								'<button type="button" class="btn" style="padding:8px 12px;" onclick="copyVerificationLink()">📋 Copy Link</button>' +
 							'</div>' +
 						'</div>' +

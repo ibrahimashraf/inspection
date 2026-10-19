@@ -4,13 +4,14 @@
 				var activeIdxByEngine = { LIFTING: 0, NDT: 0 };
 
 										/* ENGINE SWITCHING */
-						function switchEngine(id) {
+						function switchEngine(id, initialTabId) {
 					// Save the outgoing engine's cursor before we forget it.
 					// On the very first call (boot), currentEngine === id, so this
 					// is a harmless no-op write of the initial 0.
 					activeIdxByEngine[currentEngine] = activeIdx;
 
 					currentEngine = id;
+					try { if (typeof store !== 'undefined' && store.set) store.set('ims_engine', id); } catch (e) {}
 					const list = id === 'LIFTING' ? liftingBatch : ndtBatch;
 
 					// Restore with clamp. Three cases:
@@ -34,28 +35,33 @@
 					document.getElementById('btnEngNdt').setAttribute('aria-selected', id === 'NDT');
 
 					const nav = document.getElementById('navTabsContainer');
+					const targetTab = initialTabId || (typeof store !== 'undefined' && store.get ? store.get('ims_tab_' + id) : null);
 
 					if (id === 'LIFTING') {
 						document.title = 'LOLER · Inspection Management Suite';
 						nav.innerHTML =
-							'<button class="nav-btn active" role="tab" onclick="switchTab(\'tab_loler\',this)">Examination</button>' +
-							'<button class="nav-btn" role="tab" onclick="switchTab(\'tab_puwer\',this)">PUWER</button>' +
-							'<button class="nav-btn" role="tab" onclick="switchTab(\'tab_checklist\',this)">Checklist</button>' +
-							'<button class="nav-btn" role="tab" onclick="switchTab(\'tab_brand\',this)">Branding</button>' +
-							'<button class="nav-btn" role="tab" onclick="switchTab(\'tab_evidence\',this)">Evidence</button>' +
-							'<button class="nav-btn" role="tab" onclick="switchTab(\'tab_batch\',this)">Batch Inspection</button>' +
-							'<button class="nav-btn" role="tab" onclick="switchTab(\'tab_tools\',this)">Tools</button>';
-						switchTab('tab_loler', nav.firstElementChild);
+							'<button class="nav-btn" data-tab="tab_loler" role="tab" onclick="switchTab(\'tab_loler\',this)">Examination</button>' +
+							'<button class="nav-btn" data-tab="tab_puwer" role="tab" onclick="switchTab(\'tab_puwer\',this)">PUWER</button>' +
+							'<button class="nav-btn" data-tab="tab_checklist" role="tab" onclick="switchTab(\'tab_checklist\',this)">Checklist</button>' +
+							'<button class="nav-btn" data-tab="tab_brand" role="tab" onclick="switchTab(\'tab_brand\',this)">Branding</button>' +
+							'<button class="nav-btn" data-tab="tab_evidence" role="tab" onclick="switchTab(\'tab_evidence\',this)">Evidence</button>' +
+							'<button class="nav-btn" data-tab="tab_batch" role="tab" onclick="switchTab(\'tab_batch\',this)">Batch Inspection</button>' +
+							'<button class="nav-btn" data-tab="tab_tools" role="tab" onclick="switchTab(\'tab_tools\',this)">Tools</button>';
+						const btnToClick = (targetTab && nav.querySelector('[data-tab="' + targetTab + '"]')) || nav.firstElementChild;
+						const tabToActivate = (btnToClick && btnToClick.getAttribute('data-tab')) || 'tab_loler';
+						switchTab(tabToActivate, btnToClick);
 					} else {
 						document.title = 'NDT · Inspection Management Suite';
 						nav.innerHTML =
-							'<button class="nav-btn active" role="tab" onclick="switchTab(\'tab_ndt\',this)">Suite</button>' +
-							'<button class="nav-btn" role="tab" onclick="switchTab(\'tab_checklist\',this)">Checklist</button>' +
-							'<button class="nav-btn" role="tab" onclick="switchTab(\'tab_brand\',this)">Branding</button>' +
-							'<button class="nav-btn" role="tab" onclick="switchTab(\'tab_evidence\',this)">Evidence</button>' +
-							'<button class="nav-btn" role="tab" onclick="switchTab(\'tab_batch\',this)">Batch Inspection</button>'+
-							'<button class="nav-btn" role="tab" onclick="switchTab(\'tab_tools\',this)">Tools</button>';
-						switchTab('tab_ndt', nav.firstElementChild);
+							'<button class="nav-btn" data-tab="tab_ndt" role="tab" onclick="switchTab(\'tab_ndt\',this)">Suite</button>' +
+							'<button class="nav-btn" data-tab="tab_checklist" role="tab" onclick="switchTab(\'tab_checklist\',this)">Checklist</button>' +
+							'<button class="nav-btn" data-tab="tab_brand" role="tab" onclick="switchTab(\'tab_brand\',this)">Branding</button>' +
+							'<button class="nav-btn" data-tab="tab_evidence" role="tab" onclick="switchTab(\'tab_evidence\',this)">Evidence</button>' +
+							'<button class="nav-btn" data-tab="tab_batch" role="tab" onclick="switchTab(\'tab_batch\',this)">Batch Inspection</button>'+
+							'<button class="nav-btn" data-tab="tab_tools" role="tab" onclick="switchTab(\'tab_tools\',this)">Tools</button>';
+						const btnToClick = (targetTab && nav.querySelector('[data-tab="' + targetTab + '"]')) || nav.firstElementChild;
+						const tabToActivate = (btnToClick && btnToClick.getAttribute('data-tab')) || 'tab_ndt';
+						switchTab(tabToActivate, btnToClick);
 						renderNdtDynamicFields();
 						renderNdtIndications();
 					}
@@ -72,6 +78,12 @@
 					t.classList.add('active');
 					document.querySelectorAll('.nav-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
 					if (btn) { btn.classList.add('active'); btn.setAttribute('aria-selected', 'true'); }
+					try {
+					if (typeof store !== 'undefined' && store.set) {
+						store.set('ims_active_tab', tabId);
+						if (currentEngine) store.set('ims_tab_' + currentEngine, tabId);
+					}
+					} catch (e) {}
 					if (tabId === 'tab_checklist') { if (typeof renderChecklistTab === 'function') renderChecklistTab(); renderChecklistBuilder(); }
 					if (tabId === 'tab_batch') renderSheet();
 					if (tabId === 'tab_evidence') { if (typeof renderEvidenceTab === 'function') renderEvidenceTab(); renderPhotoTiles(); }
@@ -80,10 +92,14 @@
 					if (tabId === 'tab_puwer') renderPuwerBuilder();
 					if (tabId === 'tab_tools') { if (typeof renderToolsTab === 'function') renderToolsTab(); initConv(); runSlingCalc(); runRopeCalc(); runUnitConvert(); }
 					            if (tabId === 'tab_ndt') { renderNdtSigThumbs(); renderNdtExtraCellBuilder(); renderNdtIndications(); updateNdtFieldStates(); }
-            // The signature pads may have been off-screen when they were
+            // Save global active tab as well as engine tab
+store.set('ims_active_tab', tabId);
+store.set('ims_tab_' + currentEngine, tabId);
+			// The signature pads may have been off-screen when they were
             // first set up. Any time a tab becomes visible, re-size every
             // pad to its real dimensions. Preserves ink via snapshot.
             sizeAllSigPads();
+            if (typeof autoExpandAllTextareas === 'function') autoExpandAllTextareas();
         }
 
 
@@ -99,7 +115,14 @@
 				const chk = list.filter(r => r.selected === true);
 				const tg = chk.length ? chk : [list[activeIdx]];
 				if (!tg.length || !tg[0]) { showToast('Nothing to print.', 'error'); return false; }
-				if (tg.length > MAX_PRINT_SPOOL_LIMIT) { showToast('Spool limit.', 'error'); return false; }
+				
+				const MAX_RECORDS_LIMIT = (typeof MAX_PRINT_SPOOL_LIMIT === 'number') ? MAX_PRINT_SPOOL_LIMIT : 100;
+				if (tg.length > MAX_RECORDS_LIMIT) {
+					const estFn = (typeof estimateRecordPages === 'function') ? estimateRecordPages : () => 1;
+					const totalPages = tg.reduce((sum, r) => sum + estFn(r, currentEngine), 0);
+					showToast('Print spool limit exceeded: ' + tg.length + ' records selected (~' + totalPages + ' pages). Browser print limit is ' + MAX_RECORDS_LIMIT + ' records at once. Please narrow range.', 'error');
+					return false;
+				}
 
 				document.body.classList.add('printing-lock');
 				const pc = document.getElementById('printContainer');
@@ -137,30 +160,27 @@
 			});
 
 			function printSelectedBatch() {
-				document.body.classList.add('printing-lock');
-				const pc = document.getElementById('printContainer');
-				try {
-					if (!fillPrintContainer()) return;
-					// beforeprint fires around this call and would refill the
-					// container, which is what we want, but guard anyway.
+				if (!fillPrintContainer()) return;
+				// Give the browser a tick to paint/spool #printContainer before opening print dialog
+				setTimeout(function () {
 					window.print();
-				} finally {
-					pc.innerHTML = '';
-					document.body.classList.remove('printing-lock');
-				}
+				}, 50);
 			}
 				/* LIFECYCLE */
 				window.addEventListener('pagehide', () => {
+					if (typeof persistStateSync === 'function') persistStateSync();
 					if (typeof isDirty === 'function' && isDirty()) persistStateV2().catch(() => {});
 				});
 
 				document.addEventListener('visibilitychange', () => {
 					if (document.visibilityState === 'hidden') {
+						if (typeof persistStateSync === 'function') persistStateSync();
 						if (typeof isDirty === 'function' && isDirty()) persistStateV2().catch(() => {});
 					}
 				});
 
 				window.addEventListener('beforeunload', e => {
+					if (typeof persistStateSync === 'function') persistStateSync();
 					if (typeof isDirty === 'function' && isDirty()) {
 						e.preventDefault();
 						e.returnValue = '';
@@ -184,7 +204,16 @@
 					const rhf = store.get('ims_rhf') || d.reportHeaderFill;
 					if (rhf && typeof setReportHeaderFill === 'function') setReportHeaderFill(rhf);
 					const ch = store.get('ims_qr') || d.qrChannel;
-					if (ch === 'EMAIL' || ch === 'WHATSAPP') qrChannel = ch;
+					if (ch === 'EMAIL' || ch === 'WHATSAPP' || ch === 'CUSTOM') qrChannel = ch;
+					try {
+						const qc = JSON.parse(store.get('ims_qr_config') || 'null');
+						if (qc && typeof qc === 'object') {
+							if (qc.phone) qrConfig.phone = qc.phone;
+							if (qc.email) qrConfig.email = qc.email;
+							if (qc.msg) qrConfig.msg = qc.msg;
+							if (qc.customUrl) qrConfig.customUrl = qc.customUrl;
+						}
+					} catch (e) {}
 					try {
 						const dc = JSON.parse(store.get('ims_dc') || 'null');
 						if (dc) {
@@ -222,6 +251,11 @@
 					if (g('ci_phone')) g('ci_phone').value = corpInfo.phone;
 					if (g('ci_email')) g('ci_email').value = corpInfo.email;
 					if (g('ci_web')) g('ci_web').value = corpInfo.web;
+					if (window.qrConfig) {
+						if (g('waPhone')) g('waPhone').value = window.qrConfig.phone || '+441224598800';
+						if (g('waEmail')) g('waEmail').value = window.qrConfig.email || 'verify@integin-inspection.com';
+						if (g('waMsg')) g('waMsg').value = window.qrConfig.msg || 'Official Verification Request for Certificate:';
+					}
 					['ci_footnote', 'in_main_footnote', 'ndt_main_footnote'].forEach(id => { if (g(id)) g(id).value = corpInfo.footnote; });
 					['pill_docControl', 'pill_main_docControl', 'pill_ndt_main_docControl'].forEach(id => {
 						const dp = g(id);
@@ -234,6 +268,12 @@
 					const fStyle = store.get('ims_form_style');
 					if (fStyle && typeof setFormStyle === 'function') setFormStyle(fStyle);
 					if (typeof restoreCustomColorsUI === 'function') restoreCustomColorsUI();
+					const bps = parseInt(store.get('ims_batch_pagesize') || '100', 10);
+					if (!isNaN(bps) && bps > 0) {
+						batchPageSize = bps;
+						const sel = g('batchPageSizeSelect');
+						if (sel) sel.value = String(bps);
+					}
 					applyLayout();
 					updateFeaturePills();
 					refreshQrUI();
@@ -393,6 +433,7 @@
 			// and every warm start over 2s. Start it now and render immediately;
 			// the first save awaits it (see storage.js) so nothing is persisted
 			// with the audit chain silently skipped.
+			const savedEngine = store.get('ims_engine') || 'LIFTING';
 			window._aioReady = (window.AIO ? window.AIO.init() : Promise.resolve())
 				.catch(e => { console.error('[aio] self-test failed', e); });
 			try { await restoreStateV2(); } catch (e) { console.error('[boot] restore failed', e); }
@@ -401,12 +442,12 @@
 			try { await PhotosIDB.hydrateAll(); }  catch (e) { console.error('[photos-idb] hydrate', e); }
 			try { _installPhotoPersistWrapper(); } catch (e) { console.error('[photos-idb] persist wrap', e); }
 			try { _installBackupInlineWrapper(); } catch (e) { console.error('[photos-idb] backup wrap', e); }
-			try { renderPhotoTiles(); renderAssetThumbs(); renderSigThumbs(); renderNdtSigThumbs(); renderPuwerBuilder(); updateFeaturePills(); initConv(); } catch (e) {}
+			try { renderBrandTab(); renderPhotoTiles(); renderAssetThumbs(); renderSigThumbs(); renderNdtSigThumbs(); renderPuwerBuilder(); updateFeaturePills(); initConv(); } catch (e) {}
 					try {
-						setupPointerPad(document.getElementById('pad1'), u => { liftingBatch[activeIdx].inspectorSigLive = u; renderPreview(); }, () => { liftingBatch[activeIdx].inspectorSigMode = 'LIVE'; });
-						setupPointerPad(document.getElementById('pad2'), u => { liftingBatch[activeIdx].authSigLive = u; renderPreview(); }, () => { liftingBatch[activeIdx].authSigMode = 'LIVE'; });
-						setupPointerPad(document.getElementById('pad3'), u => { const r = ndtBatch[activeIdx]; if (r) { r.inspSigLive = u; renderPreview(); } }, () => { const r = ndtBatch[activeIdx]; if (r) r.inspSigMode = 'LIVE'; });
-						setupPointerPad(document.getElementById('pad4'), u => { const r = ndtBatch[activeIdx]; if (r) { r.witSigLive = u; renderPreview(); } }, () => { const r = ndtBatch[activeIdx]; if (r) r.witSigMode = 'LIVE'; });
+						setupPointerPad(document.getElementById('pad1'), u => { liftingBatch[activeIdx].inspectorSigLive = u; renderPreview(); debouncedSync(); }, () => { liftingBatch[activeIdx].inspectorSigMode = 'LIVE'; });
+						setupPointerPad(document.getElementById('pad2'), u => { liftingBatch[activeIdx].authSigLive = u; renderPreview(); debouncedSync(); }, () => { liftingBatch[activeIdx].authSigMode = 'LIVE'; });
+						setupPointerPad(document.getElementById('pad3'), u => { const r = ndtBatch[activeIdx]; if (r) { r.inspSigLive = u; renderPreview(); debouncedSync(); } }, () => { const r = ndtBatch[activeIdx]; if (r) r.inspSigMode = 'LIVE'; });
+						setupPointerPad(document.getElementById('pad4'), u => { const r = ndtBatch[activeIdx]; if (r) { r.witSigLive = u; renderPreview(); debouncedSync(); } }, () => { const r = ndtBatch[activeIdx]; if (r) r.witSigMode = 'LIVE'; });
 					} catch (e) {}
 					// ── FIX M5: mark rangeTo as user-edited when they type into it.
 					try {
@@ -425,7 +466,11 @@
 					try { MQ_BESIDE_OK.addEventListener('change', applyLayout); } catch (e) {}
 					try { window.addEventListener('resize', applyZoom, { passive: true }); } catch (e) {}
 					try { applyLayout(); } catch (e) {}
-					try { switchEngine('LIFTING'); } catch (e) {}
+					try {
+					const savedEngine = (typeof store !== 'undefined' && store.get ? store.get('ims_engine') : null) || 'LIFTING';
+					const savedTab = typeof store !== 'undefined' && store.get ? (store.get('ims_active_tab') || store.get('ims_tab_' + savedEngine)) : null;
+					switchEngine(savedEngine === 'NDT' ? 'NDT' : 'LIFTING', savedTab);
+					} catch (e) {}
 					try { loadActiveRecord(); } catch (e) { showPreviewError(e); }
 					try { sizeAllSigPads(); } catch (e) {}
 					try {

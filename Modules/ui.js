@@ -219,8 +219,19 @@
     }
 
     /* ==============================================================
-       STICKY BANNER
+       STICKY BANNER & TEXTAREA AUTO-EXPAND
        ============================================================== */
+    function autoExpandTextarea(el) {
+        if (!el || el.tagName !== 'TEXTAREA') return;
+        el.style.height = 'auto';
+        const minH = parseInt(window.getComputedStyle(el).minHeight, 10) || 36;
+        el.style.height = Math.max(minH, el.scrollHeight ? (el.scrollHeight + 2) : minH) + 'px';
+    }
+
+    function autoExpandAllTextareas() {
+        document.querySelectorAll('textarea').forEach(autoExpandTextarea);
+    }
+
     function installStickyBanner() {
         const banner = document.querySelector('.a4-gauge-banner');
         if (!banner) return;
@@ -391,7 +402,9 @@
         installKeyboardShortcuts,
         openMobileSelectDialog,
         closeMobileSelectDialog,
-        installMobileSelectInterceptors
+        installMobileSelectInterceptors,
+        autoExpandTextarea,
+        autoExpandAllTextareas
     });
 
     Object.defineProperty(window, '_IMS_UI_DEBUG', {

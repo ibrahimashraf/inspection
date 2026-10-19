@@ -92,91 +92,114 @@
 					const dialog = document.createElement('dialog');
 					dialog.style.cssText =
 						'background:var(--surface);color:var(--ink);border:1px solid var(--hairline);' +
-						'border-radius:10px;padding:0;max-width:min(94vw,680px);width:100%;' +
-						'font-family:var(--app-font-family);max-height:90vh;display:flex;flex-direction:column;' +
-						'z-index:200001;position:fixed;top:30px;left:50%;transform:translateX(-50%);box-shadow:var(--shadow-3);';
-					const sec = (t, icon) =>
-						'<div style="padding:14px 0 6px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:var(--ui-font-xs);color:var(--accent);display:flex;align-items:center;gap:6px;">' +
+						'border-radius:12px;padding:0;max-width:min(96vw,840px);width:100%;' +
+						'font-family:var(--app-font-family);max-height:92vh;display:flex;flex-direction:column;' +
+						'z-index:200001;position:fixed;top:20px;left:50%;transform:translateX(-50%);box-shadow:var(--shadow-3);';
+					const sec = (t, icon, id) =>
+						'<div id="' + (id || '') + '" style="padding:16px 0 8px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:12px;color:var(--accent);display:flex;align-items:center;gap:6px;border-top:1px dashed var(--hairline);margin-top:12px;">' +
 						(icon || '📌') + ' ' + t + '</div>';
-					const p = t => '<p style="margin:0 0 8px;line-height:1.45;font-size:var(--ui-font-sm);color:var(--ink);">' + t + '</p>';
+					const p = t => '<p style="margin:0 0 8px;line-height:1.5;font-size:12.5px;color:var(--ink);">' + t + '</p>';
 					const row = (k, d) =>
 						'<tr><td style="font-family:var(--font-data);font-weight:700;padding:5px 8px;background:var(--cell);border:1px solid var(--hairline);border-radius:4px;white-space:nowrap;width:1%;font-size:11px;">' + k + '</td><td style="padding:5px 8px;vertical-align:middle;font-size:12px;">' + d + '</td></tr>';
 
 					dialog.innerHTML =
-						'<div style="padding:14px 18px;border-bottom:1px solid var(--hairline);display:flex;justify-content:space-between;align-items:center;background:var(--panel);border-radius:10px 10px 0 0;">' +
-							'<div style="font-weight:800;font-size:var(--ui-font-md);display:flex;align-items:center;gap:8px;">📘 App Guidance, Hotkeys & User Manual</div>' +
+						'<div style="padding:14px 18px;border-bottom:1px solid var(--hairline);display:flex;justify-content:space-between;align-items:center;background:var(--panel);border-radius:12px 12px 0 0;">' +
+							'<div style="font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px;">📘 Inspection Management Suite — Complete User Manual &amp; Guidance</div>' +
 							'<button class="btn btn-accent" id="hkClose" style="padding:4px 12px;font-size:12px;">✕ Close</button>' +
 						'</div>' +
-						'<div style="padding:16px 20px;overflow-y:auto;flex:1;">' +
-							sec('Text Field Power Formatting (++ Hotkey)', '⚡') +
-							p('<strong>Multiline Split:</strong> Type <code>++</code> anywhere in a text field (such as Client, Premises, Description, or Defects) to force a clean <strong>line break</strong> on the generated A4 certificate.') +
-							p('<em>Example:</em> Typing <code>Global Marine Logistics Ltd.++London, UK</code> prints as:<br>' +
-							  '<div style="margin:4px 0 8px 12px;padding:6px 10px;background:var(--cell);border-left:3px solid var(--accent);font-size:12px;border-radius:2px;">Global Marine Logistics Ltd.<br>London, UK</div>') +
+						'<div style="padding:10px 18px;background:var(--surface);border-bottom:1px solid var(--hairline);display:flex;gap:8px;align-items:center;">' +
+							'<input type="search" id="guidanceSearchInput" placeholder="🔍 Search instructions, hotkeys, calculations, or features…" style="width:100%;padding:6px 12px;border:1px solid var(--hairline);border-radius:6px;background:var(--cell);color:var(--ink);font-size:12px;" oninput="window._filterGuidance(this.value)">' +
+						'</div>' +
+						'<div id="guidanceContentBody" style="padding:16px 22px;overflow-y:auto;flex:1;">' +
 
-							sec('Keyboard Shortcuts (Hotkeys)', '⌨') +
+							sec('System Architecture & Storage Headroom', '💾', 'guide_storage') +
+							p('The application operates entirely <strong>offline-first</strong> in your browser with zero dependency on cloud backends for core data operations. It employs a two-tier storage architecture:') +
+							'<div id="appGuidanceStorageBox" style="margin:8px 0 12px;padding:12px 14px;background:var(--cell);border:1px solid var(--hairline);border-radius:6px;">' +
+								'<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:6px;">' +
+									'<strong>Device Storage Headroom (IndexedDB + LocalStorage):</strong>' +
+									'<span id="guidanceStoragePct" style="font-family:var(--font-data);font-weight:700;">Calculating…</span>' +
+								'</div>' +
+								'<div style="width:100%;height:10px;background:var(--panel);border-radius:5px;overflow:hidden;border:1px solid var(--hairline);margin-bottom:8px;">' +
+									'<div id="guidanceStorageBar" style="width:0%;height:100%;background:var(--accent);transition:width 0.3s ease;"></div>' +
+								'</div>' +
+								'<div id="guidanceStorageDetails" style="font-size:11px;color:var(--muted);display:flex;justify-content:space-between;">' +
+									'<span>IndexedDB Media + LocalStorage JSON</span>' +
+									'<span id="guidanceStorageBytes">— / —</span>' +
+								'</div>' +
+							'</div>' +
 							'<table style="width:100%;border-collapse:separate;border-spacing:0 4px;margin-bottom:12px;">' +
-								row('++', 'Insert line break in report text fields (splits into multiple lines on certificate)') +
-								row('Ctrl + B', 'Save an encrypted safety backup (.imsbak file)') +
-								row('Ctrl + S', 'Force save changes right now') +
-								row('Ctrl + P', 'Print or Export A4 certificate to PDF immediately') +
-								row('Alt + ← / →', 'Navigate to Previous / Next inspection record in batch') +
-								row('Esc', 'Close any open modal dialog or full-screen photo viewer') +
+								row('LocalStorage (~5MB Limit)', 'Stores report text, form inputs, ISO numbering rules, theme settings, and signatures/marker references. Auto-saved immediately and synchronously on every keystroke and before unload.') +
+								row('IndexedDB (Multi-GB Quota)', 'Stores high-resolution inspection photos, branding banners, company logos, and official stamps without congesting the 5MB text quota.') +
+								row('Record Safe Capacity', 'Optimized for up to <strong>500 records</strong> per batch with zero rendering lag.') +
+								row('Photo Safe Capacity', 'Recommended max is ~<strong>200 total photos</strong> per session. Photos are compressed on capture.') +
+								row('When to Reset the App', '1. When completing an entire client inspection project after saving an encrypted <code>.imsbak</code> backup.<br>2. When browser storage usage exceeds <strong>80%</strong>.<br>3. When starting a completely new company or client contract to prevent report numbering sequence mixing.') +
+								row('Safety Rule', 'Always export an encrypted backup (<kbd>Ctrl + B</kbd>) <strong>before</strong> clicking "Reset Application" in the Tools tab.') +
 							'</table>' +
 
-							sec('App Themes vs. Report Themes', '🎭') +
-							p('<strong>App Themes & UI:</strong> Alters your application workspace interface only (e.g. European Technical Slate, Swiss Studio White, Sunlight, NDT Darkroom, High-Contrast OLED, Refined Engineering Blueprint). It enhances field contrast and reduces eye fatigue on tablets without modifying the customer report.') +
-							p('<strong>Report Archetypes & Typography:</strong> Formats the statutory A4 PDF output. Choose from 20+ institutional styles including Maritime Class Society, Swiss International, CAD Blueprint, UK HSE F91, and vibrant color archetypes (Safety Amber Gold, Maritime Signal Emerald ISO 14001, Bureau Veritas Burgundy, Offshore Crimson).') +
-							p('<strong>Header / Footer Fill Area:</strong> In the Settings Toolbar or Corporate Branding panel, select from <em>White (No Fill)</em>, <em>Subtle Theme Tint</em>, <em>Solid Theme Fill</em>, or <em>Top & Bottom Accent Stripe</em> to dynamically style your certificate header and footer blocks.') +
+							sec('Keyboard Shortcuts & Hotkeys', '⌨', 'guide_hotkeys') +
+							'<table style="width:100%;border-collapse:separate;border-spacing:0 4px;margin-bottom:12px;">' +
+								row('++', '<strong>Multiline Text Split:</strong> Type <code>++</code> anywhere in a text field (such as Client, Premises, Description, or Defects) to force an instant line break on the certificate.') +
+								row('Ctrl + B', 'Export an encrypted, hash-verified offline safety backup (.imsbak file).') +
+								row('Ctrl + S', 'Force immediate instant save and flush to disk.') +
+								row('Ctrl + P', 'Print or Export the active certificate (or all selected batch records) directly to A4 PDF.') +
+								row('Alt + ← / →', 'Instantly step to Previous / Next inspection record in the batch.') +
+								row('Esc', 'Close any open modal dialog, bottom sheet, or full-screen photo zoom viewer.') +
+							'</table>' +
 
-							sec('One-Stop Defaults Configuration', '⚙') +
-							p('You can configure all default values (App Theme, Font, Scale, Report Theme, Font, Density, Header Fill, QR Channel, ISO Doc Control, and Toggles) in a single place inside the <code>&lt;head&gt;</code> of <code>index.html</code> under <code>window.APP_DEFAULTS</code>.') +
-
-							sec('Enterprise White-Label Customizer', '🎨') +
-							p('Under <em>Settings / White-Label & Archetypes</em>, adjust institutional colors dynamically:') +
-							'<ul style="margin:0 0 10px 18px;padding:0;font-size:var(--ui-font-sm);line-height:1.45;">' +
-								'<li><strong>Section Headings & Accents:</strong> Sets the primary color for table headers, category badges, and divider lines.</li>' +
-								'<li><strong>Outer Border & Grid Lines:</strong> Controls document perimeter line weight and inner cell border shading.</li>' +
-								'<li><strong>Field Label Colors:</strong> Configures label tone (subtle gray, muted slate, or deep contrast).</li>' +
-								'<li><strong>One-Click Presets:</strong> Quickly load verified color harmonies: Classic Navy, Industrial Safety Amber, Forest Green, or Minimal Monochrome.</li>' +
+							sec('Core Engines: LOLER (Lifting) vs. NDT (Non-Destructive Testing)', '⚙', 'guide_engines') +
+							p('Switch seamlessly between statutory inspection disciplines using the master engine toggle at top left:') +
+							'<ul style="margin:0 0 10px 18px;padding:0;font-size:12px;line-height:1.5;">' +
+								'<li><strong>LOLER 1998 Lifting Equipment Engine:</strong> Designed for Rigging, Slings, Shackles, Cranes, Hoists, Runway Beams, and Winches. Conforms to LEEA, ASME B30, BS EN 13889, and UK SI 1998/2307. Features statutory 6-month / 12-month interval switches, initial installation status, and safe working load (SWL / WLL) validation.</li>' +
+								'<li><strong>NDT Testing Suite:</strong> Dedicated to MPI (Magnetic Particle Inspection), DPI (Dye Penetrant), and Ultrasonic (UT) flaw detection. Includes calibration overdue tracking, surface condition, temperature windows (10–50°C), magnetic current / yoke serials, and weld indication tracking with individual PASS/FAIL evaluation.</li>' +
 							'</ul>' +
 
-							sec('ISO Document Control & Auto-Numbering Engine', '🔢') +
-							p('In leading global inspection bodies (<strong>LEEA</strong>, <strong>Bureau Veritas</strong>, <strong>DNV</strong>, <strong>SGS</strong>):') +
-							'<ul style="margin:0 0 10px 18px;padding:0;font-size:var(--ui-font-sm);line-height:1.45;">' +
-								'<li><strong>Default Structure:</strong> <code>[PREFIX]-[YYYYMMDD]-0[SEQ]</code> (e.g. <code>LFT-20261012-01</code> for Lifting, <code>NDT-20261012-01</code> for NDT).</li>' +
-								'<li><strong>Custom Pattern Setup:</strong> In <em>Settings / ISO Document Control</em>, customize the <strong>No. Format</strong> cell with tokens: <code>{PREFIX}</code>, <code>{DATE}</code>, <code>{YEAR}</code>, <code>{SEQ}</code>.</li>' +
-								'<li><strong>Per-Record Override:</strong> Editing the Report Number in the active record form overrides only that designated record without altering the sequence or other records in your batch.</li>' +
-								'<li><strong>Auto-Increment:</strong> Adding or cloning records automatically increments the numeric sequence (+1) from the highest existing record.</li>' +
+							sec('Workspace Tabs & Operational Modules', '📑', 'guide_tabs') +
+							p('Each inspection engine provides dedicated operational tabs:') +
+							'<ul style="margin:0 0 10px 18px;padding:0;font-size:12px;line-height:1.5;">' +
+								'<li><strong>Examination / Suite Tab:</strong> The primary inspection data entry form. Features auto-expanding input fields, voice dictation, live validation conflict warnings, and signature pads.</li>' +
+								'<li><strong>PUWER 1998 Tab (Lifting):</strong> Comprehensive statutory annexure auditing Regulations 4 through 22 (CE/UKCA conformity, guarding, emergency stops, markings, stability). Toggle ON/OFF dynamically.</li>' +
+								'<li><strong>Checklist Tab:</strong> Customizable itemized audit checkpoint matrix with PASS, FAIL, or N/A statuses and auto-expanding observation notes.</li>' +
+								'<li><strong>Branding Tab:</strong> Configure company details (accreditation body, contact numbers, email, ISO documentation footers) and upload transparent logos, stamps, and high-DPI header/footer banners.</li>' +
+								'<li><strong>Evidence Tab:</strong> Attach up to 4 high-resolution proof photos per record with custom descriptions, date-stamps, and full-screen pan/zoom analysis.</li>' +
+								'<li><strong>Batch Inspection Tab:</strong> High-density spreadsheet grid for multi-item surveys. Includes column freezing, row cloning, bulk status updates, CSV import/export, and pagination up to 500 records.</li>' +
+								'<li><strong>Tools Tab:</strong> Engineering calculators (Rigging Sling Capacity, Wire Rope Discard Criteria per ISO 4309, Unit Converters) and Emergency Data Operations (Export Backup, Restore Backup, Factory Reset).</li>' +
 							'</ul>' +
 
-							sec('Evidence & Photo Audit Engine', '📷') +
-							p('Capture or attach up to 4 high-resolution proof photos per inspection item:') +
-							'<ul style="margin:0 0 10px 18px;padding:0;font-size:var(--ui-font-sm);line-height:1.45;">' +
-								'<li><strong>IndexedDB Blob Storage:</strong> High-res images are automatically compressed and offloaded to browser IndexedDB, keeping workspace JSON exports lightweight and ultra-fast.</li>' +
-								'<li><strong>Photo Labels & Timestamps:</strong> Click any photo slot to add custom inspection captions and capture coordinates/timestamps.</li>' +
-								'<li><strong>Interactive Photo Viewer:</strong> Click thumbnail to inspect full-screen with pan, zoom, rotation, and single-click download.</li>' +
+							sec('Batch Inspection & High-Density Grid Operations', '📊', 'guide_batch') +
+							p('For multi-shackle, sling inventory, or pipeline weld inspections with tens or hundreds of items:') +
+							'<ul style="margin:0 0 10px 18px;padding:0;font-size:12px;line-height:1.5;">' +
+								'<li><strong>Pagination Controls:</strong> Move between pages with First (<code>«</code>), Previous (<code>‹</code>), Next (<code>›</code>), and Last (<code>»</code>) buttons. Select page sizes from 10 to 500 rows per page.</li>' +
+								'<li><strong>Row Cloning:</strong> Select any row checkbox and click <strong>Clone Selected</strong> to duplicate items while auto-incrementing serial numbers and report sequences.</li>' +
+								'<li><strong>Apply to All (Bulk Fill):</strong> Edit common fields (e.g. Employer, Premises, Examination Date, Competent Person) and propagate them across all selected batch records with a single click.</li>' +
+								'<li><strong>Master CSV Import / Export:</strong> Import equipment registers directly from Excel/CSV spreadsheets. All mapped columns (Plant ID, SWL, Serial, Manufacturer) populate instantly.</li>' +
+								'<li><strong>Spool Limit:</strong> Supports printing up to <strong>500 records</strong> in a single print spool run.</li>' +
 							'</ul>' +
 
-							sec('QR Verification & Digital Dispatch', '📲') +
-							p('Every certificate can embed a tamper-evident dynamic QR code linking directly to verification endpoints:') +
-							'<ul style="margin:0 0 10px 18px;padding:0;font-size:var(--ui-font-sm);line-height:1.45;">' +
-								'<li><strong>Instant Dispatch:</strong> Send report summaries directly to clients via WhatsApp or native Email draft with one click.</li>' +
-								'<li><strong>Field Signatures:</strong> Capture digital touch/stylus signatures directly on mobile screens with inspector accreditation numbers.</li>' +
+							sec('QR Verification, Digital Dispatch & Security Chain (AIO)', '📲', 'guide_qr') +
+							p('Every generated certificate features a cryptographic, tamper-evident digital verification seal:') +
+							'<ul style="margin:0 0 10px 18px;padding:0;font-size:12px;line-height:1.5;">' +
+								'<li><strong>Clickable Hyperlink Seal:</strong> In the printed certificate preview, the text label under the QR code is an active hyperlink. Clicking it instantly launches verification without needing a camera.</li>' +
+								'<li><strong>Dispatch Channels:</strong> Switch between <strong>WhatsApp Instant Dispatch</strong> and <strong>Email Dispatch</strong> in Settings to automatically generate pre-formatted certificate transmission drafts.</li>' +
+								'<li><strong>AIO Integrity Guard:</strong> Employs ECDSA cryptographic signing and SHA-256 hash chaining to ensure certificates cannot be modified offline without triggering an integrity warning.</li>' +
 							'</ul>' +
 
-							sec('Annexures, PUWER 1998 & Multi-Page Budgeting', '📑') +
-							p('Maintain strict page-budget discipline for single-sheet or comprehensive multi-page audits:') +
-							'<ul style="margin:0 0 10px 18px;padding:0;font-size:var(--ui-font-sm);line-height:1.45;">' +
-								'<li><strong>Single-Page Statutory LOLER:</strong> Keep your core certificate to a single clean A4 sheet for standard compliance.</li>' +
-								'<li><strong>Full PUWER 1998 Statutory Compliance:</strong> Comprehensive audit checklist covering Reg 4 (Suitability), Reg 5 (Maintenance), Reg 6 (Competent Person Inspection), Reg 7 (Specific Risks), Reg 8 (Information), Reg 9 (Training), Reg 10 (CE/UKCA Conformity), Reg 11 (Guarding), Reg 12 (Specific Hazards & Falling Objects), Reg 14 (Controls), Reg 15 (Emergency Stops), Reg 16 (Energy Isolation), Reg 17 (Stability), Reg 18 (Lighting), Reg 19 (Safe Maintenance), Reg 20 (Markings), Reg 21 (Warnings), and Reg 22.</li>' +
-								'<li><strong>Persistent Footers:</strong> Corporate and reserved certification footers are pinned flush to the bottom of all subsequent pages (Page 2+).</li>' +
+							sec('Engineering Tools & Rigging Calculators', '🧮', 'guide_tools') +
+							p('Built-in engineering calculators accessible from the Tools tab:') +
+							'<ul style="margin:0 0 10px 18px;padding:0;font-size:12px;line-height:1.5;">' +
+								'<li><strong>Sling Capacity & Angle Factor Calculator:</strong> Computes actual working load limits based on leg sling geometry ($WLL = \text{Leg SWL} \times \cos(\theta) \times 2$) for 30°, 45°, and 60° bridle configurations.</li>' +
+								'<li><strong>ISO 4309 Wire Rope Discard Calculator:</strong> Assesses broken wire limits, diameter reduction percentage, corrosion pitting, and core collapse against ISO discard thresholds.</li>' +
+								'<li><strong>Engineering Unit Converter:</strong> Instant bidirectional conversions between Metric and Imperial for Force (kN, Tonnes, lbs), Length (mm, in, ft), Pressure (bar, psi, MPa), and Temperature (°C, °F).</li>' +
 							'</ul>' +
 
-							sec('Key Controls & ON / OFF Toggles', '🎛') +
-							p('Every form box has a compact <span style="display:inline-block;padding:1px 5px;background:var(--accent);color:#fff;border-radius:10px;font-size:9px;font-weight:bold;">● ON</span> toggle. Click it anytime to hide or show that section in the final printable report without losing your input.') +
+							sec('Themes, White-Labeling & Typography', '🎨', 'guide_themes') +
+							p('Customize both your working interface and customer-facing reports:') +
+							'<ul style="margin:0 0 10px 18px;padding:0;font-size:12px;line-height:1.5;">' +
+								'<li><strong>App Themes (UI Only):</strong> Technical Slate, Studio White, Direct Sunlight (high-glare outdoors), NDT UV Darkroom, High-Contrast OLED, and Engineering Blueprint.</li>' +
+								'<li><strong>Report Archetypes (PDF Output):</strong> Over 20 institutional layouts including Swiss International, Maritime Class Society, UK HSE F91, Bureau Veritas Burgundy, and Safety Amber Gold.</li>' +
+								'<li><strong>White-Label Customizer:</strong> Adjust primary brand colors, outer borders, grid line weights, and table header fills to match corporate identity guidelines.</li>' +
+							'</ul>' +
 
-							sec('Designer Asset Dimensions & Guidelines', '📐') +
-							p('Detailed physical and pixel dimensions for design teams preparing custom institutional overlays:') +
+							sec('Designer Asset Dimensions & Guidelines', '📐', 'guide_designer') +
 							'<table style="width:100%;border-collapse:collapse;margin-bottom:12px;font-size:11px;border:1px solid var(--hairline);">' +
 								'<tr style="background:var(--panel);font-weight:700;"><th style="padding:6px;border:1px solid var(--hairline);text-align:left;">Asset</th><th style="padding:6px;border:1px solid var(--hairline);text-align:left;">Aspect Ratio</th><th style="padding:6px;border:1px solid var(--hairline);text-align:left;">Recommended (300 DPI)</th><th style="padding:6px;border:1px solid var(--hairline);text-align:left;">Physical A4 Size</th><th style="padding:6px;border:1px solid var(--hairline);text-align:left;">Format</th></tr>' +
 								'<tr><td style="padding:6px;border:1px solid var(--hairline);font-weight:700;">Header Banner</td><td style="padding:6px;border:1px solid var(--hairline);">~11:1 (wide band)</td><td style="padding:6px;border:1px solid var(--hairline);"><strong>1500 &times; 140 px</strong></td><td style="padding:6px;border:1px solid var(--hairline);">194 &times; 18 mm (max height 70px)</td><td style="padding:6px;border:1px solid var(--hairline);">PNG / SVG / JPEG</td></tr>' +
@@ -185,17 +208,67 @@
 								'<tr><td style="padding:6px;border:1px solid var(--hairline);font-weight:700;">Official Stamp / Seal</td><td style="padding:6px;border:1px solid var(--hairline);">1:1 (square/circle)</td><td style="padding:6px;border:1px solid var(--hairline);"><strong>400 &times; 400 px</strong></td><td style="padding:6px;border:1px solid var(--hairline);">Movable & Resizable (75&times;75 px default)</td><td style="padding:6px;border:1px solid var(--hairline);">Transparent PNG / SVG</td></tr>' +
 								'<tr><td style="padding:6px;border:1px solid var(--hairline);font-weight:700;">Accreditation Badges</td><td style="padding:6px;border:1px solid var(--hairline);">1.5:1 to 1:1</td><td style="padding:6px;border:1px solid var(--hairline);"><strong>300 &times; 200 px</strong></td><td style="padding:6px;border:1px solid var(--hairline);">Movable & Resizable (55&times;36 px default)</td><td style="padding:6px;border:1px solid var(--hairline);">Transparent PNG / SVG</td></tr>' +
 							'</table>' +
-							p('<em>Tip:</em> Use high-contrast transparent PNGs with no solid outer margins for crisp rendering on statutory white paper.') +
+							p('<em>Tip:</em> Always use high-contrast transparent PNGs with no solid background margins for clean rendering on statutory white paper.') +
 
-							sec('What is this app? (Simple Overview)', '🚀') +
-							p('A standalone, offline-first digital inspection clipboard. Create LOLER & NDT certificates, capture live signatures, attach proof photos, generate instant QR verification links, and export pristine A4 reports.') +
 						'</div>';
+
+					window._filterGuidance = function (query) {
+						const q = (query || '').toLowerCase().trim();
+						const body = document.getElementById('guidanceContentBody');
+						if (!body) return;
+						const elements = body.children;
+						for (let i = 0; i < elements.length; i++) {
+							const el = elements[i];
+							if (!q) {
+								el.style.display = '';
+								continue;
+							}
+							const txt = el.textContent.toLowerCase();
+							el.style.display = txt.includes(q) ? '' : 'none';
+						}
+					};
 
 					document.body.appendChild(dialog);
 					dialog.querySelector('#hkClose').onclick = () => { dialog.close(); dialog.remove(); };
 					dialog.addEventListener('close', () => dialog.remove());
 					dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
 					dialog.showModal();
+
+					// Asynchronously query actual browser storage quota and headroom
+					(async () => {
+						try {
+							const pctEl = dialog.querySelector('#guidanceStoragePct');
+							const barEl = dialog.querySelector('#guidanceStorageBar');
+							const bytesEl = dialog.querySelector('#guidanceStorageBytes');
+							if (!pctEl || !barEl || !bytesEl) return;
+
+							let usageMb = 0, quotaMb = 0, pct = 0;
+							if (navigator.storage && navigator.storage.estimate) {
+								const est = await navigator.storage.estimate();
+								usageMb = (est.usage / (1024 * 1024)).toFixed(1);
+								quotaMb = (est.quota / (1024 * 1024)).toFixed(0);
+								pct = est.quota ? (est.usage / est.quota * 100).toFixed(1) : 0;
+							} else {
+								// Fallback: estimate from localStorage string lengths
+								let totalChars = 0;
+								for (let i = 0; i < localStorage.length; i++) {
+									const k = localStorage.key(i);
+									totalChars += ((k || '').length + (localStorage.getItem(k) || '').length);
+								}
+								usageMb = (totalChars * 2 / (1024 * 1024)).toFixed(2);
+								quotaMb = 5; // standard 5MB localStorage
+								pct = ((usageMb / quotaMb) * 100).toFixed(1);
+							}
+
+							const headroom = Math.max(0, (100 - pct)).toFixed(1);
+							pctEl.innerHTML = `<span style="color:${pct > 80 ? 'var(--fail)' : 'var(--accent)'};">${headroom}% Available Headroom</span> (${pct}% Used)`;
+							barEl.style.width = Math.min(100, Math.max(2, pct)) + '%';
+							barEl.style.background = pct > 80 ? 'var(--fail)' : (pct > 60 ? 'var(--warn)' : 'var(--accent)');
+							bytesEl.textContent = `${usageMb} MB used of ~${quotaMb} MB available`;
+						} catch (err) {
+							console.warn('[guidance] storage estimate error', err);
+						}
+					})();
 				}
 
 				function updateFeaturePills() {
@@ -349,10 +422,10 @@
 					const b = document.getElementById('extraCellList'); if (!b) return;
 					const r = liftingBatch[activeIdx]; const l = (r && r.extraCells) || [];
 					b.innerHTML = l.map((c, i) =>
-						'<div style="display:flex;gap:4px;margin-bottom:4px;">' +
-						'<input name="extraCellLabel_' + i + '" value="' + attrEsc(c.label) + '" style="flex:1;" oninput="liftingBatch[activeIdx].extraCells[' + i + '].label=this.value;debouncedSync();">' +
-						'<input name="extraCellValue_' + i + '" value="' + attrEsc(c.value) + '" style="flex:2;" oninput="liftingBatch[activeIdx].extraCells[' + i + '].value=this.value;debouncedSync();">' +
-						'<button class="btn btn-danger" style="padding:3px 6px;" onclick="liftingBatch[activeIdx].extraCells.splice(' + i + ',1);renderExtraCellBuilder();debouncedSync();">&times;</button>' +
+						'<div class="dynamic-cell-row">' +
+						'<input class="dcr-label" name="extraCellLabel_' + i + '" value="' + attrEsc(c.label) + '" placeholder="Label" oninput="liftingBatch[activeIdx].extraCells[' + i + '].label=this.value;debouncedSync();">' +
+						'<textarea class="dcr-val auto-expand" name="extraCellValue_' + i + '" rows="1" placeholder="Value / Findings" oninput="liftingBatch[activeIdx].extraCells[' + i + '].value=this.value;autoExpandTextarea(this);debouncedSync();">' + attrEsc(c.value) + '</textarea>' +
+						'<button class="btn btn-danger dcr-del" onclick="liftingBatch[activeIdx].extraCells.splice(' + i + ',1);renderExtraCellBuilder();debouncedSync();">&times;</button>' +
 						'</div>'
 					).join('');
 				}
@@ -363,10 +436,10 @@
 					const b = document.getElementById('ndtExtraCellList'); if (!b) return;
 					const r = ndtBatch[activeIdx]; const l = (r && r.extraCells) || [];
 					b.innerHTML = l.map((c, i) =>
-						'<div style="display:flex;gap:4px;margin-bottom:4px;">' +
-						'<input name="ndtExtraCellLabel_' + i + '" value="' + attrEsc(c.label) + '" style="flex:1;" oninput="ndtBatch[activeIdx].extraCells[' + i + '].label=this.value;debouncedSync();">' +
-						'<input name="ndtExtraCellValue_' + i + '" value="' + attrEsc(c.value) + '" style="flex:2;" oninput="ndtBatch[activeIdx].extraCells[' + i + '].value=this.value;debouncedSync();">' +
-						'<button class="btn btn-danger" style="padding:3px 6px;" onclick="ndtBatch[activeIdx].extraCells.splice(' + i + ',1);renderNdtExtraCellBuilder();debouncedSync();">&times;</button>' +
+						'<div class="dynamic-cell-row">' +
+						'<input class="dcr-label" name="ndtExtraCellLabel_' + i + '" value="' + attrEsc(c.label) + '" placeholder="Label" oninput="ndtBatch[activeIdx].extraCells[' + i + '].label=this.value;debouncedSync();">' +
+						'<textarea class="dcr-val auto-expand" name="ndtExtraCellValue_' + i + '" rows="1" placeholder="Value / Findings" oninput="ndtBatch[activeIdx].extraCells[' + i + '].value=this.value;autoExpandTextarea(this);debouncedSync();">' + attrEsc(c.value) + '</textarea>' +
+						'<button class="btn btn-danger dcr-del" onclick="ndtBatch[activeIdx].extraCells.splice(' + i + ',1);renderNdtExtraCellBuilder();debouncedSync();">&times;</button>' +
 						'</div>'
 					).join('');
 				}
@@ -397,13 +470,14 @@
 
 				/* PERSISTENCE */
 				function schedulePersist() {
+					if (typeof persistStateSync === 'function') persistStateSync();
 					if (saveTimer) clearTimeout(saveTimer);
 					saveTimer = setTimeout(() => {
 						persistStateV2().catch(err => {
 							console.error('[autosave]', err);
 							if (typeof showToast === 'function') showToast('Autosave failed: ' + err.message, 'error');
 						});
-					}, 600);
+					}, 250);
 				}
 
 				/* WORKFLOW CHECKS */
@@ -1489,6 +1563,28 @@
 				}
 						const SVG_GEAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
 				const SVG_CLOSE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+				var _headerDrawerTimer = null;
+
+				function closeHeaderDrawer() {
+					if (_headerDrawerTimer) { clearTimeout(_headerDrawerTimer); _headerDrawerTimer = null; }
+					if (document.body.classList.contains('header-drawer-open')) {
+						document.body.classList.remove('header-drawer-open');
+						const btn = document.getElementById('btnHeaderDrawer');
+						if (btn) {
+							btn.innerHTML = SVG_GEAR;
+							btn.title = 'Settings';
+							btn.classList.remove('active');
+						}
+						store.set('ims_header_drawer', '0');
+					}
+				}
+
+				function scheduleHeaderDrawerAutoHide(delayMs) {
+					if (_headerDrawerTimer) clearTimeout(_headerDrawerTimer);
+					_headerDrawerTimer = setTimeout(() => {
+						closeHeaderDrawer();
+					}, delayMs || 6000);
+				}
 
 				function toggleHeaderDrawer() {
 					const open = document.body.classList.toggle('header-drawer-open');
@@ -1499,19 +1595,45 @@
 						btn.classList.toggle('active', open);
 					}
 					store.set('ims_header_drawer', open ? '1' : '0');
+					if (open) {
+						scheduleHeaderDrawerAutoHide(8000); // Auto-hide after 8 seconds of inactivity
+					} else if (_headerDrawerTimer) {
+						clearTimeout(_headerDrawerTimer);
+						_headerDrawerTimer = null;
+					}
 				}
 
 				(function restoreHeaderDrawer() {
 					try {
-						if (store.get('ims_header_drawer') === '1') {
-							document.body.classList.add('header-drawer-open');
-							const btn = document.getElementById('btnHeaderDrawer');
-							if (btn) {
-								btn.innerHTML = SVG_CLOSE;
-								btn.title = 'Hide settings';
-								btn.classList.add('active');
+						// Setup auto-close on selection/interaction inside the toolbar
+						document.addEventListener('DOMContentLoaded', () => {
+							const tb = document.querySelector('.formatting-toolbar');
+							if (tb) {
+								tb.addEventListener('change', () => {
+									// When a user selects a theme, font, density, size, auto-hide smoothly
+									scheduleHeaderDrawerAutoHide(1200);
+								});
+								// Reset idle timer if user is actively interacting with the toolbar
+								tb.addEventListener('pointerenter', () => {
+									if (_headerDrawerTimer) clearTimeout(_headerDrawerTimer);
+								});
+								tb.addEventListener('pointerleave', () => {
+									if (document.body.classList.contains('header-drawer-open')) {
+										scheduleHeaderDrawerAutoHide(3000);
+									}
+								});
 							}
-						}
+							// Clicking outside closes the drawer
+							document.addEventListener('pointerdown', (ev) => {
+								if (document.body.classList.contains('header-drawer-open')) {
+									const drawer = document.querySelector('.formatting-toolbar');
+									const btn = document.getElementById('btnHeaderDrawer');
+									if (drawer && !drawer.contains(ev.target) && btn && !btn.contains(ev.target)) {
+										closeHeaderDrawer();
+									}
+								}
+							});
+						});
 					} catch (e) {}
 				})();
 				const THEMES = [
@@ -1664,7 +1786,7 @@
 					const rows = ndtBatch[activeIdx].indications || [];
 					l.innerHTML = rows.map((ind, i) =>
 						'<div class="ind-edit">' +
-						'<input name="indJoint_' + i + '" value="' + attrEsc(ind.joint) + '" oninput="ndtBatch[activeIdx].indications[' + i + '].joint=this.value;debouncedSync();">' +
+						'<input name="indItem_' + i + '" value="' + attrEsc(ind.item) + '" oninput="ndtBatch[activeIdx].indications[' + i + '].item=this.value;debouncedSync();">' +
 						'<input name="indArea_' + i + '" value="' + attrEsc(ind.area) + '" oninput="ndtBatch[activeIdx].indications[' + i + '].area=this.value;debouncedSync();">' +
 						'<input class="inde-find" name="indFinding_' + i + '" value="' + attrEsc(ind.finding) + '" oninput="ndtBatch[activeIdx].indications[' + i + '].finding=this.value;debouncedSync();">' +
 						'<select name="indResult_' + i + '" onchange="ndtBatch[activeIdx].indications[' + i + '].result=this.value;debouncedSync();">' +
@@ -1675,7 +1797,7 @@
 						'</div>'
 					).join('');
 				}
-				function addNdtIndication() { const r = ndtBatch[activeIdx]; if (!r.indications) r.indications = []; r.indications.push({ joint: 'Joint C-' + (1000 + Math.floor(Math.random() * 900)), area: 'Weld Zone', finding: 'No indications', result: 'PASS' }); renderNdtIndications(); debouncedSync(); }
+				function addNdtIndication() { const r = ndtBatch[activeIdx]; if (!r.indications) r.indications = []; r.indications.push({ item: '', area: '', finding: '', result: 'PASS' }); renderNdtIndications(); debouncedSync(); }
 				function removeNdtIndication(i) { const r = ndtBatch[activeIdx]; if (!r.indications) return; r.indications.splice(i, 1); renderNdtIndications(); debouncedSync(); }
 
 				/* CHECKLIST */
@@ -1684,15 +1806,15 @@
 					const ref = currentEngine === 'LIFTING' ? 'liftingBatch[activeIdx]' : 'ndtBatch[activeIdx]';
 					const l = activeRec().checklist || [];
 					c.innerHTML = l.map((x, i) =>
-						'<div style="display:flex;gap:4px;margin-bottom:4px;flex-wrap:wrap;">' +
-						'<input name="chkItem_' + i + '" value="' + attrEsc(x.item) + '" style="flex:2;min-width:140px;" oninput="' + ref + '.checklist[' + i + '].item=this.value;debouncedSync();">' +
-						'<select name="chkStatus_' + i + '" style="width:80px;" onchange="' + ref + '.checklist[' + i + '].status=this.value;debouncedSync();">' +
+						'<div class="checklist-row-edit">' +
+						'<input class="chk-item" name="chkItem_' + i + '" value="' + attrEsc(x.item) + '" placeholder="Verification Item" oninput="' + ref + '.checklist[' + i + '].item=this.value;debouncedSync();">' +
+						'<select class="chk-status" name="chkStatus_' + i + '" onchange="' + ref + '.checklist[' + i + '].status=this.value;debouncedSync();">' +
 						'<option value="PASS"' + (x.status === 'PASS' ? ' selected' : '') + '>PASS</option>' +
 						'<option value="FAIL"' + (x.status === 'FAIL' ? ' selected' : '') + '>FAIL</option>' +
 						'<option value="N/A"' + (x.status === 'N/A' ? ' selected' : '') + '>N/A</option>' +
 						'</select>' +
-						'<input name="chkNote_' + i + '" value="' + attrEsc(x.note) + '" style="flex:1;min-width:90px;" oninput="' + ref + '.checklist[' + i + '].note=this.value;debouncedSync();">' +
-						'<button class="btn btn-danger" style="padding:3px 6px;" onclick="' + ref + '.checklist.splice(' + i + ',1);renderChecklistBuilder();debouncedSync();">&times;</button>' +
+						'<textarea class="chk-note auto-expand" name="chkNote_' + i + '" rows="1" placeholder="Findings / Notes" oninput="' + ref + '.checklist[' + i + '].note=this.value;autoExpandTextarea(this);debouncedSync();">' + attrEsc(x.note || '') + '</textarea>' +
+						'<button class="btn btn-danger chk-del" onclick="' + ref + '.checklist.splice(' + i + ',1);renderChecklistBuilder();debouncedSync();">&times;</button>' +
 						'</div>'
 					).join('');
 				}
@@ -2078,6 +2200,7 @@
 						r.companyAccred  = g('in_companyAccred').value;
 						r.employer       = g('in_employer').value;
 						r.premises       = g('in_premises').value;
+						r.subLocation    = g('in_subLocation') ? g('in_subLocation').value : '';
 						r.colourCode     = g('in_colourCode').value;
 						r.standards      = g('in_standards').value;
 						r.sopRef         = g('in_sopRef').value;
@@ -2368,13 +2491,20 @@
 									'<div style="display:flex;gap:4px;flex-wrap:wrap;">' +
 										'<button type="button" class="btn btn-accent" id="qr_ch_whatsapp" onclick="setQrChannel(\'WHATSAPP\')">📱 WhatsApp</button>' +
 										'<button type="button" class="btn" id="qr_ch_email" onclick="setQrChannel(\'EMAIL\')">✉ Email</button>' +
+										'<button type="button" class="btn" id="qr_ch_custom" onclick="setQrChannel(\'CUSTOM\')">🔗 Custom Link</button>' +
 									'</div>' +
 								'</div>' +
 							'</div>' +
 							'<div class="row cols-3">' +
-								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Phone (WhatsApp)</span></div><input type="text" id="waPhone" value="+441224598800" placeholder="+441224598800" oninput="debouncedSync();updateQrBudget()"></div>' +
-								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Email (Dispatch)</span></div><input type="email" id="waEmail" value="verify@integin-inspection.com" placeholder="verify@integin-inspection.com" oninput="debouncedSync();updateQrBudget()"></div>' +
-								'<div class="fg"><div class="fg-hdr"><span class="fg-title">Prefix / Inquiry Text</span></div><input type="text" id="waMsg" value="Official Verification Request for Certificate:" oninput="debouncedSync();updateQrBudget()"></div>' +
+								'<div class="fg" id="fg_qr_phone"><div class="fg-hdr"><span class="fg-title">Phone (WhatsApp)</span></div><input type="text" id="waPhone" value="+441224598800" placeholder="+441224598800" oninput="debouncedSync();updateQrBudget()"></div>' +
+								'<div class="fg" id="fg_qr_email"><div class="fg-hdr"><span class="fg-title">Email (Dispatch)</span></div><input type="email" id="waEmail" value="verify@integin-inspection.com" placeholder="verify@integin-inspection.com" oninput="debouncedSync();updateQrBudget()"></div>' +
+								'<div class="fg" id="fg_qr_msg"><div class="fg-hdr"><span class="fg-title">Prefix / Inquiry Text</span></div><input type="text" id="waMsg" value="Official Verification Request for Certificate:" oninput="debouncedSync();updateQrBudget()"></div>' +
+							'</div>' +
+							'<div class="row" id="fg_qr_customUrl" style="display:none;">' +
+								'<div class="fg" style="grid-column:span 12;">' +
+									'<div class="fg-hdr"><span class="fg-title">Custom QR Link / URL Pattern</span><span style="font-size:11px;color:var(--ink-muted);font-weight:normal;">Tokens: {REPORT_NO}, {SERIAL}, {DATE}</span></div>' +
+									'<input type="text" id="qrCustomUrl" class="mono" value="https://verify.integin-inspection.com/{REPORT_NO}" placeholder="https://your-domain.com/verify?id={REPORT_NO}" oninput="debouncedSync();updateQrBudget()">' +
+								'</div>' +
 							'</div>' +
 							'<div class="row">' +
 								'<div class="fg" style="grid-column:span 12;">' +
@@ -2401,8 +2531,16 @@
 						if (g('dc_rev')) g('dc_rev').value = docControl.rev || '03';
 						if (g('dc_revDate')) g('dc_revDate').value = docControl.revDate || '2026-01-15';
 						if (g('dc_reportNoPattern')) g('dc_reportNoPattern').value = docControl.reportNoPattern || '{PREFIX}-{DATE}-0{SEQ}';
+						if (window.qrConfig) {
+							if (g('waPhone')) g('waPhone').value = window.qrConfig.phone || '+441224598800';
+							if (g('waEmail')) g('waEmail').value = window.qrConfig.email || 'verify@integin-inspection.com';
+							if (g('waMsg')) g('waMsg').value = window.qrConfig.msg || 'Official Verification Request for Certificate:';
+							if (g('qrCustomUrl')) g('qrCustomUrl').value = window.qrConfig.customUrl || 'https://verify.integin-inspection.com/{REPORT_NO}';
+						}
 						restoreCustomColorsUI();
 					}
+					refreshQrUI();
+					updateQrBudget();
 					if (typeof renderAssetThumbs === 'function') renderAssetThumbs();
 				}
 

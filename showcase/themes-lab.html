@@ -1,0 +1,3573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theme Systems Interactive Showcase · Inspection Management Suite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   INTERACTIVE SHOWCASE LAB: APP UI & REPORT PRESETS
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #090a0f;
+    color: #e2e8f0;
+    line-height: 1.4;
+    padding: 24px;
+}
+
+header.lab-header {
+    max-width: 1400px;
+    margin: 0 auto 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.lab-title h1 {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.lab-badge {
+    background: #3b82f6;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.lab-subtitle {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-top: 4px;
+}
+
+.selector-nav {
+    display: flex;
+    gap: 8px;
+    background: #12151c;
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+.tab-pill {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.tab-pill:hover { color: #fff; }
+.tab-pill.active { background: #2563eb; color: #fff; }
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.section-label {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #64748b;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ==========================================================================
+   PART 1: 4 DISTINCT A4 CERTIFICATE THEME PRESETS
+   ========================================================================== */
+.report-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    margin-bottom: 48px;
+}
+.report-card {
+    background: #12151c;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.report-card-hdr {
+    padding: 14px 18px;
+    background: #181d26;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.report-card-hdr h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+}
+.report-card-tag {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #94a3b8;
+}
+
+/* Mini A4 Canvas Frame */
+.mini-a4-frame {
+    background: #ffffff;
+    color: #000000;
+    padding: 16px;
+    font-size: 8.5px;
+    line-height: 1.25;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 480px;
+}
+
+/* Base Report Table */
+.mini-tbl {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+.mini-tbl th, .mini-tbl td {
+    border: 1px solid #000;
+    padding: 3px 5px;
+    vertical-align: top;
+    text-align: left;
+    word-break: break-word;
+}
+.mini-lbl {
+    font-size: 6.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: block;
+    color: #475569;
+    letter-spacing: 0.03em;
+}
+.mini-val {
+    font-size: 8.5px;
+    font-weight: 600;
+    color: #000;
+}
+.mini-val.mono {
+    font-family: 'JetBrains Mono', Consolas, monospace;
+}
+
+/* -------------------------------------------------------------
+   PRESET 1: CLASSIC STATUTORY (Traditional Legal Black)
+   ------------------------------------------------------------- */
+.theme-classic .mini-a4-frame {
+    border: 2px solid #000;
+}
+.theme-classic .mini-title-wrap {
+    border-bottom: 2px solid #000;
+    padding: 4px 0 6px;
+    text-align: center;
+    margin-bottom: 4px;
+}
+.theme-classic .mini-title {
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #000;
+}
+.theme-classic .mini-subtitle {
+    font-size: 7.5px;
+    font-weight: 700;
+    color: #334155;
+    margin-top: 1px;
+}
+.theme-classic .mini-csec {
+    background: #000000;
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 7.5px;
+    text-transform: uppercase;
+    padding: 2.5px 5px;
+    letter-spacing: 0.03em;
+}
+.theme-classic .mini-verdict {
+    border: 2px solid #000;
+    background: #f8fafc;
+    text-align: center;
+    padding: 4px;
+}
+.theme-classic .verdict-text {
+    font-size: 11px;
+    font-weight: 900;
+    color: #15803d;
+    letter-spacing: 0.05em;
+}
+
+/* -------------------------------------------------------------
+   PRESET 2: SWISS EXECUTIVE (Refined Modern Slate)
+   ------------------------------------------------------------- */
+.theme-swiss .mini-a4-frame {
+    border: 1.5px solid #0f172a;
+}
+.theme-swiss .mini-title-wrap {
+    background: #f8fafc;
+    border: 1px solid #0f172a;
+    border-left: 5px solid #0f172a;
+    padding: 6px 8px;
+    text-align: left;
+    margin-bottom: 4px;
+}
+.theme-swiss .mini-title {
+    font-size: 11.5px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #0f172a;
+}
+.theme-swiss .mini-subtitle {
+    font-size: 7.2px;
+    font-weight: 600;
+    color: #475569;
+}
+.theme-swiss .mini-csec {
+    background: #0f172a;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 7.5px;
+    text-transform: uppercase;
+    padding: 2.5px 6px;
+    letter-spacing: 0.05em;
+}
+.theme-swiss .mini-tbl th, .theme-swiss .mini-tbl td {
+    border-color: #0f172a;
+}
+.theme-swiss .mini-verdict {
+    border: 1.5px solid #0f172a;
+    background: #f1f5f9;
+    text-align: center;
+    padding: 5px;
+}
+.theme-swiss .verdict-text {
+    font-size: 11px;
+    font-weight: 900;
+    color: #16a34a;
+}
+
+/* -------------------------------------------------------------
+   PRESET 3: TECHNICAL BLUEPRINT (Engineering Grid)
+   ------------------------------------------------------------- */
+.theme-blueprint .mini-a4-frame {
+    border: 2px solid #1e3a8a;
+}
+.theme-blueprint .mini-title-wrap {
+    background: linear-gradient(90deg, #1e3a8a, #2563eb);
+    color: #ffffff;
+    padding: 6px 10px;
+    text-align: center;
+    border-radius: 2px;
+    margin-bottom: 4px;
+}
+.theme-blueprint .mini-title {
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #ffffff;
+}
+.theme-blueprint .mini-subtitle {
+    font-size: 7.2px;
+    font-weight: 500;
+    color: #e0e7ff;
+}
+.theme-blueprint .mini-csec {
+    background: #eff6ff;
+    color: #1e3a8a;
+    font-weight: 900;
+    font-size: 7.5px;
+    text-transform: uppercase;
+    padding: 2.5px 6px;
+    letter-spacing: 0.06em;
+    border-top: 1.5px solid #1e3a8a;
+    border-bottom: 1.5px solid #1e3a8a;
+}
+.theme-blueprint .mini-tbl th, .theme-blueprint .mini-tbl td {
+    border-color: #93c5fd;
+}
+.theme-blueprint .mini-verdict {
+    border: 2px solid #1e3a8a;
+    background: #eff6ff;
+    text-align: center;
+    padding: 5px;
+}
+.theme-blueprint .verdict-text {
+    font-size: 11px;
+    font-weight: 900;
+    color: #15803d;
+}
+
+/* -------------------------------------------------------------
+   PRESET 4: MINIMAL ARCHITECTURAL LINE (Ink-Saver Line)
+   ------------------------------------------------------------- */
+.theme-minimal .mini-a4-frame {
+    border: 1px solid #64748b;
+}
+.theme-minimal .mini-title-wrap {
+    border-top: 2px solid #0f172a;
+    border-bottom: 1px solid #0f172a;
+    padding: 6px 0;
+    text-align: left;
+    margin-bottom: 4px;
+}
+.theme-minimal .mini-title {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #0f172a;
+}
+.theme-minimal .mini-subtitle {
+    font-size: 7px;
+    font-weight: 500;
+    color: #64748b;
+}
+.theme-minimal .mini-csec {
+    background: transparent;
+    color: #0f172a;
+    font-weight: 800;
+    font-size: 7.5px;
+    text-transform: uppercase;
+    padding: 2px 0;
+    letter-spacing: 0.06em;
+    border-top: 1.5px solid #0f172a;
+    border-bottom: 0.5px solid #0f172a;
+}
+.theme-minimal .mini-tbl th, .theme-minimal .mini-tbl td {
+    border-color: #cbd5e1;
+}
+.theme-minimal .mini-verdict {
+    border: 1px solid #0f172a;
+    background: #ffffff;
+    text-align: center;
+    padding: 5px;
+}
+.theme-minimal .verdict-text {
+    font-size: 10.5px;
+    font-weight: 900;
+    color: #16a34a;
+}
+
+/* -------------------------------------------------------------
+   PRESET 5: OFFSHORE INDUSTRIAL AMBER (DNV / North Sea Grade)
+   ------------------------------------------------------------- */
+.theme-offshore .mini-a4-frame {
+    border: 3px solid #b45309;
+}
+.theme-offshore .mini-title-wrap {
+    background: #b45309;
+    color: #ffffff;
+    padding: 6px 10px;
+    text-align: center;
+    margin-bottom: 4px;
+}
+.theme-offshore .mini-title {
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #ffffff;
+}
+.theme-offshore .mini-subtitle {
+    font-size: 7.5px;
+    font-weight: 700;
+    color: #fef3c7;
+    margin-top: 1px;
+}
+.theme-offshore .mini-csec {
+    background: #78350f;
+    color: #fef3c7;
+    font-weight: 900;
+    font-size: 7.5px;
+    text-transform: uppercase;
+    padding: 2.5px 6px;
+    letter-spacing: 0.05em;
+    border-bottom: 1.5px solid #b45309;
+}
+.theme-offshore .mini-tbl th, .theme-offshore .mini-tbl td {
+    border-color: #b45309;
+}
+.theme-offshore .mini-lbl { color: #92400e; font-weight: 800; }
+.theme-offshore .mini-verdict {
+    border: 2px solid #b45309;
+    background: #fffbeb;
+    text-align: center;
+    padding: 5px;
+}
+.theme-offshore .verdict-text {
+    font-size: 11px;
+    font-weight: 900;
+    color: #15803d;
+}
+
+/* -------------------------------------------------------------
+   PRESET 6: EXECUTIVE OBSIDIAN (Monochrome High-End Audit)
+   ------------------------------------------------------------- */
+.theme-obsidian-rep .mini-a4-frame {
+    border: 2px solid #09090b;
+}
+.theme-obsidian-rep .mini-title-wrap {
+    background: #09090b;
+    color: #ffffff;
+    padding: 7px 10px;
+    text-align: left;
+    margin-bottom: 4px;
+}
+.theme-obsidian-rep .mini-title {
+    font-size: 11.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #ffffff;
+}
+.theme-obsidian-rep .mini-subtitle {
+    font-size: 7px;
+    font-weight: 600;
+    color: #a1a1aa;
+    letter-spacing: 0.03em;
+}
+.theme-obsidian-rep .mini-csec {
+    background: #27272a;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 7.2px;
+    text-transform: uppercase;
+    padding: 2.5px 6px;
+    letter-spacing: 0.06em;
+}
+.theme-obsidian-rep .mini-tbl th, .theme-obsidian-rep .mini-tbl td {
+    border-color: #52525b;
+}
+.theme-obsidian-rep .mini-lbl { color: #52525b; font-weight: 700; }
+.theme-obsidian-rep .mini-verdict {
+    border: 2px solid #09090b;
+    background: #f4f4f5;
+    text-align: center;
+    padding: 5px;
+}
+.theme-obsidian-rep .verdict-text {
+    font-size: 11px;
+    font-weight: 900;
+    color: #09090b;
+}
+
+/* -------------------------------------------------------------
+   PRESET 7: CRIMSON MARITIME (Lloyd's Register / Marine)
+   ------------------------------------------------------------- */
+.theme-crimson .mini-a4-frame {
+    border: 2.5px solid #991b1b;
+}
+.theme-crimson .mini-title-wrap {
+    border-top: 4px solid #991b1b;
+    border-bottom: 1.5px solid #991b1b;
+    background: #fef2f2;
+    padding: 6px 8px;
+    text-align: center;
+    margin-bottom: 4px;
+}
+.theme-crimson .mini-title {
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #991b1b;
+}
+.theme-crimson .mini-subtitle {
+    font-size: 7.2px;
+    font-weight: 700;
+    color: #7f1d1d;
+}
+.theme-crimson .mini-csec {
+    background: #991b1b;
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 7.5px;
+    text-transform: uppercase;
+    padding: 2.5px 6px;
+    letter-spacing: 0.05em;
+}
+.theme-crimson .mini-tbl th, .theme-crimson .mini-tbl td {
+    border-color: #b91c1c;
+}
+.theme-crimson .mini-lbl { color: #991b1b; font-weight: 700; }
+.theme-crimson .mini-verdict {
+    border: 2px solid #991b1b;
+    background: #fef2f2;
+    text-align: center;
+    padding: 5px;
+}
+.theme-crimson .verdict-text {
+    font-size: 11px;
+    font-weight: 900;
+    color: #15803d;
+}
+
+/* -------------------------------------------------------------
+   PRESET 8: MODERNIST BAUHAUS (Asymmetric Primary Accent)
+   ------------------------------------------------------------- */
+.theme-bauhaus .mini-a4-frame {
+    border: 2px solid #000000;
+}
+.theme-bauhaus .mini-title-wrap {
+    display: flex;
+    border-bottom: 3px solid #000000;
+    padding: 0;
+    margin-bottom: 4px;
+}
+.theme-bauhaus .tb-accent-block {
+    background: #ef4444;
+    width: 8px;
+    flex-shrink: 0;
+}
+.theme-bauhaus .tb-inner {
+    padding: 6px 8px;
+    flex: 1;
+    background: #fef08a;
+}
+.theme-bauhaus .mini-title {
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: #000000;
+}
+.theme-bauhaus .mini-subtitle {
+    font-size: 7px;
+    font-weight: 700;
+    color: #1e3a8a;
+}
+.theme-bauhaus .mini-csec {
+    background: #000000;
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 7.5px;
+    text-transform: uppercase;
+    padding: 2.5px 6px;
+    letter-spacing: 0.08em;
+    border-left: 5px solid #3b82f6;
+}
+.theme-bauhaus .mini-tbl th, .theme-bauhaus .mini-tbl td {
+    border-color: #000000;
+}
+.theme-bauhaus .mini-lbl { color: #000000; font-weight: 800; font-size: 6.5px; }
+.theme-bauhaus .mini-verdict {
+    border: 2px solid #000000;
+    background: #ffffff;
+    box-shadow: 2px 2px 0px #000000;
+    text-align: center;
+    padding: 5px;
+}
+.theme-bauhaus .verdict-text {
+    font-size: 11px;
+    font-weight: 900;
+    color: #000000;
+}
+
+/* -------------------------------------------------------------
+   PRESET 9: FEDERAL COMPLIANCE (US OSHA / ASME)
+   ------------------------------------------------------------- */
+.theme-federal .mini-a4-frame { border: 2.5px solid #000; }
+.theme-federal .mini-title-wrap {
+    background: repeating-linear-gradient(45deg, #000, #000 10px, #f59e0b 10px, #f59e0b 20px);
+    padding: 4px;
+    margin-bottom: 4px;
+}
+.theme-federal .fed-inner { background: #000; color: #fff; padding: 6px 8px; text-align: center; }
+.theme-federal .mini-title { font-size: 12px; font-weight: 900; text-transform: uppercase; color: #f59e0b; letter-spacing: 0.06em; }
+.theme-federal .mini-subtitle { font-size: 7px; font-weight: 700; color: #fff; }
+.theme-federal .mini-csec { background: #000; color: #f59e0b; font-weight: 900; font-size: 7.5px; text-transform: uppercase; padding: 2.5px 6px; letter-spacing: 0.05em; border-left: 4px solid #f59e0b; }
+.theme-federal .mini-tbl th, .theme-federal .mini-tbl td { border-color: #000; }
+.theme-federal .mini-verdict { border: 2px solid #000; background: #fef3c7; text-align: center; padding: 5px; }
+.theme-federal .verdict-text { font-size: 11px; font-weight: 900; color: #000; }
+
+/* -------------------------------------------------------------
+   PRESET 10: NORDIC DEEP FJORD (Scandinavian Marine Equinor)
+   ------------------------------------------------------------- */
+.theme-fjord .mini-a4-frame { border: 2px solid #0c4a6e; }
+.theme-fjord .mini-title-wrap { background: linear-gradient(135deg, #0c4a6e, #0284c7); color: #fff; padding: 6px 10px; margin-bottom: 4px; }
+.theme-fjord .mini-title { font-size: 12px; font-weight: 900; text-transform: uppercase; color: #fff; letter-spacing: 0.05em; }
+.theme-fjord .mini-subtitle { font-size: 7px; color: #bae6fd; font-weight: 600; }
+.theme-fjord .mini-csec { background: #0c4a6e; color: #fff; font-weight: 800; font-size: 7.2px; text-transform: uppercase; padding: 2.5px 6px; letter-spacing: 0.05em; }
+.theme-fjord .mini-tbl th, .theme-fjord .mini-tbl td { border-color: #38bdf8; }
+.theme-fjord .mini-lbl { color: #0369a1; font-weight: 700; }
+.theme-fjord .mini-verdict { border: 2px solid #0c4a6e; background: #f0f9ff; text-align: center; padding: 5px; }
+.theme-fjord .verdict-text { font-size: 11px; font-weight: 900; color: #0284c7; }
+
+/* -------------------------------------------------------------
+   PRESET 11: SUBSEA PETRO-TECH (API 8C Teal Offshore)
+   ------------------------------------------------------------- */
+.theme-subsea .mini-a4-frame { border: 2px solid #115e59; }
+.theme-subsea .mini-title-wrap { background: #115e59; color: #fff; padding: 6px 8px; text-align: center; margin-bottom: 4px; }
+.theme-subsea .mini-title { font-size: 11.5px; font-weight: 900; text-transform: uppercase; color: #fff; letter-spacing: 0.06em; }
+.theme-subsea .mini-subtitle { font-size: 7px; color: #99f6e4; font-weight: 700; }
+.theme-subsea .mini-csec { background: #134e4a; color: #ccfbf1; font-weight: 800; font-size: 7.2px; text-transform: uppercase; padding: 2.5px 6px; }
+.theme-subsea .mini-tbl th, .theme-subsea .mini-tbl td { border-color: #14b8a6; }
+.theme-subsea .mini-lbl { color: #0f766e; font-weight: 700; }
+.theme-subsea .mini-verdict { border: 2px solid #115e59; background: #f0fdfa; text-align: center; padding: 5px; }
+.theme-subsea .verdict-text { font-size: 11px; font-weight: 900; color: #0f766e; }
+
+/* -------------------------------------------------------------
+   PRESET 12: AVIONICS FLIGHT-LINE (FAA / EASA Form 1 Spec)
+   ------------------------------------------------------------- */
+.theme-avionics .mini-a4-frame { border: 2px solid #334155; }
+.theme-avionics .mini-title-wrap { border: 2px solid #0f172a; padding: 4px 8px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
+.theme-avionics .mini-title { font-size: 11px; font-weight: 900; text-transform: uppercase; color: #0f172a; }
+.theme-avionics .mini-subtitle { font-size: 6.8px; font-weight: 700; color: #475569; }
+.theme-avionics .mini-csec { background: #334155; color: #fff; font-weight: 900; font-size: 7.2px; text-transform: uppercase; padding: 2.5px 6px; letter-spacing: 0.04em; }
+.theme-avionics .mini-tbl th, .theme-avionics .mini-tbl td { border-color: #64748b; }
+.theme-avionics .mini-lbl { color: #475569; font-weight: 800; }
+.theme-avionics .mini-verdict { border: 2px solid #0f172a; background: #f1f5f9; text-align: center; padding: 5px; }
+.theme-avionics .verdict-text { font-size: 11px; font-weight: 900; color: #15803d; }
+
+/* -------------------------------------------------------------
+   PRESET 13: METRIC MILLIMETER SPEC (JIS Precision Calibration)
+   ------------------------------------------------------------- */
+.theme-metric .mini-a4-frame { border: 1.5px solid #000; font-family: 'JetBrains Mono', Consolas, monospace; }
+.theme-metric .mini-title-wrap { border-bottom: 2px solid #000; padding: 4px 0 6px; text-align: left; margin-bottom: 4px; }
+.theme-metric .mini-title { font-size: 11px; font-weight: 900; text-transform: uppercase; color: #000; }
+.theme-metric .mini-subtitle { font-size: 7px; color: #444; }
+.theme-metric .mini-csec { background: #000; color: #fff; font-weight: 800; font-size: 7px; text-transform: uppercase; padding: 2px 4px; }
+.theme-metric .mini-tbl th, .theme-metric .mini-tbl td { border-color: #777; }
+.theme-metric .mini-lbl { color: #555; font-size: 6px; }
+.theme-metric .mini-verdict { border: 1.5px solid #000; background: #fafafa; text-align: center; padding: 4px; }
+.theme-metric .verdict-text { font-size: 10.5px; font-weight: 900; color: #000; }
+
+/* -------------------------------------------------------------
+   PRESET 14: HOLOGRAPHIC LASER NDT (NDT Calibration Certificate)
+   ------------------------------------------------------------- */
+.theme-laser-ndt .mini-a4-frame { border: 2px solid #0284c7; }
+.theme-laser-ndt .mini-title-wrap { background: #0369a1; color: #fff; padding: 6px 8px; text-align: center; margin-bottom: 4px; }
+.theme-laser-ndt .mini-title { font-size: 12px; font-weight: 900; text-transform: uppercase; color: #38bdf8; }
+.theme-laser-ndt .mini-subtitle { font-size: 7px; color: #bae6fd; }
+.theme-laser-ndt .mini-csec { background: #075985; color: #38bdf8; font-weight: 900; font-size: 7.2px; text-transform: uppercase; padding: 2.5px 6px; border-left: 4px solid #38bdf8; }
+.theme-laser-ndt .mini-tbl th, .theme-laser-ndt .mini-tbl td { border-color: #38bdf8; }
+.theme-laser-ndt .mini-verdict { border: 2px solid #0284c7; background: #f0f9ff; text-align: center; padding: 5px; }
+.theme-laser-ndt .verdict-text { font-size: 11px; font-weight: 900; color: #0284c7; }
+
+/* -------------------------------------------------------------
+   PRESET 15: BRUTALIST MONOLITH (Heavy Civil Works 3px Black)
+   ------------------------------------------------------------- */
+.theme-monolith .mini-a4-frame { border: 3px solid #000; }
+.theme-monolith .mini-title-wrap { background: #000; color: #fff; padding: 6px 10px; margin-bottom: 4px; }
+.theme-monolith .mini-title { font-size: 13px; font-weight: 900; text-transform: uppercase; color: #fff; letter-spacing: 0.08em; }
+.theme-monolith .mini-subtitle { font-size: 7px; font-weight: 800; color: #ccc; }
+.theme-monolith .mini-csec { background: #000; color: #fff; font-weight: 900; font-size: 7.5px; text-transform: uppercase; padding: 3px 6px; }
+.theme-monolith .mini-tbl th, .theme-monolith .mini-tbl td { border: 2px solid #000; }
+.theme-monolith .mini-lbl { color: #000; font-weight: 900; }
+.theme-monolith .mini-verdict { border: 3px solid #000; background: #fff; text-align: center; padding: 6px; }
+.theme-monolith .verdict-text { font-size: 12px; font-weight: 900; color: #000; }
+
+/* -------------------------------------------------------------
+   PRESET 16: ARCHIVAL PARCHMENT (Historical Guild Certificate)
+   ------------------------------------------------------------- */
+.theme-parchment .mini-a4-frame { border: 2px solid #78350f; background: #fdfbf7; font-family: Georgia, serif; }
+.theme-parchment .mini-title-wrap { border-bottom: 2px solid #78350f; padding: 6px 0; text-align: center; margin-bottom: 4px; }
+.theme-parchment .mini-title { font-size: 12.5px; font-weight: 900; text-transform: uppercase; color: #78350f; letter-spacing: 0.04em; }
+.theme-parchment .mini-subtitle { font-size: 7.5px; color: #92400e; font-style: italic; }
+.theme-parchment .mini-csec { background: #78350f; color: #fdfbf7; font-weight: 800; font-size: 7.5px; text-transform: uppercase; padding: 2.5px 6px; font-family: Arial, sans-serif; }
+.theme-parchment .mini-tbl th, .theme-parchment .mini-tbl td { border-color: #b45309; }
+.theme-parchment .mini-lbl { color: #92400e; font-family: Arial, sans-serif; font-size: 6.5px; }
+.theme-parchment .mini-verdict { border: 2px solid #78350f; background: #fef3c7; text-align: center; padding: 5px; }
+.theme-parchment .verdict-text { font-size: 11px; font-weight: 900; color: #78350f; }
+
+/* -------------------------------------------------------------
+   PRESET 17: LINEAR SLATE DEVTOOLS
+   ------------------------------------------------------------- */
+.theme-cert-linear .mini-a4-frame { border: 1.5px solid #21262d; background: #ffffff; }
+.theme-cert-linear .mini-title-wrap { background: #0d1117; color: #f0f6fc; padding: 6px 10px; margin-bottom: 4px; border-radius: 4px; }
+.theme-cert-linear .mini-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: #58a6ff; letter-spacing: 0.05em; }
+.theme-cert-linear .mini-subtitle { font-size: 7px; color: #8b949e; }
+.theme-cert-linear .mini-csec { background: #161b22; color: #58a6ff; font-weight: 800; font-size: 7.2px; text-transform: uppercase; padding: 2.5px 6px; border-left: 3px solid #58a6ff; }
+.theme-cert-linear .mini-tbl th, .theme-cert-linear .mini-tbl td { border-color: #d0d7de; }
+.theme-cert-linear .mini-lbl { color: #57606a; font-weight: 700; }
+.theme-cert-linear .mini-verdict { border: 1.5px solid #21262d; background: #f6f8fa; text-align: center; padding: 5px; }
+.theme-cert-linear .verdict-text { font-size: 11px; font-weight: 900; color: #1a7f37; }
+
+/* -------------------------------------------------------------
+   PRESET 18: BLOOMBERG TABULAR HUD
+   ------------------------------------------------------------- */
+.theme-cert-bloomberg .mini-a4-frame { border: 1.5px solid #000; font-family: 'JetBrains Mono', Consolas, monospace; }
+.theme-cert-bloomberg .mini-title-wrap { background: #000; color: #fff; padding: 5px 8px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
+.theme-cert-bloomberg .mini-title { font-size: 11.5px; font-weight: 900; text-transform: uppercase; color: #ff9900; }
+.theme-cert-bloomberg .mini-subtitle { font-size: 6.8px; color: #fff; }
+.theme-cert-bloomberg .mini-csec { background: #222; color: #ff9900; font-weight: 900; font-size: 7px; text-transform: uppercase; padding: 2px 4px; }
+.theme-cert-bloomberg .mini-tbl th, .theme-cert-bloomberg .mini-tbl td { border-color: #000; padding: 2px 4px; }
+.theme-cert-bloomberg .mini-lbl { color: #555; font-size: 6px; }
+.theme-cert-bloomberg .mini-verdict { border: 2px solid #000; background: #fff; text-align: center; padding: 4px; }
+.theme-cert-bloomberg .verdict-text { font-size: 11px; font-weight: 900; color: #000; }
+
+/* -------------------------------------------------------------
+   PRESET 19: NEUMORPHIC LETTERPRESS
+   ------------------------------------------------------------- */
+.theme-cert-neumorphic .mini-a4-frame { border: 1px solid #dcd7ca; background: #f4f1ea; box-shadow: inset 2px 2px 4px rgba(0,0,0,0.06); }
+.theme-cert-neumorphic .mini-title-wrap { background: #f4f1ea; box-shadow: 2px 2px 5px #dcd7ca, -2px -2px 5px #fff; padding: 6px 10px; margin-bottom: 6px; border-radius: 6px; text-align: center; }
+.theme-cert-neumorphic .mini-title { font-size: 12px; font-weight: 900; text-transform: uppercase; color: #475569; }
+.theme-cert-neumorphic .mini-subtitle { font-size: 7px; color: #64748b; font-weight: 600; }
+.theme-cert-neumorphic .mini-csec { background: #e8e4da; color: #334155; font-weight: 800; font-size: 7.2px; text-transform: uppercase; padding: 2.5px 6px; border-radius: 3px; box-shadow: inset 1px 1px 2px rgba(0,0,0,0.08); }
+.theme-cert-neumorphic .mini-tbl th, .theme-cert-neumorphic .mini-tbl td { border-color: #dcd7ca; }
+.theme-cert-neumorphic .mini-lbl { color: #64748b; font-weight: 700; }
+.theme-cert-neumorphic .mini-verdict { box-shadow: 3px 3px 6px #dcd7ca, -3px -3px 6px #fff; background: #f4f1ea; border-radius: 6px; text-align: center; padding: 5px; }
+.theme-cert-neumorphic .verdict-text { font-size: 11px; font-weight: 900; color: #15803d; }
+
+/* -------------------------------------------------------------
+   PRESET 20: VISIONOS SPATIAL GLASS
+   ------------------------------------------------------------- */
+.theme-cert-visionos .mini-a4-frame { border: 1.5px solid #cbd5e1; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); }
+.theme-cert-visionos .mini-title-wrap { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 8px 12px; margin-bottom: 6px; border-radius: 8px; text-align: center; }
+.theme-cert-visionos .mini-title { font-size: 12px; font-weight: 900; text-transform: uppercase; color: #0f172a; letter-spacing: 0.05em; }
+.theme-cert-visionos .mini-subtitle { font-size: 7px; color: #475569; }
+.theme-cert-visionos .mini-csec { background: rgba(255, 255, 255, 0.6); color: #0f172a; font-weight: 800; font-size: 7.2px; text-transform: uppercase; padding: 3px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.8); }
+.theme-cert-visionos .mini-tbl th, .theme-cert-visionos .mini-tbl td { border-color: #cbd5e1; }
+.theme-cert-visionos .mini-lbl { color: #64748b; font-weight: 700; }
+.theme-cert-visionos .mini-verdict { background: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-radius: 8px; text-align: center; padding: 5px; }
+.theme-cert-visionos .verdict-text { font-size: 11px; font-weight: 900; color: #16a34a; }
+
+/* -------------------------------------------------------------
+   PRESET 21: PRISMATIC AURORA
+   ------------------------------------------------------------- */
+.theme-cert-aurora .mini-a4-frame { border: 2px solid #8b5cf6; }
+.theme-cert-aurora .mini-title-wrap { background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899); color: #fff; padding: 7px 10px; margin-bottom: 4px; text-align: center; border-radius: 3px; }
+.theme-cert-aurora .mini-title { font-size: 12px; font-weight: 900; text-transform: uppercase; color: #fff; letter-spacing: 0.06em; }
+.theme-cert-aurora .mini-subtitle { font-size: 7px; color: #fdf4ff; font-weight: 700; }
+.theme-cert-aurora .mini-csec { background: linear-gradient(90deg, #8b5cf6, #ec4899); color: #fff; font-weight: 800; font-size: 7.2px; text-transform: uppercase; padding: 2.5px 6px; }
+.theme-cert-aurora .mini-tbl th, .theme-cert-aurora .mini-tbl td { border-color: #c4b5fd; }
+.theme-cert-aurora .mini-lbl { color: #7c3aed; font-weight: 700; }
+.theme-cert-aurora .mini-verdict { border: 2px solid #8b5cf6; background: #faf5ff; text-align: center; padding: 5px; border-radius: 3px; }
+.theme-cert-aurora .verdict-text { font-size: 11px; font-weight: 900; color: #7c3aed; }
+
+/* -------------------------------------------------------------
+   PRESET 22: NEUBRUTALIST POP
+   ------------------------------------------------------------- */
+.theme-cert-neubrutalist .mini-a4-frame { border: 3px solid #000; background: #fff; }
+.theme-cert-neubrutalist .mini-title-wrap { background: #fef08a; border-bottom: 3px solid #000; padding: 6px 10px; margin-bottom: 4px; }
+.theme-cert-neubrutalist .mini-title { font-size: 13px; font-weight: 900; text-transform: uppercase; color: #000; letter-spacing: -0.01em; }
+.theme-cert-neubrutalist .mini-subtitle { font-size: 7px; font-weight: 800; color: #000; }
+.theme-cert-neubrutalist .mini-csec { background: #000; color: #fff; font-weight: 900; font-size: 7.5px; text-transform: uppercase; padding: 2.5px 6px; box-shadow: 2px 2px 0 #000; }
+.theme-cert-neubrutalist .mini-tbl th, .theme-cert-neubrutalist .mini-tbl td { border: 2px solid #000; }
+.theme-cert-neubrutalist .mini-lbl { color: #000; font-weight: 900; font-size: 6.5px; }
+.theme-cert-neubrutalist .mini-verdict { border: 3px solid #000; background: #86efac; box-shadow: 3px 3px 0 #000; text-align: center; padding: 5px; }
+.theme-cert-neubrutalist .verdict-text { font-size: 11px; font-weight: 900; color: #000; }
+
+/* -------------------------------------------------------------
+   PRESET 23: APPLE BENTO TILES
+   ------------------------------------------------------------- */
+.theme-cert-bento .mini-a4-frame { border: 1.5px solid #e2e8f0; background: #f8fafc; }
+.theme-cert-bento .mini-title-wrap { background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.04); padding: 8px 12px; margin-bottom: 6px; border-radius: 8px; }
+.theme-cert-bento .mini-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: #0f172a; }
+.theme-cert-bento .mini-subtitle { font-size: 7px; color: #64748b; }
+.theme-cert-bento .mini-csec { background: #ffffff; color: #0f172a; font-weight: 800; font-size: 7.2px; text-transform: uppercase; padding: 3px 6px; border-radius: 6px; border: 1px solid #e2e8f0; }
+.theme-cert-bento .mini-tbl { background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+.theme-cert-bento .mini-tbl th, .theme-cert-bento .mini-tbl td { border-color: #f1f5f9; }
+.theme-cert-bento .mini-lbl { color: #64748b; font-weight: 700; }
+.theme-cert-bento .mini-verdict { background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-radius: 8px; text-align: center; padding: 6px; }
+.theme-cert-bento .verdict-text { font-size: 11px; font-weight: 900; color: #0284c7; }
+
+/* -------------------------------------------------------------
+   PRESET 24: DARK LUXURY OBSIDIAN GOLD
+   ------------------------------------------------------------- */
+.theme-cert-luxury .mini-a4-frame { border: 2px solid #d4af37; background: #0a0a0a; color: #f5f5f5; }
+.theme-cert-luxury .mini-title-wrap { border-bottom: 1.5px solid #d4af37; padding: 6px 0; margin-bottom: 4px; text-align: center; }
+.theme-cert-luxury .mini-title { font-size: 12.5px; font-weight: 800; text-transform: uppercase; color: #d4af37; letter-spacing: 0.08em; }
+.theme-cert-luxury .mini-subtitle { font-size: 7px; color: #e5e5e5; }
+.theme-cert-luxury .mini-csec { background: #141414; color: #d4af37; font-weight: 800; font-size: 7.2px; text-transform: uppercase; padding: 2.5px 6px; border-left: 3px solid #d4af37; }
+.theme-cert-luxury .mini-tbl th, .theme-cert-luxury .mini-tbl td { border-color: #333333; }
+.theme-cert-luxury .mini-lbl { color: #a3a3a3; font-size: 6.5px; }
+.theme-cert-luxury .mini-val { color: #ffffff; }
+.theme-cert-luxury .mini-verdict { border: 1.5px solid #d4af37; background: #141414; text-align: center; padding: 5px; }
+.theme-cert-luxury .verdict-text { font-size: 11px; font-weight: 900; color: #d4af37; }
+
+/* ==========================================================================
+   PART 2: MODERN APP WORKSPACE THEMES (INTERACTIVE LIVE PREVIEW)
+   ========================================================================== */
+.app-mockup-wrapper {
+    background: #12151c;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+.app-mockup-bar {
+    padding: 10px 16px;
+    background: rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.app-dots { display: flex; gap: 6px; }
+.app-dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot-red { background: #ef4444; }
+.dot-yel { background: #f59e0b; }
+.dot-grn { background: #10b981; }
+
+.app-theme-switches {
+    display: flex;
+    gap: 8px;
+}
+.theme-btn {
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    border: 1px solid rgba(255,255,255,0.12);
+    cursor: pointer;
+    background: #181d26;
+    color: #cbd5e1;
+    transition: all 0.15s;
+}
+.theme-btn:hover { color: #fff; border-color: rgba(255,255,255,0.25); }
+.theme-btn.active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+
+/* The App Shell Container */
+.live-app-shell {
+    min-height: 480px;
+    padding: 18px;
+    transition: background 0.25s, color 0.25s;
+}
+
+/* App Theme: Vercel Slate Dark */
+.app-dark {
+    background: #090a0f;
+    color: #e2e8f0;
+    --c-card: #12151c;
+    --c-border: #222734;
+    --c-input: #171b24;
+    --c-accent: #3b82f6;
+    --c-text-muted: #94a3b8;
+}
+/* App Theme: Nordic Frost Light */
+.app-light {
+    background: #f8fafc;
+    color: #0f172a;
+    --c-card: #ffffff;
+    --c-border: #e2e8f0;
+    --c-input: #f1f5f9;
+    --c-accent: #2563eb;
+    --c-text-muted: #64748b;
+}
+/* App Theme: OLED Stealth Obsidian */
+.app-obsidian {
+    background: #000000;
+    color: #f1f5f9;
+    --c-card: #0c0d10;
+    --c-border: #1f242e;
+    --c-input: #08090c;
+    --c-accent: #10b981;
+    --c-text-muted: #6b7280;
+}
+/* App Theme: High Contrast Accessible */
+.app-hc {
+    background: #000000;
+    color: #ffffff;
+    --c-card: #0a0a0a;
+    --c-border: #6b6b6b;
+    --c-input: #000000;
+    --c-accent: #ffd400;
+    --c-text-muted: #d4d4d4;
+}
+
+/* 5. Bloomberg Terminal */
+.app-bloomberg {
+    background: #000000;
+    color: #ffffff;
+    --c-card: #0c0d10;
+    --c-border: #27272a;
+    --c-input: #18181b;
+    --c-accent: #ff9900;
+    --c-text-muted: #a1a1aa;
+}
+
+/* 6. Technical Blueprint */
+.app-blueprint {
+    background: #0a1128;
+    color: #f0fdf4;
+    --c-card: #001f54;
+    --c-border: #1282a2;
+    --c-input: #034078;
+    --c-accent: #00f0ff;
+    --c-text-muted: #90e0ef;
+}
+
+/* 7. JIS Metric Precision */
+.app-metric {
+    background: #f8fafc;
+    color: #0f172a;
+    --c-card: #ffffff;
+    --c-border: #000000;
+    --c-input: #f1f5f9;
+    --c-accent: #2563eb;
+    --c-text-muted: #475569;
+}
+
+/* 8. Neumorphic Soft Clay */
+.app-clay {
+    background: #f4f1ea;
+    color: #334155;
+    --c-card: #e8e4da;
+    --c-border: #dcd7ca;
+    --c-input: #f4f1ea;
+    --c-accent: #64748b;
+    --c-text-muted: #64748b;
+}
+
+/* 9. Avionics Aluminum */
+.app-avionics {
+    background: #1e232b;
+    color: #f8fafc;
+    --c-card: #2b303c;
+    --c-border: #475569;
+    --c-input: #14171d;
+    --c-accent: #38bdf8;
+    --c-text-muted: #94a3b8;
+}
+
+/* 10. Archival Linen */
+.app-linen {
+    background: #fdfbf7;
+    color: #451a03;
+    --c-card: #f7f4ec;
+    --c-border: #b45309;
+    --c-input: #ffffff;
+    --c-accent: #78350f;
+    --c-text-muted: #92400e;
+}
+
+/* 11. E-Ink Matte Paper */
+.app-eink {
+    background: #f4f3ef;
+    color: #1a1a1a;
+    --c-card: #ffffff;
+    --c-border: #1a1a1a;
+    --c-input: #ffffff;
+    --c-accent: #1a1a1a;
+    --c-text-muted: #555555;
+}
+
+/* 12. VisionOS Spatial Acrylic */
+.app-visionos {
+    background: #0b0f19;
+    color: #ffffff;
+    --c-card: rgba(255,255,255,0.06);
+    --c-border: rgba(255,255,255,0.15);
+    --c-input: rgba(255,255,255,0.08);
+    --c-accent: #a855f7;
+    --c-text-muted: #94a3b8;
+}
+
+/* 13. Terminal Green Phosphor */
+.app-terminal {
+    background: #050505;
+    color: #33ff00;
+    --c-card: #0a110a;
+    --c-border: #1a551a;
+    --c-input: #050505;
+    --c-accent: #33ff00;
+    --c-text-muted: #22aa00;
+}
+.app-terminal .app-act-btn.primary { color: #000 !important; }
+
+/* 14. Cyberdeck Neon Vector */
+.app-cyberdeck {
+    background: #05080f;
+    color: #00f0ff;
+    --c-card: #0b1329;
+    --c-border: #00f0ff;
+    --c-input: #070d1e;
+    --c-accent: #ff0055;
+    --c-text-muted: #00b4d8;
+}
+
+/* 15. Prismatic Aurora Mesh */
+.app-aurora {
+    background: #110924;
+    color: #fdf4ff;
+    --c-card: #1a0f38;
+    --c-border: #8b5cf6;
+    --c-input: #23124a;
+    --c-accent: #ec4899;
+    --c-text-muted: #c4b5fd;
+}
+
+/* 16. Neubrutalist Pop Yellow */
+.app-neubrutalist {
+    background: #fef08a;
+    color: #000000;
+    --c-card: #ffffff;
+    --c-border: #000000;
+    --c-input: #ffffff;
+    --c-accent: #ef4444;
+    --c-text-muted: #444444;
+}
+
+/* 17. Weimar Bauhaus 1919 */
+.app-bauhaus {
+    background: #f0f0f0;
+    color: #121212;
+    --c-card: #ffffff;
+    --c-border: #121212;
+    --c-input: #fef08a;
+    --c-accent: #d02020;
+    --c-text-muted: #444444;
+}
+
+/* 18. Industrial Monolith Raw */
+.app-monolith {
+    background: #18181b;
+    color: #f4f4f5;
+    --c-card: #27272a;
+    --c-border: #3f3f46;
+    --c-input: #18181b;
+    --c-accent: #ea580c;
+    --c-text-muted: #a1a1aa;
+}
+
+/* 19. Y2K Millennium Chrome */
+.app-y2k {
+    background: #1e1b4b;
+    color: #f5d0fe;
+    --c-card: #311042;
+    --c-border: #c0c0c0;
+    --c-input: #230c33;
+    --c-accent: #f472b6;
+    --c-text-muted: #d8b4fe;
+}
+
+/* 20. UK Statutory Legal */
+.app-statutory {
+    background: #fcfcfc;
+    color: #000000;
+    --c-card: #ffffff;
+    --c-border: #000000;
+    --c-input: #f8fafc;
+    --c-accent: #15803d;
+    --c-text-muted: #334155;
+}
+
+/* 21. Lloyd's Crimson Maritime */
+.app-crimson {
+    background: #fafaf9;
+    color: #1c1917;
+    --c-card: #fef2f2;
+    --c-border: #b91c1c;
+    --c-input: #ffffff;
+    --c-accent: #991b1b;
+    --c-text-muted: #7f1d1d;
+}
+
+/* 22. DNV Offshore Amber Rig */
+.app-offshore {
+    background: #14171a;
+    color: #fef3c7;
+    --c-card: #1c1f24;
+    --c-border: #78350f;
+    --c-input: #0f1114;
+    --c-accent: #f59e0b;
+    --c-text-muted: #fbbf24;
+}
+.app-offshore .app-act-btn.primary { color: #000 !important; }
+
+/* 23. US OSHA Hazard Chevron */
+.app-osha {
+    background: #111111;
+    color: #ffffff;
+    --c-card: #1c1917;
+    --c-border: #f59e0b;
+    --c-input: #000000;
+    --c-accent: #f59e0b;
+    --c-text-muted: #fcd34d;
+}
+.app-osha .app-act-btn.primary { color: #000 !important; }
+
+/* 24. Dark Luxury Obsidian Gold */
+.app-luxury {
+    background: #0a0a0a;
+    color: #f5f5f5;
+    --c-card: #141414;
+    --c-border: rgba(212,175,55,0.3);
+    --c-input: #0d0d0d;
+    --c-accent: #d4af37;
+    --c-text-muted: #a3a3a3;
+}
+.app-luxury .app-act-btn.primary { color: #000 !important; }
+
+/* App Shell Components */
+.app-nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--c-card);
+    border: 1px solid var(--c-border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    margin-bottom: 14px;
+}
+.app-brand { font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+.app-tabs { display: flex; gap: 6px; }
+.app-tab-btn {
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--c-text-muted);
+    cursor: pointer;
+}
+.app-tab-btn.active {
+    background: var(--c-accent);
+    color: #fff;
+}
+.app-hc .app-tab-btn.active { color: #000 !important; }
+
+.app-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+.app-box {
+    background: var(--c-card);
+    border: 1px solid var(--c-border);
+    border-radius: 8px;
+    padding: 14px;
+}
+.app-box-title {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--c-accent);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--c-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.app-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.app-fg {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.app-fg label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+}
+.app-fg input, .app-fg select {
+    background: var(--c-input);
+    border: 1px solid var(--c-border);
+    color: inherit;
+    padding: 6px 8px;
+    border-radius: 5px;
+    font-size: 11.5px;
+    font-family: inherit;
+    outline: none;
+}
+.app-btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+}
+.app-act-btn {
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 11.5px;
+    font-weight: 700;
+    border: 1px solid var(--c-border);
+    background: var(--c-card);
+    color: inherit;
+    cursor: pointer;
+}
+.app-act-btn.primary {
+    background: var(--c-accent);
+    color: #fff;
+    border-color: var(--c-accent);
+}
+.app-hc .app-act-btn.primary { color: #000 !important; }
+
+/* Micro-toggle */
+.app-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-size: 9.5px;
+    font-weight: 800;
+    background: var(--c-accent);
+    color: #fff;
+}
+.app-hc .app-toggle { color: #000 !important; }
+.toggle-dot { width: 5px; height: 5px; background: currentColor; border-radius: 50%; }
+
+/* Table styling inside app */
+.app-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+}
+.app-table th, .app-table td {
+    padding: 6px 8px;
+    border: 1px solid var(--c-border);
+    text-align: left;
+}
+.app-table th {
+    background: var(--c-input);
+    font-weight: 700;
+    color: var(--c-text-muted);
+}
+.status-pill {
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 9.5px;
+    font-weight: 800;
+}
+.status-pass { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+.status-warn { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+</style>
+</head>
+<body>
+
+<header class="lab-header">
+    <div class="lab-title">
+        <h1>Inspection Management Suite <span class="lab-badge">Design Lab</span></h1>
+        <div class="lab-subtitle">Side-by-side comparison of modern App Shells &amp; Statutory A4 Certificate Design Presets</div>
+    </div>
+    <div class="selector-nav">
+        <button class="tab-pill active" onclick="scrollToSection('sec-reports')">1. 24 A4 Certificate Presets</button>
+        <button class="tab-pill" onclick="scrollToSection('sec-apps')">2. 24 App Shell Palettes</button>
+        <button class="tab-pill" onclick="scrollToSection('sec-form-styles')" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6);color:#fff;font-weight:700;">★ 3. 24 Form Design Presets</button>
+    </div>
+</header>
+
+<div class="container">
+
+    <!-- ====================================================================
+         SECTION 1: A4 CERTIFICATE DESIGN PRESETS
+         ==================================================================== -->
+    <div class="section-label" id="sec-reports">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+        Part 1: 24 Statutory A4 Certificate Design Presets (Full Document System · Zero Overlap)
+    </div>
+
+    <div class="report-grid">
+
+        <!-- PRESET 1: CLASSIC STATUTORY -->
+        <div class="report-card theme-classic">
+            <div class="report-card-hdr">
+                <h3>1. Classic Statutory</h3>
+                <span class="report-card-tag">UK Legal / Standard</span>
+            </div>
+            <div class="mini-a4-frame">
+                <!-- Title Block -->
+                <div class="mini-title-wrap">
+                    <div class="mini-title">Report of Thorough Examination</div>
+                    <div class="mini-subtitle">Lifting Operations &amp; Lifting Equipment Regulations 1998 (LOLER)</div>
+                </div>
+
+                <!-- Section 1 -->
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Equipment Specification &amp; Governing Standards</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Quantity</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+
+                <!-- Section 2 -->
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Reason for Thorough Examination</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+
+                <!-- Section 3 Verdict -->
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Is Equipment Safe to Operate?</span>
+                        <div class="verdict-text">YES — WOULD BE SAFE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 2: SWISS EXECUTIVE -->
+        <div class="report-card theme-swiss">
+            <div class="report-card-hdr">
+                <h3>2. Swiss Executive</h3>
+                <span class="report-card-tag">Editorial Slate</span>
+            </div>
+            <div class="mini-a4-frame">
+                <!-- Title Block -->
+                <div class="mini-title-wrap">
+                    <div class="mini-title">Report of Thorough Examination</div>
+                    <div class="mini-subtitle">Lifting Operations &amp; Lifting Equipment Regulations 1998 (LOLER)</div>
+                </div>
+
+                <!-- Section 1 -->
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Equipment Specification &amp; Governing Standards</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;color:#0f172a;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Quantity</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+
+                <!-- Section 2 -->
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Reason for Thorough Examination</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+
+                <!-- Section 3 Verdict -->
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Is Equipment Safe to Operate?</span>
+                        <div class="verdict-text">YES — WOULD BE SAFE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 3: TECHNICAL BLUEPRINT -->
+        <div class="report-card theme-blueprint">
+            <div class="report-card-hdr">
+                <h3>3. Technical Blueprint</h3>
+                <span class="report-card-tag">Engineering Grid</span>
+            </div>
+            <div class="mini-a4-frame">
+                <!-- Title Block -->
+                <div class="mini-title-wrap">
+                    <div class="mini-title">Report of Thorough Examination</div>
+                    <div class="mini-subtitle">Lifting Operations &amp; Lifting Equipment Regulations 1998 (LOLER)</div>
+                </div>
+
+                <!-- Section 1 -->
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Equipment Specification &amp; Governing Standards</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;color:#1e3a8a;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Quantity</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+
+                <!-- Section 2 -->
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Reason for Thorough Examination</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+
+                <!-- Section 3 Verdict -->
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Is Equipment Safe to Operate?</span>
+                        <div class="verdict-text">YES — WOULD BE SAFE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 4: MINIMAL LINE -->
+        <div class="report-card theme-minimal">
+            <div class="report-card-hdr">
+                <h3>4. Minimal Line</h3>
+                <span class="report-card-tag">Architectural Clean</span>
+            </div>
+            <div class="mini-a4-frame">
+                <!-- Title Block -->
+                <div class="mini-title-wrap">
+                    <div class="mini-title">Report of Thorough Examination</div>
+                    <div class="mini-subtitle">Lifting Operations &amp; Lifting Equipment Regulations 1998 (LOLER)</div>
+                </div>
+
+                <!-- Section 1 -->
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Equipment Specification &amp; Governing Standards</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Quantity</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+
+                <!-- Section 2 -->
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Reason for Thorough Examination</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+
+                <!-- Section 3 Verdict -->
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Is Equipment Safe to Operate?</span>
+                        <div class="verdict-text">YES — WOULD BE SAFE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 5: OFFSHORE INDUSTRIAL AMBER -->
+        <div class="report-card theme-offshore">
+            <div class="report-card-hdr">
+                <h3>5. Offshore Amber</h3>
+                <span class="report-card-tag" style="background:rgba(245,158,11,0.15);color:#f59e0b;">DNV / Rig Spec</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="mini-title">Report of Thorough Examination</div>
+                    <div class="mini-subtitle">Lifting Operations &amp; Lifting Equipment Regulations 1998 (LOLER)</div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Equipment Specification &amp; Governing Standards</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;color:#b45309;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Quantity</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Reason for Thorough Examination</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Is Equipment Safe to Operate?</span>
+                        <div class="verdict-text">YES — WOULD BE SAFE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 6: EXECUTIVE OBSIDIAN -->
+        <div class="report-card theme-obsidian-rep">
+            <div class="report-card-hdr">
+                <h3>6. Executive Obsidian</h3>
+                <span class="report-card-tag" style="background:rgba(255,255,255,0.1);color:#fff;">Corporate Audit</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="mini-title">Report of Thorough Examination</div>
+                    <div class="mini-subtitle">Lifting Operations &amp; Lifting Equipment Regulations 1998 (LOLER)</div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Equipment Specification &amp; Governing Standards</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Quantity</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Reason for Thorough Examination</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Is Equipment Safe to Operate?</span>
+                        <div class="verdict-text" style="color:#000;">YES — WOULD BE SAFE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 7: CRIMSON MARITIME -->
+        <div class="report-card theme-crimson">
+            <div class="report-card-hdr">
+                <h3>7. Crimson Maritime</h3>
+                <span class="report-card-tag" style="background:rgba(239,68,68,0.15);color:#ef4444;">Lloyd's Register</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="mini-title">Report of Thorough Examination</div>
+                    <div class="mini-subtitle">Lifting Operations &amp; Lifting Equipment Regulations 1998 (LOLER)</div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Equipment Specification &amp; Governing Standards</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;color:#991b1b;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Quantity</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Reason for Thorough Examination</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Is Equipment Safe to Operate?</span>
+                        <div class="verdict-text">YES — WOULD BE SAFE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 8: MODERNIST BAUHAUS -->
+        <div class="report-card theme-bauhaus">
+            <div class="report-card-hdr">
+                <h3>8. Modernist Bauhaus</h3>
+                <span class="report-card-tag" style="background:rgba(234,179,8,0.2);color:#eab308;">Asymmetric Primary</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="tb-accent-block"></div>
+                    <div class="tb-inner">
+                        <div class="mini-title">Report of Thorough Examination</div>
+                        <div class="mini-subtitle">Lifting Operations &amp; Lifting Equipment Regulations 1998 (LOLER)</div>
+                    </div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Equipment Specification &amp; Governing Standards</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Quantity</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Reason for Thorough Examination</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Is Equipment Safe to Operate?</span>
+                        <div class="verdict-text">YES — WOULD BE SAFE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 9: FEDERAL COMPLIANCE -->
+        <div class="report-card theme-federal">
+            <div class="report-card-hdr">
+                <h3>9. Federal Compliance</h3>
+                <span class="report-card-tag" style="background:#fef3c7;color:#b45309;">OSHA / ASME</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="fed-inner">
+                        <div class="mini-title">Report of Thorough Examination</div>
+                        <div class="mini-subtitle">OSHA 1910.179 / ASME B30.20 Standard Compliance</div>
+                    </div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Equipment Specification &amp; Standards</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Qty</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Reason for Thorough Examination</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Is Equipment Safe to Operate?</span>
+                        <div class="verdict-text">YES — WOULD BE SAFE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 10: NORDIC DEEP FJORD -->
+        <div class="report-card theme-fjord">
+            <div class="report-card-hdr">
+                <h3>10. Nordic Deep Fjord</h3>
+                <span class="report-card-tag" style="background:#e0f2fe;color:#0284c7;">Equinor Marine</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="mini-title">Report of Thorough Examination</div>
+                    <div class="mini-subtitle">LOLER 1998 · Scandinavian Marine Engineering Spec</div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Equipment Specification &amp; Standards</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;color:#0284c7;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Qty</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Reason for Thorough Examination</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Is Equipment Safe to Operate?</span>
+                        <div class="verdict-text">YES — WOULD BE SAFE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 11: SUBSEA PETRO-TECH -->
+        <div class="report-card theme-subsea">
+            <div class="report-card-hdr">
+                <h3>11. Subsea Petro-Tech</h3>
+                <span class="report-card-tag" style="background:#ccfbf1;color:#0f766e;">API 8C Drilling</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="mini-title">Report of Thorough Examination</div>
+                    <div class="mini-subtitle">API Spec 8C / LOLER 1998 Subsea Verification</div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Equipment Specification &amp; Standards</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;color:#0f766e;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Qty</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Reason for Thorough Examination</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Is Equipment Safe to Operate?</span>
+                        <div class="verdict-text">YES — WOULD BE SAFE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 12: AVIONICS FLIGHT-LINE -->
+        <div class="report-card theme-avionics">
+            <div class="report-card-hdr">
+                <h3>12. Avionics Flight-Line</h3>
+                <span class="report-card-tag" style="background:#f1f5f9;color:#334155;">FAA / EASA Spec</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div>
+                        <div class="mini-title">Authorized Release Certificate</div>
+                        <div class="mini-subtitle">FAA Part 43 / LOLER Dual Compliance</div>
+                    </div>
+                    <span style="font-size:7px;font-weight:800;border:1px solid #000;padding:2px 4px;">FORM 1</span>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Item Identification &amp; Traceability</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Qty</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Reason for Thorough Examination</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Return to Service Cert Approval</span>
+                        <div class="verdict-text">AIRWORTHY / SAFE TO OPERATE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 13: METRIC MILLIMETER SPEC -->
+        <div class="report-card theme-metric">
+            <div class="report-card-hdr">
+                <h3>13. Metric Millimeter Spec</h3>
+                <span class="report-card-tag" style="background:#f4f4f5;color:#09090b;">JIS Precision</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="mini-title">Dimensional Calibration &amp; Thorough Exam</div>
+                    <div class="mini-subtitle">JIS B 2801 / LOLER 1998 Dimensional Inspection</div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">[01] SPECIFICATION &amp; TOLERANCE</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;">4.750 t</span></td>
+                        <td><span class="mini-lbl">Qty</span><span class="mini-val">01</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">[02] EXAMINATION REGIME</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [1]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [0]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">OPERATIONAL STATUS</span>
+                        <div class="verdict-text">VERIFIED — WITHIN TOLERANCE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 14: HOLOGRAPHIC LASER NDT -->
+        <div class="report-card theme-laser-ndt">
+            <div class="report-card-hdr">
+                <h3>14. Holographic Laser NDT</h3>
+                <span class="report-card-tag" style="background:#e0f2fe;color:#0284c7;">Laser UT Grid</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="mini-title">&lt; NDT CERTIFICATE &gt;</div>
+                    <div class="mini-subtitle">Non-Destructive Testing &amp; Thorough Examination Record</div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">TARGET ASSET SPECIFICATION</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;color:#0284c7;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Qty</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">EXAMINATION SCOPE</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">ACOUSTIC INTEGRITY SCAN</span>
+                        <div class="verdict-text">DEFECT-FREE / PASS</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 15: BRUTALIST MONOLITH -->
+        <div class="report-card theme-monolith">
+            <div class="report-card-hdr">
+                <h3>15. Brutalist Monolith</h3>
+                <span class="report-card-tag" style="background:#000;color:#fff;">Heavy Civil</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="mini-title">EXAMINATION RECORD</div>
+                    <div class="mini-subtitle">LOLER 1998 HEAVY CIVIL WORKS CERTIFICATE</div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">EQUIPMENT DATA</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;">4.75 T</span></td>
+                        <td><span class="mini-lbl">Qty</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">SCOPE</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [X]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [ ]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">STATUS</span>
+                        <div class="verdict-text">SAFE FOR OPERATION</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 16: ARCHIVAL PARCHMENT -->
+        <div class="report-card theme-parchment">
+            <div class="report-card-hdr">
+                <h3>16. Archival Parchment</h3>
+                <span class="report-card-tag" style="background:#fef3c7;color:#78350f;">Historical Guild</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="mini-title">Certificate of Thorough Examination</div>
+                    <div class="mini-subtitle">Issued under the Lifting Operations Regulations 1998</div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Specification of Inspected Equipment</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;color:#78350f;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Qty</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Schedule &amp; Examination Regime</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Operational Safety Assessment</span>
+                        <div class="verdict-text">CERTIFIED SAFE FOR USE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 17: LINEAR SLATE DEVTOOLS -->
+        <div class="report-card theme-cert-linear">
+            <div class="report-card-hdr">
+                <h3>17. Linear Slate Devtools</h3>
+                <span class="report-card-tag" style="background:#0d1117;color:#58a6ff;">Vercel Clean</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="mini-title">Report of Thorough Examination</div>
+                    <div class="mini-subtitle">Linear Statutory Devtools Spec · LOLER 1998</div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Equipment Specification &amp; Governing Standards</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Quantity</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Reason for Thorough Examination</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Operational Safety Assessment</span>
+                        <div class="verdict-text">YES — SAFE TO OPERATE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 18: BLOOMBERG TABULAR HUD -->
+        <div class="report-card theme-cert-bloomberg">
+            <div class="report-card-hdr">
+                <h3>18. Bloomberg Tabular HUD</h3>
+                <span class="report-card-tag" style="background:#000;color:#ff9900;">Dense Terminal</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="mini-title">EXAMINATION DATA RECORD</div>
+                    <div class="mini-subtitle">&lt;LOLER.STATUTORY.TERMINAL&gt;</div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">[DATA.SPEC] CAPACITY &amp; STANDARDS</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">ITEM</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;">4.750 T</span></td>
+                        <td><span class="mini-lbl">QTY</span><span class="mini-val">01</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">MFG</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">MOD</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">SER</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">TAG</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">[SCHEDULE.REGIME]</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6M_SCHED</span><span class="mini-val">1 [TRUE]</span></td>
+                        <td><span class="mini-lbl">1ST_EXAM</span><span class="mini-val">0 [FALSE]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">SYSTEM STATUS VERDICT</span>
+                        <div class="verdict-text">OPERATIONAL COMPLIANT [PASS]</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 19: NEUMORPHIC LETTERPRESS -->
+        <div class="report-card theme-cert-neumorphic">
+            <div class="report-card-hdr">
+                <h3>19. Neumorphic Letterpress</h3>
+                <span class="report-card-tag" style="background:#e8e4da;color:#475569;">Debossed Sculpt</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="mini-title">Report of Thorough Examination</div>
+                    <div class="mini-subtitle">Tactile Letterpress Dimensional Frame · LOLER 1998</div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Equipment Specification &amp; Governing Standards</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Quantity</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Reason for Thorough Examination</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Operational Safety Assessment</span>
+                        <div class="verdict-text">YES — SAFE TO OPERATE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 20: VISIONOS SPATIAL GLASS -->
+        <div class="report-card theme-cert-visionos">
+            <div class="report-card-hdr">
+                <h3>20. VisionOS Spatial Glass</h3>
+                <span class="report-card-tag" style="background:rgba(255,255,255,0.8);color:#0f172a;">Frosted Spatial</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="mini-title">Report of Thorough Examination</div>
+                    <div class="mini-subtitle">Spatial Translucent Layering · LOLER 1998</div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Equipment Specification &amp; Standards</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Quantity</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Reason for Examination</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Spatial Verification Verdict</span>
+                        <div class="verdict-text">CERTIFIED OPERATIONAL</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 21: PRISMATIC AURORA -->
+        <div class="report-card theme-cert-aurora">
+            <div class="report-card-hdr">
+                <h3>21. Prismatic Aurora</h3>
+                <span class="report-card-tag" style="background:#faf5ff;color:#7c3aed;">Luminous Gradient</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="mini-title">Report of Thorough Examination</div>
+                    <div class="mini-subtitle">Atmospheric Gradient System · LOLER 1998</div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Equipment Specification &amp; Governing Standards</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Quantity</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Reason for Thorough Examination</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Operational Safety Assessment</span>
+                        <div class="verdict-text">PASS — FULLY VERIFIED</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 22: NEUBRUTALIST POP -->
+        <div class="report-card theme-cert-neubrutalist">
+            <div class="report-card-hdr">
+                <h3>22. Neubrutalist Pop</h3>
+                <span class="report-card-tag" style="background:#fef08a;color:#000;border:1px solid #000;">Pop Hard-Shadow</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="mini-title">EXAMINATION CERTIFICATE</div>
+                    <div class="mini-subtitle">LOLER 1998 · HIGH-IMPACT VISUAL SYSTEM</div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">ITEM SPEC &amp; STANDARDS</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">DESCRIPTION</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;">4.75 T</span></td>
+                        <td><span class="mini-lbl">QTY</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">MANUFACTURER</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">MODEL</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">SERIAL NO</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">ASSET ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">EXAMINATION REASON</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-MONTH</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">FIRST EXAM</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">OPERATIONAL STATUS</span>
+                        <div class="verdict-text">SAFE TO OPERATE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 23: APPLE BENTO TILES -->
+        <div class="report-card theme-cert-bento">
+            <div class="report-card-hdr">
+                <h3>23. Apple Bento Tiles</h3>
+                <span class="report-card-tag" style="background:#f1f5f9;color:#0f172a;">Modular Tiles</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="mini-title">Report of Thorough Examination</div>
+                    <div class="mini-subtitle">Modular Tile Grouping Architecture · LOLER 1998</div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Equipment Tile Specification</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Quantity</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Examination Regime Tile</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Bento Operational Verdict</span>
+                        <div class="verdict-text">PASSED &amp; SAFE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESET 24: DARK LUXURY OBSIDIAN GOLD -->
+        <div class="report-card theme-cert-luxury">
+            <div class="report-card-hdr">
+                <h3>24. Dark Luxury Obsidian Gold</h3>
+                <span class="report-card-tag" style="background:#141414;color:#d4af37;border:1px solid #d4af37;">Executive Gold</span>
+            </div>
+            <div class="mini-a4-frame">
+                <div class="mini-title-wrap">
+                    <div class="mini-title">Certificate of Thorough Examination</div>
+                    <div class="mini-subtitle">Sovereign Executive Gold Audit · LOLER 1998</div>
+                </div>
+                <table class="mini-tbl">
+                    <tr><td colspan="4" class="mini-csec">Equipment Specification &amp; Governing Standards</td></tr>
+                    <tr>
+                        <td colspan="2"><span class="mini-lbl">Description</span><span class="mini-val">Shackle Grade 6 Bow Safety Pin</span></td>
+                        <td><span class="mini-lbl">SWL</span><span class="mini-val mono" style="font-weight:900;color:#d4af37;">4.75 Tonnes</span></td>
+                        <td><span class="mini-lbl">Quantity</span><span class="mini-val">1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="mini-lbl">Manufacturer</span><span class="mini-val">Crosby</span></td>
+                        <td><span class="mini-lbl">Model</span><span class="mini-val">G-2130</span></td>
+                        <td><span class="mini-lbl">Serial No</span><span class="mini-val mono">CR-99214-A</span></td>
+                        <td><span class="mini-lbl">Asset ID</span><span class="mini-val mono">EQ-041</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl">
+                    <tr><td colspan="2" class="mini-csec">Reason for Thorough Examination</td></tr>
+                    <tr>
+                        <td><span class="mini-lbl">6-Month Schedule</span><span class="mini-val">YES [✓]</span></td>
+                        <td><span class="mini-lbl">First Exam</span><span class="mini-val">NO [&nbsp;]</span></td>
+                    </tr>
+                </table>
+                <table class="mini-tbl" style="margin-top:auto;">
+                    <tr><td class="mini-verdict">
+                        <span class="mini-lbl">Operational Safety Assessment</span>
+                        <div class="verdict-text">CERTIFIED OPERATIONAL SAFE</div>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ====================================================================
+         SECTION 2: MODERN APP WORKSPACE THEMES (INTERACTIVE SHELL)
+         ==================================================================== -->
+    <div class="section-label" id="sec-apps">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+        Part 2: 24 App Shell Workspace Palettes (Click to switch live workspace chrome)
+    </div>
+
+    <div class="app-mockup-wrapper">
+        <div class="app-mockup-bar">
+            <div class="app-dots">
+                <span class="app-dot dot-red"></span>
+                <span class="app-dot dot-yel"></span>
+                <span class="app-dot dot-grn"></span>
+            </div>
+            <div class="app-theme-switches" style="display:flex;flex-wrap:wrap;gap:4px;max-width:900px;">
+                <button class="theme-btn active" onclick="switchAppTheme('app-dark', this)">01 Linear Slate</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-light', this)">02 Nordic Frost</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-obsidian', this)">03 Obsidian OLED</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-hc', this)">04 High Contrast</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-bloomberg', this)">05 Bloomberg</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-blueprint', this)">06 Blueprint</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-metric', this)">07 JIS Metric</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-clay', this)">08 Soft Clay</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-avionics', this)">09 Avionics Steel</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-linen', this)">10 Archival Linen</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-eink', this)">11 E-Ink Paper</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-visionos', this)">12 VisionOS</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-terminal', this)">13 Terminal Green</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-cyberdeck', this)">14 Cyberdeck</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-aurora', this)">15 Aurora Mesh</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-neubrutalist', this)">16 Neubrutalist</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-bauhaus', this)">17 Bauhaus 1919</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-monolith', this)">18 Monolith Raw</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-y2k', this)">19 Y2K Chrome</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-statutory', this)">20 UK Statutory</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-crimson', this)">21 Lloyd's Red</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-offshore', this)">22 DNV Amber</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-osha', this)">23 OSHA Hazard</button>
+                <button class="theme-btn" onclick="switchAppTheme('app-luxury', this)">24 Obsidian Gold</button>
+            </div>
+        </div>
+
+        <div class="live-app-shell app-dark" id="liveAppShell">
+            <!-- App Navigation Bar -->
+            <div class="app-nav-bar">
+                <div class="app-brand">
+                    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c-accent);"></span>
+                    Inspection Management Suite
+                </div>
+                <div class="app-tabs">
+                    <button class="app-tab-btn active">Examination</button>
+                    <button class="app-tab-btn">PUWER</button>
+                    <button class="app-tab-btn">Evidence</button>
+                    <button class="app-tab-btn">Batch Queue</button>
+                </div>
+                <div style="font-size:11px;font-weight:700;color:var(--c-text-muted);">
+                    Record <strong style="color:var(--c-accent);">1 of 42</strong>
+                </div>
+            </div>
+
+            <!-- Workspace Columns -->
+            <div class="app-split">
+                <!-- Form Panel -->
+                <div class="app-box">
+                    <div class="app-box-title">
+                        <span>1. Statutory Examination Particulars</span>
+                        <span class="app-toggle"><span class="toggle-dot"></span>ON</span>
+                    </div>
+                    <div class="app-row">
+                        <div class="app-fg">
+                            <label>Report Number</label>
+                            <input type="text" value="LFT-20261012-01">
+                        </div>
+                        <div class="app-fg">
+                            <label>Safe Working Load (SWL)</label>
+                            <input type="text" value="4.75 Tonnes" style="font-weight:700;">
+                        </div>
+                    </div>
+                    <div class="app-row">
+                        <div class="app-fg">
+                            <label>Client / Operator</label>
+                            <input type="text" value="Petrofac Marine Engineering">
+                        </div>
+                        <div class="app-fg">
+                            <label>Premises / Location</label>
+                            <input type="text" value="Rig Scarabeo 9 · Red Sea">
+                        </div>
+                    </div>
+                    <div class="app-btn-row">
+                        <button class="app-act-btn primary">Save Record</button>
+                        <button class="app-act-btn">Reset</button>
+                        <button class="app-act-btn" style="margin-left:auto;">Print Preview &rarr;</button>
+                    </div>
+                </div>
+
+                <!-- Table / Batch Grid -->
+                <div class="app-box">
+                    <div class="app-box-title">
+                        <span>Batch Fast Editor</span>
+                        <span style="font-size:11px;color:var(--c-text-muted);">Synced 16:54:10</span>
+                    </div>
+                    <table class="app-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Serial No</th>
+                                <th>Item Description</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>CR-99214-A</td>
+                                <td>Shackle Grade 6 Bow</td>
+                                <td><span class="status-pill status-pass">PASS</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>CR-99215-B</td>
+                                <td>Wire Rope Sling 4-Leg</td>
+                                <td><span class="status-pill status-pass">PASS</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>CR-99216-C</td>
+                                <td>Master Link Sub-Assembly</td>
+                                <td><span class="status-pill status-warn">MONITOR</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====================================================================
+         SECTION 3: 24 ORTHOGONAL FORM DESIGN PRESETS PLAYGROUND
+         ==================================================================== -->
+    <div class="section-label" id="sec-form-styles" style="margin-top:40px;color:#a855f7;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Part 3: 24 Orthogonal Form Design Presets (Filtered &amp; Deduplicated · Zero Overlap)
+    </div>
+
+    <!-- Form Style Picker Toolbar -->
+    <div style="background:#131722;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:16px;margin-bottom:20px;">
+        <div style="font-size:12px;font-weight:700;color:#94a3b8;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
+            <span>SELECT FORM DESIGN PRESET (24 MUTUALLY EXCLUSIVE DESIGN ARCHETYPES)</span>
+            <span id="activeStyleBadge" style="background:#3b82f6;color:#fff;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:800;">STYLE: LINEAR MINIMALIST</span>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(210px, 1fr));gap:8px;" id="styleButtonsGrid">
+            <!-- Family 1: Modern Tech & SaaS -->
+            <button class="form-style-btn active" onclick="setFormStyle('form-linear', this)">
+                <span class="fsb-num">01</span>
+                <div><strong>Linear Minimalist</strong><small>Vercel / Linear Slate</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-floating', this)">
+                <span class="fsb-num">02</span>
+                <div><strong>Floating Neo-SaaS</strong><small>Stripe / Pill Radius</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-bento', this)">
+                <span class="fsb-num">03</span>
+                <div><strong>Bento Grid Tiles</strong><small>Apple / Modular Cards</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-material', this)">
+                <span class="fsb-num">04</span>
+                <div><strong>Material You (M3)</strong><small>Filled Container &amp; Line</small></div>
+            </button>
+
+            <!-- Family 2: Industrial & Tough Hardware -->
+            <button class="form-style-btn" onclick="setFormStyle('form-rugged', this)">
+                <span class="fsb-num">05</span>
+                <div><strong>Industrial Rugged</strong><small>Mil-Spec 2px Tactical</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-neumorphic', this)">
+                <span class="fsb-num">06</span>
+                <div><strong>Neumorphic Tactile</strong><small>Soft Clay Inset Wells</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-meter', this)">
+                <span class="fsb-num">07</span>
+                <div><strong>Analog Hardware</strong><small>Brushed Metal Dial</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-compact-hud', this)">
+                <span class="fsb-num">08</span>
+                <div><strong>Compact Tabular HUD</strong><small>Bloomberg Inline Rows</small></div>
+            </button>
+
+            <!-- Family 3: Futuristic & Spatial -->
+            <button class="form-style-btn" onclick="setFormStyle('form-cyberdeck', this)">
+                <span class="fsb-num">09</span>
+                <div><strong>Cyberdeck Neon HUD</strong><small>Sci-Fi Bracket &amp; Cyan</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-glassmorphic', this)">
+                <span class="fsb-num">10</span>
+                <div><strong>Glassmorphic Spatial</strong><small>VisionOS Frosted Acrylic</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-synthwave', this)">
+                <span class="fsb-num">11</span>
+                <div><strong>Synthwave Outrun</strong><small>Neon Magenta Grid</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-wireframe', this)">
+                <span class="fsb-num">12</span>
+                <div><strong>Holographic Blueprint</strong><small>Dotted Laser Grid</small></div>
+            </button>
+
+            <!-- Family 4: Editorial & Avant-Garde -->
+            <button class="form-style-btn" onclick="setFormStyle('form-swiss', this)">
+                <span class="fsb-num">13</span>
+                <div><strong>Swiss Editorial</strong><small>Vignelli Clean Underline</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-zen', this)">
+                <span class="fsb-num">14</span>
+                <div><strong>Nordic Japandi Zen</strong><small>Warm Sand Organic</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-brutalist', this)">
+                <span class="fsb-num">15</span>
+                <div><strong>Brutalist Neo-Raw</strong><small>Hard 4px Drop Shadow</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-stealth', this)">
+                <span class="fsb-num">16</span>
+                <div><strong>Dark Luxury Stealth</strong><small>Obsidian &amp; Satin Gold</small></div>
+            </button>
+
+            <!-- Orthogonal Extended Archetypes -->
+            <button class="form-style-btn" onclick="setFormStyle('form-metric', this)">
+                <span class="fsb-num">17</span>
+                <div><strong>JIS Metric Tolerance</strong><small>Precision 0.5pt Mono</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-linen', this)">
+                <span class="fsb-num">18</span>
+                <div><strong>Archival Linen Seal</strong><small>Georgia Serif &amp; Rules</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-eink', this)">
+                <span class="fsb-num">19</span>
+                <div><strong>E-Ink Matte Paper</strong><small>Zero Motion / Contrast</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-terminal-green', this)">
+                <span class="fsb-num">20</span>
+                <div><strong>Terminal Green CLI</strong><small>Matrix CRT Phosphor</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-bauhaus', this)">
+                <span class="fsb-num">21</span>
+                <div><strong>Bauhaus Constructivist</strong><small>1919 Primary Triad</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-y2k', this)">
+                <span class="fsb-num">22</span>
+                <div><strong>Y2K Gloss Chrome</strong><small>Millennium Iridescent</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-crimson', this)">
+                <span class="fsb-num">23</span>
+                <div><strong>Lloyd's Crimson Marine</strong><small>Classification Red</small></div>
+            </button>
+            <button class="form-style-btn" onclick="setFormStyle('form-osha', this)">
+                <span class="fsb-num">24</span>
+                <div><strong>OSHA Hazard Chevron</strong><small>Safety Amber / Black</small></div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Live Interactive Form Stage -->
+    <div id="liveFormStage" class="form-stage form-linear">
+        <div class="f-header">
+            <div class="f-title-group">
+                <span class="f-icon">📋</span>
+                <div>
+                    <h2 class="f-title">Statutory Lifting Equipment Examination</h2>
+                    <p class="f-desc">Comprehensive field inspection data entry · Standards: LOLER 1998 / PUWER 1998</p>
+                </div>
+            </div>
+            <div class="f-status-pill">
+                <span class="f-dot"></span> LIVE AUTOSAVE ON
+            </div>
+        </div>
+
+        <div class="f-grid">
+            <!-- Field 1 -->
+            <div class="f-fg">
+                <label class="f-lbl">Report Identifier No.</label>
+                <div class="f-inp-wrap">
+                    <input type="text" class="f-inp" value="LFT-20261012-01">
+                    <button class="f-mic" title="Voice dictation">🎙️</button>
+                </div>
+                <div class="f-hint">Unique statutory examination sequence reference</div>
+            </div>
+
+            <!-- Field 2 -->
+            <div class="f-fg">
+                <label class="f-lbl">Safe Working Load (SWL)</label>
+                <div class="f-inp-wrap">
+                    <input type="text" class="f-inp mono" value="4.75 Tonnes">
+                    <span class="f-unit">WLL</span>
+                </div>
+                <div class="f-hint">Statically verified rated capacity</div>
+            </div>
+
+            <!-- Field 3 -->
+            <div class="f-fg">
+                <label class="f-lbl">Equipment Category</label>
+                <select class="f-select">
+                    <option selected>Bow Shackle Grade 6 (Safety Pin)</option>
+                    <option>Wire Rope Multi-Leg Sling</option>
+                    <option>Master Link Sub-Assembly</option>
+                    <option>Overhead Traveling Crane</option>
+                </select>
+                <div class="f-hint">Harmonized BS EN 13889 classification</div>
+            </div>
+
+            <!-- Field 4 -->
+            <div class="f-fg">
+                <label class="f-lbl">Manufacturer &amp; Model</label>
+                <input type="text" class="f-inp" value="Crosby Group · G-2130">
+                <div class="f-hint">Original OEM plate specification</div>
+            </div>
+
+            <!-- Field 5 -->
+            <div class="f-fg">
+                <label class="f-lbl">Premises / Operating Rig</label>
+                <input type="text" class="f-inp" value="Rig Scarabeo 9 · Red Sea Offshore">
+                <div class="f-hint">Geographical installation location</div>
+            </div>
+
+            <!-- Field 6 -->
+            <div class="f-fg">
+                <label class="f-lbl">Examination Scope</label>
+                <div class="f-toggle-row">
+                    <button class="f-chip active">6-Month Thorough Exam</button>
+                    <button class="f-chip">First Exam Before Use</button>
+                    <button class="f-chip">Major Overhaul</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Textarea / Assessment -->
+        <div class="f-fg" style="margin-top:16px;">
+            <label class="f-lbl">Defects, Rectification Required &amp; Operational Safety Verdict</label>
+            <textarea class="f-textarea" rows="3">No visible permanent deformation, elongation, or thread galling observed on pin assembly. Ultrasonic wall thickness within permissible ±2% tolerance. Safe for continued operational service at rated SWL.</textarea>
+        </div>
+
+        <!-- Form Actions Footer -->
+        <div class="f-actions">
+            <button class="f-btn f-btn-primary">Commit &amp; Sign Examination Record</button>
+            <button class="f-btn f-btn-secondary">Batch Duplicate</button>
+            <button class="f-btn f-btn-ghost" style="margin-left:auto;">Generate Instant LOLER Certificate &rarr;</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- 16 FORM STYLES CSS ENGINE -->
+<style>
+/* Style Selector Buttons */
+.form-style-btn {
+    background: #181d28;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: #e2e8f0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.form-style-btn:hover {
+    background: #222938;
+    border-color: rgba(255,255,255,0.2);
+    transform: translateY(-1px);
+}
+.form-style-btn.active {
+    background: #1e3a8a;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59,130,246,0.3);
+}
+.fsb-num {
+    font-size: 11px;
+    font-weight: 800;
+    color: #64748b;
+    font-family: 'JetBrains Mono', monospace;
+}
+.form-style-btn.active .fsb-num { color: #60a5fa; }
+.form-style-btn strong { display: block; font-size: 12.5px; font-weight: 700; color: #fff; }
+.form-style-btn small { display: block; font-size: 10.5px; color: #94a3b8; }
+
+/* Base Form Stage Container */
+.form-stage {
+    padding: 28px;
+    border-radius: 12px;
+    margin-bottom: 60px;
+    transition: all 0.3s ease;
+}
+.f-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.f-title-group { display: flex; align-items: center; gap: 14px; }
+.f-icon { font-size: 26px; }
+.f-title { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; }
+.f-desc { font-size: 12.5px; margin-top: 2px; }
+.f-status-pill {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.f-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
+.f-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+}
+.f-fg { display: flex; flex-direction: column; gap: 6px; }
+.f-lbl { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.f-inp-wrap { position: relative; display: flex; align-items: center; }
+.f-inp, .f-select, .f-textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+.f-inp.mono { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+.f-mic {
+    position: absolute;
+    right: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+.f-mic:hover { opacity: 1; }
+.f-unit {
+    position: absolute;
+    right: 12px;
+    font-size: 10px;
+    font-weight: 800;
+    opacity: 0.6;
+    letter-spacing: 0.05em;
+}
+.f-hint { font-size: 10.5px; margin-top: 2px; }
+.f-toggle-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.f-chip {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.f-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 18px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.f-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+/* ==========================================================================
+   STYLE 1: LINEAR MINIMALIST (Vercel / Linear Slate)
+   ========================================================================== */
+.form-stage.form-linear {
+    background: #0d1117;
+    border: 1px solid #21262d;
+    color: #e6edf3;
+}
+.form-stage.form-linear .f-header { border-bottom: 1px solid #21262d; }
+.form-stage.form-linear .f-title { color: #f0f6fc; }
+.form-stage.form-linear .f-desc { color: #8b949e; }
+.form-stage.form-linear .f-status-pill { background: rgba(59,130,246,0.12); color: #58a6ff; border: 1px solid rgba(59,130,246,0.3); }
+.form-stage.form-linear .f-lbl { color: #8b949e; font-size: 11px; }
+.form-stage.form-linear .f-hint { color: #6e7681; }
+.form-stage.form-linear .f-inp,
+.form-stage.form-linear .f-select,
+.form-stage.form-linear .f-textarea {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    color: #f0f6fc;
+    padding: 8px 12px;
+}
+.form-stage.form-linear .f-inp:focus,
+.form-stage.form-linear .f-select:focus,
+.form-stage.form-linear .f-textarea:focus {
+    border-color: #58a6ff;
+    box-shadow: 0 0 0 3px rgba(88,166,255,0.18);
+    outline: none;
+}
+.form-stage.form-linear .f-chip {
+    background: #161b22;
+    border: 1px solid #30363d;
+    color: #8b949e;
+}
+.form-stage.form-linear .f-chip.active {
+    background: #1f6feb;
+    border-color: #388bfd;
+    color: #fff;
+}
+.form-stage.form-linear .f-actions { border-top: 1px solid #21262d; }
+.form-stage.form-linear .f-btn-primary { background: #238636; border: 1px solid #2ea043; color: #fff; }
+.form-stage.form-linear .f-btn-secondary { background: #21262d; border: 1px solid #30363d; color: #c9d1d9; }
+.form-stage.form-linear .f-btn-ghost { background: transparent; border: none; color: #58a6ff; }
+
+/* ==========================================================================
+   STYLE 2: FLOATING NEO-SAAS (Stripe / Raycast Rounded)
+   ========================================================================== */
+.form-stage.form-floating {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01);
+    color: #1e293b;
+    border-radius: 18px;
+}
+.form-stage.form-floating .f-header { border-bottom: 1px solid #f1f5f9; }
+.form-stage.form-floating .f-title { color: #0f172a; font-weight: 800; }
+.form-stage.form-floating .f-desc { color: #64748b; }
+.form-stage.form-floating .f-status-pill { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+.form-stage.form-floating .f-lbl { color: #475569; font-weight: 700; font-size: 11.5px; }
+.form-stage.form-floating .f-hint { color: #94a3b8; }
+.form-stage.form-floating .f-inp,
+.form-stage.form-floating .f-select,
+.form-stage.form-floating .f-textarea {
+    background: #f8fafc;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    color: #0f172a;
+    padding: 10px 14px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+.form-stage.form-floating .f-inp:focus,
+.form-stage.form-floating .f-select:focus,
+.form-stage.form-floating .f-textarea:focus {
+    background: #ffffff;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99,102,241,0.18);
+    outline: none;
+}
+.form-stage.form-floating .f-chip {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    border-radius: 999px;
+}
+.form-stage.form-floating .f-chip.active {
+    background: #6366f1;
+    color: #fff;
+    border-color: #6366f1;
+    box-shadow: 0 4px 10px rgba(99,102,241,0.3);
+}
+.form-stage.form-floating .f-actions { border-top: 1px solid #f1f5f9; }
+.form-stage.form-floating .f-btn-primary { background: #6366f1; border: none; color: #fff; border-radius: 999px; box-shadow: 0 4px 12px rgba(99,102,241,0.3); }
+.form-stage.form-floating .f-btn-secondary { background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; border-radius: 999px; }
+.form-stage.form-floating .f-btn-ghost { background: transparent; border: none; color: #6366f1; }
+
+/* ==========================================================================
+   STYLE 3: BENTO GRID MODULAR (Apple Tiles)
+   ========================================================================== */
+.form-stage.form-bento {
+    background: #11141c;
+    border: 1px solid rgba(255,255,255,0.06);
+    color: #f1f5f9;
+}
+.form-stage.form-bento .f-fg {
+    background: #181d28;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 14px;
+    transition: all 0.25s;
+}
+.form-stage.form-bento .f-fg:hover {
+    background: #1e2433;
+    border-color: rgba(255,255,255,0.18);
+    transform: translateY(-2px);
+}
+.form-stage.form-bento .f-lbl { color: #94a3b8; font-size: 11px; }
+.form-stage.form-bento .f-inp,
+.form-stage.form-bento .f-select,
+.form-stage.form-bento .f-textarea {
+    background: #11141c;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: #fff;
+    padding: 8px 10px;
+}
+.form-stage.form-bento .f-btn-primary { background: #3b82f6; border: none; border-radius: 8px; color: #fff; }
+.form-stage.form-bento .f-btn-secondary { background: #1e2433; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #cbd5e1; }
+.form-stage.form-bento .f-btn-ghost { background: transparent; border: none; color: #60a5fa; }
+
+/* ==========================================================================
+   STYLE 4: MATERIAL YOU M3 (Filled Container & Bottom Line)
+   ========================================================================== */
+.form-stage.form-material {
+    background: #1e1f25;
+    color: #e3e2e6;
+    border-radius: 20px;
+}
+.form-stage.form-material .f-inp,
+.form-stage.form-material .f-select,
+.form-stage.form-material .f-textarea {
+    background: #2b2b31;
+    border: none;
+    border-bottom: 2px solid #90909a;
+    border-radius: 8px 8px 0 0;
+    color: #e3e2e6;
+    padding: 12px 14px;
+}
+.form-stage.form-material .f-inp:focus,
+.form-stage.form-material .f-select:focus,
+.form-stage.form-material .f-textarea:focus {
+    border-bottom: 2px solid #a8c7fa;
+    background: #35363c;
+    outline: none;
+}
+.form-stage.form-material .f-btn-primary { background: #a8c7fa; color: #062e6f; border: none; border-radius: 999px; font-weight: 800; }
+.form-stage.form-material .f-btn-secondary { background: transparent; border: 1px solid #90909a; color: #a8c7fa; border-radius: 999px; }
+.form-stage.form-material .f-btn-ghost { background: transparent; border: none; color: #a8c7fa; }
+
+/* ==========================================================================
+   STYLE 5: INDUSTRIAL RUGGED (Mil-Spec 2px Tactical)
+   ========================================================================== */
+.form-stage.form-rugged {
+    background: #14171a;
+    border: 3px solid #d97706;
+    color: #f3f4f6;
+    border-radius: 0px;
+}
+.form-stage.form-rugged .f-header { border-bottom: 2px solid #d97706; }
+.form-stage.form-rugged .f-title { color: #f59e0b; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; font-size: 16px; }
+.form-stage.form-rugged .f-lbl { color: #fbbf24; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; }
+.form-stage.form-rugged .f-inp,
+.form-stage.form-rugged .f-select,
+.form-stage.form-rugged .f-textarea {
+    background: #0f1114;
+    border: 2px solid #78350f;
+    border-radius: 0px;
+    color: #fbbf24;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    padding: 8px 10px;
+}
+.form-stage.form-rugged .f-inp:focus,
+.form-stage.form-rugged .f-select:focus,
+.form-stage.form-rugged .f-textarea:focus {
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 2px #f59e0b;
+    outline: none;
+}
+.form-stage.form-rugged .f-btn-primary { background: #d97706; color: #000; border: none; border-radius: 0px; font-weight: 900; font-family: 'JetBrains Mono', monospace; }
+.form-stage.form-rugged .f-btn-secondary { background: #262a30; border: 2px solid #78350f; color: #fbbf24; border-radius: 0px; }
+.form-stage.form-rugged .f-btn-ghost { background: transparent; border: none; color: #fbbf24; }
+
+/* ==========================================================================
+   STYLE 6: NEUMORPHIC TACTILE (Soft Clay Inset Wells)
+   ========================================================================== */
+.form-stage.form-neumorphic {
+    background: #242730;
+    box-shadow: 20px 20px 40px #1a1c22, -20px -20px 40px #2e323e;
+    color: #e2e8f0;
+    border-radius: 24px;
+}
+.form-stage.form-neumorphic .f-inp,
+.form-stage.form-neumorphic .f-select,
+.form-stage.form-neumorphic .f-textarea {
+    background: #242730;
+    border: none;
+    border-radius: 12px;
+    color: #f1f5f9;
+    padding: 10px 14px;
+    box-shadow: inset 4px 4px 8px #1a1c22, inset -4px -4px 8px #2e323e;
+}
+.form-stage.form-neumorphic .f-inp:focus,
+.form-stage.form-neumorphic .f-select:focus,
+.form-stage.form-neumorphic .f-textarea:focus {
+    outline: none;
+    box-shadow: inset 6px 6px 10px #15171c, inset -6px -6px 10px #333744, 0 0 0 2px #3b82f6;
+}
+.form-stage.form-neumorphic .f-btn-primary {
+    background: #242730;
+    color: #60a5fa;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 5px 5px 10px #1a1c22, -5px -5px 10px #2e323e;
+    font-weight: 800;
+}
+.form-stage.form-neumorphic .f-btn-primary:active {
+    box-shadow: inset 3px 3px 6px #1a1c22, inset -3px -3px 6px #2e323e;
+}
+
+/* ==========================================================================
+   STYLE 7: ANALOG HARDWARE METER (Brushed Metal)
+   ========================================================================== */
+.form-stage.form-meter {
+    background: linear-gradient(145deg, #2b303c, #1f232b);
+    border: 2px solid #475569;
+    color: #f8fafc;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 12px 24px rgba(0,0,0,0.4);
+}
+.form-stage.form-meter .f-lbl { color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; }
+.form-stage.form-meter .f-inp,
+.form-stage.form-meter .f-select,
+.form-stage.form-meter .f-textarea {
+    background: #0f1218;
+    border: 1px solid #334155;
+    border-radius: 4px;
+    color: #38bdf8;
+    font-family: 'JetBrains Mono', monospace;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
+    padding: 8px 10px;
+}
+.form-stage.form-meter .f-btn-primary { background: #0284c7; color: #fff; border: 1px solid #38bdf8; border-radius: 4px; }
+.form-stage.form-meter .f-btn-secondary { background: #334155; color: #cbd5e1; border: 1px solid #475569; border-radius: 4px; }
+.form-stage.form-meter .f-btn-ghost { background: transparent; border: none; color: #38bdf8; }
+
+/* ==========================================================================
+   STYLE 8: COMPACT TABULAR HUD (Bloomberg Terminal)
+   ========================================================================== */
+.form-stage.form-compact-hud {
+    background: #0c0d10;
+    border: 1px solid #27272a;
+    color: #e4e4e7;
+    border-radius: 4px;
+    padding: 16px;
+}
+.form-stage.form-compact-hud .f-grid { gap: 6px; }
+.form-stage.form-compact-hud .f-fg {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background: #18181b;
+    border: 1px solid #27272a;
+    padding: 4px 8px;
+    border-radius: 2px;
+}
+.form-stage.form-compact-hud .f-lbl { width: 140px; margin: 0; font-size: 10.5px; color: #a1a1aa; flex-shrink: 0; }
+.form-stage.form-compact-hud .f-inp-wrap,
+.form-stage.form-compact-hud .f-inp,
+.form-stage.form-compact-hud .f-select {
+    border: none;
+    background: transparent;
+    padding: 2px 6px;
+    color: #fafafa;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    text-align: right;
+}
+.form-stage.form-compact-hud .f-hint { display: none; }
+.form-stage.form-compact-hud .f-btn-primary { background: #ea580c; border: none; color: #fff; font-size: 11px; padding: 4px 10px; border-radius: 2px; }
+.form-stage.form-compact-hud .f-btn-secondary { background: #27272a; border: none; color: #d4d4d8; font-size: 11px; padding: 4px 10px; border-radius: 2px; }
+.form-stage.form-compact-hud .f-btn-ghost { background: transparent; border: none; color: #fb923c; font-size: 11px; }
+
+/* ==========================================================================
+   STYLE 9: CYBERDECK NEON HUD (FUI Sci-Fi)
+   ========================================================================== */
+.form-stage.form-cyberdeck {
+    background: #05080f;
+    border: 1px solid #00f0ff;
+    color: #e0f7fa;
+    box-shadow: 0 0 20px rgba(0,240,255,0.15), inset 0 0 20px rgba(0,240,255,0.05);
+    border-radius: 4px;
+}
+.form-stage.form-cyberdeck .f-title { color: #00f0ff; font-family: 'JetBrains Mono', monospace; text-shadow: 0 0 8px rgba(0,240,255,0.6); }
+.form-stage.form-cyberdeck .f-lbl { color: #00f0ff; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+.form-stage.form-cyberdeck .f-lbl::before { content: "[ "; color: #ff0055; }
+.form-stage.form-cyberdeck .f-lbl::after { content: " ]"; color: #ff0055; }
+.form-stage.form-cyberdeck .f-inp,
+.form-stage.form-cyberdeck .f-select,
+.form-stage.form-cyberdeck .f-textarea {
+    background: rgba(0,240,255,0.03);
+    border: 1px solid #00f0ff;
+    border-radius: 0;
+    color: #00f0ff;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 8px 12px;
+}
+.form-stage.form-cyberdeck .f-inp:focus,
+.form-stage.form-cyberdeck .f-select:focus,
+.form-stage.form-cyberdeck .f-textarea:focus {
+    box-shadow: 0 0 12px #00f0ff;
+    background: rgba(0,240,255,0.08);
+    outline: none;
+}
+.form-stage.form-cyberdeck .f-btn-primary { background: #00f0ff; color: #000; border: none; font-family: 'JetBrains Mono', monospace; font-weight: 900; box-shadow: 0 0 12px #00f0ff; }
+.form-stage.form-cyberdeck .f-btn-secondary { background: transparent; border: 1px solid #ff0055; color: #ff0055; font-family: 'JetBrains Mono', monospace; }
+.form-stage.form-cyberdeck .f-btn-ghost { background: transparent; border: none; color: #00f0ff; }
+
+/* ==========================================================================
+   STYLE 10: GLASSMORPHIC SPATIAL (VisionOS Acrylic)
+   ========================================================================== */
+.form-stage.form-glassmorphic {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    color: #ffffff;
+    border-radius: 20px;
+}
+.form-stage.form-glassmorphic .f-inp,
+.form-stage.form-glassmorphic .f-select,
+.form-stage.form-glassmorphic .f-textarea {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 12px;
+    color: #ffffff;
+    padding: 10px 14px;
+}
+.form-stage.form-glassmorphic .f-inp:focus,
+.form-stage.form-glassmorphic .f-select:focus,
+.form-stage.form-glassmorphic .f-textarea:focus {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 15px rgba(255,255,255,0.25);
+    outline: none;
+}
+.form-stage.form-glassmorphic .f-btn-primary { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; border-radius: 999px; }
+.form-stage.form-glassmorphic .f-btn-secondary { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #ccc; border-radius: 999px; }
+.form-stage.form-glassmorphic .f-btn-ghost { background: transparent; border: none; color: #fff; }
+
+/* ==========================================================================
+   STYLE 11: SYNTHWAVE OUTRUN (Retro Magenta Glow)
+   ========================================================================== */
+.form-stage.form-synthwave {
+    background: #17092b;
+    border: 2px solid #ec4899;
+    color: #fdf2f8;
+    box-shadow: 0 0 25px rgba(236,72,153,0.3);
+    border-radius: 12px;
+}
+.form-stage.form-synthwave .f-title { color: #f43f5e; text-shadow: 0 0 10px rgba(244,63,94,0.6); }
+.form-stage.form-synthwave .f-lbl { color: #a855f7; }
+.form-stage.form-synthwave .f-inp,
+.form-stage.form-synthwave .f-select,
+.form-stage.form-synthwave .f-textarea {
+    background: #231140;
+    border: 1px solid #d946ef;
+    border-radius: 8px;
+    color: #fdf4ff;
+    padding: 8px 12px;
+}
+.form-stage.form-synthwave .f-btn-primary { background: linear-gradient(135deg, #ec4899, #8b5cf6); border: none; color: #fff; font-weight: 800; border-radius: 8px; }
+.form-stage.form-synthwave .f-btn-secondary { background: #231140; border: 1px solid #a855f7; color: #f0abfc; border-radius: 8px; }
+.form-stage.form-synthwave .f-btn-ghost { background: transparent; border: none; color: #ec4899; }
+
+/* ==========================================================================
+   STYLE 12: HOLOGRAPHIC BLUEPRINT (Dotted Grid)
+   ========================================================================== */
+.form-stage.form-wireframe {
+    background: #020b18;
+    border: 1px dashed #0284c7;
+    color: #bae6fd;
+    border-radius: 0;
+}
+.form-stage.form-wireframe .f-inp,
+.form-stage.form-wireframe .f-select,
+.form-stage.form-wireframe .f-textarea {
+    background: transparent;
+    border: 1px dashed #0369a1;
+    color: #38bdf8;
+    border-radius: 0;
+    padding: 8px 10px;
+    font-family: 'JetBrains Mono', monospace;
+}
+.form-stage.form-wireframe .f-inp:focus,
+.form-stage.form-wireframe .f-select:focus,
+.form-stage.form-wireframe .f-textarea:focus {
+    border: 1px solid #38bdf8;
+    box-shadow: 0 0 10px #0284c7;
+    outline: none;
+}
+.form-stage.form-wireframe .f-btn-primary { background: transparent; border: 1px solid #38bdf8; color: #38bdf8; border-radius: 0; }
+.form-stage.form-wireframe .f-btn-secondary { background: transparent; border: 1px dashed #0369a1; color: #7dd3fc; border-radius: 0; }
+.form-stage.form-wireframe .f-btn-ghost { background: transparent; border: none; color: #38bdf8; }
+
+/* ==========================================================================
+   STYLE 13: SWISS EDITORIAL (Underline Modernist)
+   ========================================================================== */
+.form-stage.form-swiss {
+    background: #ffffff;
+    border: 2px solid #000000;
+    color: #000000;
+    border-radius: 0;
+}
+.form-stage.form-swiss .f-header { border-bottom: 2px solid #000000; }
+.form-stage.form-swiss .f-title { font-weight: 900; letter-spacing: -0.04em; color: #000; font-size: 19px; }
+.form-stage.form-swiss .f-lbl { color: #000000; font-weight: 800; font-size: 11px; }
+.form-stage.form-swiss .f-inp,
+.form-stage.form-swiss .f-select,
+.form-stage.form-swiss .f-textarea {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #000000;
+    color: #000000;
+    border-radius: 0;
+    padding: 8px 0;
+    font-weight: 600;
+}
+.form-stage.form-swiss .f-inp:focus,
+.form-stage.form-swiss .f-select:focus,
+.form-stage.form-swiss .f-textarea:focus {
+    border-bottom: 3px solid #dc2626;
+    outline: none;
+}
+.form-stage.form-swiss .f-btn-primary { background: #000000; color: #fff; border: 2px solid #000; border-radius: 0; font-weight: 800; }
+.form-stage.form-swiss .f-btn-secondary { background: #fff; color: #000; border: 2px solid #000; border-radius: 0; }
+.form-stage.form-swiss .f-btn-ghost { background: transparent; border: none; color: #dc2626; font-weight: 800; }
+
+/* ==========================================================================
+   STYLE 14: NORDIC JAPANDI ZEN (Warm Earth Muted)
+   ========================================================================== */
+.form-stage.form-zen {
+    background: #f7f5f0;
+    border: 1px solid #e6e2d8;
+    color: #3b3a36;
+    border-radius: 16px;
+}
+.form-stage.form-zen .f-inp,
+.form-stage.form-zen .f-select,
+.form-stage.form-zen .f-textarea {
+    background: #ebe7dd;
+    border: 1px solid #dcd7ca;
+    border-radius: 8px;
+    color: #2b2a27;
+    padding: 9px 12px;
+}
+.form-stage.form-zen .f-btn-primary { background: #5c6356; color: #fff; border: none; border-radius: 8px; }
+.form-stage.form-zen .f-btn-secondary { background: #ebe7dd; border: 1px solid #dcd7ca; color: #3b3a36; border-radius: 8px; }
+.form-stage.form-zen .f-btn-ghost { background: transparent; border: none; color: #5c6356; }
+
+/* ==========================================================================
+   STYLE 15: BRUTALIST NEO-RAW (Hard Drop Shadows)
+   ========================================================================== */
+.form-stage.form-brutalist {
+    background: #fef08a;
+    border: 3px solid #000000;
+    box-shadow: 6px 6px 0px #000000;
+    color: #000000;
+    border-radius: 0;
+}
+.form-stage.form-brutalist .f-header { border-bottom: 3px solid #000000; }
+.form-stage.form-brutalist .f-title { color: #000; font-weight: 900; }
+.form-stage.form-brutalist .f-lbl { color: #000; font-weight: 900; }
+.form-stage.form-brutalist .f-inp,
+.form-stage.form-brutalist .f-select,
+.form-stage.form-brutalist .f-textarea {
+    background: #ffffff;
+    border: 3px solid #000000;
+    box-shadow: 3px 3px 0px #000000;
+    border-radius: 0;
+    color: #000000;
+    font-weight: 700;
+    padding: 8px 10px;
+}
+.form-stage.form-brutalist .f-btn-primary { background: #000000; color: #fff; border: 3px solid #000; border-radius: 0; font-weight: 900; box-shadow: 4px 4px 0px #ffffff; }
+.form-stage.form-brutalist .f-btn-secondary { background: #ffffff; color: #000; border: 3px solid #000; border-radius: 0; font-weight: 800; box-shadow: 3px 3px 0px #000; }
+.form-stage.form-brutalist .f-btn-ghost { background: transparent; border: none; color: #000; font-weight: 900; text-decoration: underline; }
+
+/* ==========================================================================
+   STYLE 16: DARK LUXURY STEALTH (Obsidian & Satin Gold)
+   ========================================================================== */
+.form-stage.form-stealth {
+    background: #0a0a0a;
+    border: 1px solid rgba(212,175,55,0.3);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+    color: #e5e5e5;
+    border-radius: 10px;
+}
+.form-stage.form-stealth .f-title { color: #e5c07b; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.form-stage.form-stealth .f-lbl { color: #d4af37; font-size: 11px; letter-spacing: 0.08em; }
+.form-stage.form-stealth .f-inp,
+.form-stage.form-stealth .f-select,
+.form-stage.form-stealth .f-textarea {
+    background: #141414;
+    border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 4px;
+    color: #f5f5f5;
+    padding: 9px 12px;
+}
+.form-stage.form-stealth .f-inp:focus,
+.form-stage.form-stealth .f-select:focus,
+.form-stage.form-stealth .f-textarea:focus {
+    border-color: #d4af37;
+    box-shadow: 0 0 10px rgba(212,175,55,0.3);
+    outline: none;
+}
+.form-stage.form-stealth .f-btn-primary { background: #d4af37; color: #000; border: none; border-radius: 4px; font-weight: 800; }
+.form-stage.form-stealth .f-btn-secondary { background: #1a1a1a; border: 1px solid rgba(212,175,55,0.3); color: #d4af37; border-radius: 4px; }
+.form-stage.form-stealth .f-btn-ghost { background: transparent; border: none; color: #d4af37; }
+
+/* ==========================================================================
+   STYLE 17: JIS METRIC TOLERANCE (Precision 0.5pt Monospace)
+   ========================================================================== */
+.form-stage.form-metric {
+    background: #ffffff;
+    border: 1.5px solid #000000;
+    color: #000000;
+    border-radius: 0px;
+    font-family: 'JetBrains Mono', Consolas, monospace;
+}
+.form-stage.form-metric .f-header { border-bottom: 1.5px solid #000; }
+.form-stage.form-metric .f-title { font-size: 14px; font-weight: 900; }
+.form-stage.form-metric .f-inp,
+.form-stage.form-metric .f-select,
+.form-stage.form-metric .f-textarea {
+    background: #f8fafc;
+    border: 1px solid #000;
+    border-radius: 0px;
+    color: #000;
+    padding: 6px 8px;
+    font-family: 'JetBrains Mono', monospace;
+}
+.form-stage.form-metric .f-inp:focus { outline: none; background: #eff6ff; border-color: #2563eb; }
+.form-stage.form-metric .f-btn-primary { background: #000; color: #fff; border: 1px solid #000; border-radius: 0; }
+.form-stage.form-metric .f-btn-secondary { background: #fff; color: #000; border: 1px solid #000; border-radius: 0; }
+.form-stage.form-metric .f-btn-ghost { background: transparent; border: none; color: #000; }
+
+/* ==========================================================================
+   STYLE 18: ARCHIVAL LINEN (Georgia Serif & Engraved Rules)
+   ========================================================================== */
+.form-stage.form-linen {
+    background: #fdfbf7;
+    border: 2px solid #78350f;
+    box-shadow: 0 4px 20px rgba(120,53,15,0.08);
+    color: #451a03;
+    border-radius: 4px;
+    font-family: Georgia, serif;
+}
+.form-stage.form-linen .f-header { border-bottom: 2px double #78350f; }
+.form-stage.form-linen .f-title { font-weight: 700; color: #78350f; font-size: 18px; }
+.form-stage.form-linen .f-lbl { color: #92400e; font-family: Arial, sans-serif; font-size: 10px; }
+.form-stage.form-linen .f-inp,
+.form-stage.form-linen .f-select,
+.form-stage.form-linen .f-textarea {
+    background: #fff;
+    border: 1px solid #b45309;
+    border-radius: 2px;
+    color: #451a03;
+    padding: 8px 10px;
+}
+.form-stage.form-linen .f-inp:focus { border-color: #78350f; box-shadow: 0 0 0 2px rgba(120,53,15,0.2); outline: none; }
+.form-stage.form-linen .f-btn-primary { background: #78350f; color: #fdfbf7; border: 1px solid #451a03; border-radius: 2px; }
+.form-stage.form-linen .f-btn-secondary { background: #fdfbf7; color: #78350f; border: 1px solid #b45309; border-radius: 2px; }
+.form-stage.form-linen .f-btn-ghost { background: transparent; border: none; color: #78350f; }
+
+/* ==========================================================================
+   STYLE 19: E-INK MATTE PAPER (Zero Gradients / Pure Contrast)
+   ========================================================================== */
+.form-stage.form-eink {
+    background: #f4f3ef;
+    border: 2px solid #1a1a1a;
+    color: #1a1a1a;
+    border-radius: 0;
+}
+.form-stage.form-eink .f-header { border-bottom: 2px solid #1a1a1a; }
+.form-stage.form-eink .f-title { font-weight: 900; }
+.form-stage.form-eink .f-inp,
+.form-stage.form-eink .f-select,
+.form-stage.form-eink .f-textarea {
+    background: #ffffff;
+    border: 2px solid #1a1a1a;
+    border-radius: 0;
+    color: #1a1a1a;
+    padding: 8px 10px;
+    transition: none;
+}
+.form-stage.form-eink .f-inp:focus { background: #1a1a1a; color: #ffffff; outline: none; }
+.form-stage.form-eink .f-btn-primary { background: #1a1a1a; color: #ffffff; border: 2px solid #1a1a1a; border-radius: 0; }
+.form-stage.form-eink .f-btn-secondary { background: #ffffff; color: #1a1a1a; border: 2px solid #1a1a1a; border-radius: 0; }
+.form-stage.form-eink .f-btn-ghost { background: transparent; border: none; color: #1a1a1a; font-weight: 900; }
+
+/* ==========================================================================
+   STYLE 20: TERMINAL GREEN PHOSPHOR (Pure OLED & Matrix CRT)
+   ========================================================================== */
+.form-stage.form-terminal-green {
+    background: #050505;
+    border: 1px solid #33ff00;
+    box-shadow: 0 0 15px rgba(51,255,0,0.15);
+    color: #33ff00;
+    border-radius: 0;
+    font-family: 'JetBrains Mono', monospace;
+}
+.form-stage.form-terminal-green .f-header { border-bottom: 1px solid #33ff00; }
+.form-stage.form-terminal-green .f-title { color: #33ff00; font-size: 15px; }
+.form-stage.form-terminal-green .f-lbl { color: #33ff00; }
+.form-stage.form-terminal-green .f-lbl::before { content: "> "; }
+.form-stage.form-terminal-green .f-inp,
+.form-stage.form-terminal-green .f-select,
+.form-stage.form-terminal-green .f-textarea {
+    background: #0a110a;
+    border: 1px solid #1a551a;
+    border-radius: 0;
+    color: #33ff00;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 8px 10px;
+}
+.form-stage.form-terminal-green .f-inp:focus { border-color: #33ff00; box-shadow: 0 0 8px #33ff00; outline: none; }
+.form-stage.form-terminal-green .f-btn-primary { background: #33ff00; color: #000; border: none; border-radius: 0; font-weight: 900; }
+.form-stage.form-terminal-green .f-btn-secondary { background: #000; color: #33ff00; border: 1px solid #33ff00; border-radius: 0; }
+.form-stage.form-terminal-green .f-btn-ghost { background: transparent; border: none; color: #33ff00; }
+
+/* ==========================================================================
+   STYLE 21: BAUHAUS CONSTRUCTIVIST (Weimar Primary Triad)
+   ========================================================================== */
+.form-stage.form-bauhaus {
+    background: #f0f0f0;
+    border: 3px solid #121212;
+    color: #121212;
+    border-radius: 0;
+}
+.form-stage.form-bauhaus .f-header { border-bottom: 3px solid #121212; background: #fef08a; margin: -28px -28px 24px -28px; padding: 20px 28px; }
+.form-stage.form-bauhaus .f-title { font-weight: 900; text-transform: uppercase; color: #000; }
+.form-stage.form-bauhaus .f-inp,
+.form-stage.form-bauhaus .f-select,
+.form-stage.form-bauhaus .f-textarea {
+    background: #ffffff;
+    border: 2px solid #121212;
+    border-radius: 0;
+    color: #000;
+    padding: 8px 10px;
+    font-weight: 700;
+}
+.form-stage.form-bauhaus .f-inp:focus { border-color: #d02020; box-shadow: 4px 4px 0px #121212; outline: none; }
+.form-stage.form-bauhaus .f-btn-primary { background: #d02020; color: #fff; border: 2px solid #121212; border-radius: 999px; font-weight: 900; box-shadow: 3px 3px 0 #121212; }
+.form-stage.form-bauhaus .f-btn-secondary { background: #1040c0; color: #fff; border: 2px solid #121212; border-radius: 999px; font-weight: 900; box-shadow: 3px 3px 0 #121212; }
+.form-stage.form-bauhaus .f-btn-ghost { background: transparent; border: none; color: #d02020; font-weight: 900; }
+
+/* ==========================================================================
+   STYLE 22: Y2K GLOSS CHROME (Millennium Silver & Iridescent)
+   ========================================================================== */
+.form-stage.form-y2k {
+    background: linear-gradient(135deg, #1e1b4b, #311042);
+    border: 2px solid #c0c0c0;
+    box-shadow: 0 0 25px rgba(192,192,192,0.3);
+    color: #f5d0fe;
+    border-radius: 18px;
+}
+.form-stage.form-y2k .f-title { color: #f472b6; text-shadow: 0 0 8px rgba(244,114,182,0.8); }
+.form-stage.form-y2k .f-inp,
+.form-stage.form-y2k .f-select,
+.form-stage.form-y2k .f-textarea {
+    background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.3) 100%);
+    border: 1.5px solid #a855f7;
+    border-radius: 12px;
+    color: #fff;
+    padding: 9px 12px;
+}
+.form-stage.form-y2k .f-inp:focus { border-color: #38bdf8; box-shadow: 0 0 12px #38bdf8; outline: none; }
+.form-stage.form-y2k .f-btn-primary { background: linear-gradient(180deg, #f472b6 0%, #db2777 100%); color: #fff; border: 1px solid #fff; border-radius: 999px; font-weight: 800; }
+.form-stage.form-y2k .f-btn-secondary { background: linear-gradient(180deg, #c0c0c0 0%, #64748b 100%); color: #000; border: 1px solid #fff; border-radius: 999px; font-weight: 800; }
+.form-stage.form-y2k .f-btn-ghost { background: transparent; border: none; color: #38bdf8; }
+
+/* ==========================================================================
+   STYLE 23: LLOYD'S CRIMSON MARITIME (Marine Classification Red)
+   ========================================================================== */
+.form-stage.form-crimson {
+    background: #ffffff;
+    border: 2px solid #991b1b;
+    color: #1c1917;
+    border-radius: 4px;
+}
+.form-stage.form-crimson .f-header { border-bottom: 2px solid #991b1b; background: #fef2f2; margin: -28px -28px 24px -28px; padding: 18px 28px; }
+.form-stage.form-crimson .f-title { color: #991b1b; font-weight: 900; }
+.form-stage.form-crimson .f-lbl { color: #991b1b; }
+.form-stage.form-crimson .f-inp,
+.form-stage.form-crimson .f-select,
+.form-stage.form-crimson .f-textarea {
+    background: #fff;
+    border: 1.5px solid #b91c1c;
+    border-radius: 4px;
+    color: #000;
+    padding: 8px 10px;
+}
+.form-stage.form-crimson .f-inp:focus { border-color: #991b1b; box-shadow: 0 0 0 3px rgba(153,27,27,0.18); outline: none; }
+.form-stage.form-crimson .f-btn-primary { background: #991b1b; color: #fff; border: none; border-radius: 4px; font-weight: 800; }
+.form-stage.form-crimson .f-btn-secondary { background: #fef2f2; color: #991b1b; border: 1px solid #b91c1c; border-radius: 4px; }
+.form-stage.form-crimson .f-btn-ghost { background: transparent; border: none; color: #991b1b; }
+
+/* ==========================================================================
+   STYLE 24: US OSHA HAZARD CHEVRON (High-Contrast Regulatory)
+   ========================================================================== */
+.form-stage.form-osha {
+    background: #111;
+    border: 3px solid #f59e0b;
+    color: #fff;
+    border-radius: 0;
+}
+.form-stage.form-osha .f-header {
+    background: repeating-linear-gradient(45deg, #000, #000 12px, #f59e0b 12px, #f59e0b 24px);
+    padding: 4px;
+    margin: -28px -28px 24px -28px;
+}
+.form-stage.form-osha .f-header > * { background: #000; padding: 14px 20px; }
+.form-stage.form-osha .f-title { color: #f59e0b; font-weight: 900; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; }
+.form-stage.form-osha .f-lbl { color: #f59e0b; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+.form-stage.form-osha .f-inp,
+.form-stage.form-osha .f-select,
+.form-stage.form-osha .f-textarea {
+    background: #1c1917;
+    border: 2px solid #78350f;
+    border-radius: 0;
+    color: #fef3c7;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 8px 10px;
+}
+.form-stage.form-osha .f-inp:focus { border-color: #f59e0b; box-shadow: 0 0 0 2px #f59e0b; outline: none; }
+.form-stage.form-osha .f-btn-primary { background: #f59e0b; color: #000; border: none; border-radius: 0; font-weight: 900; font-family: 'JetBrains Mono', monospace; }
+.form-stage.form-osha .f-btn-secondary { background: #262626; color: #f59e0b; border: 2px solid #78350f; border-radius: 0; }
+.form-stage.form-osha .f-btn-ghost { background: transparent; border: none; color: #f59e0b; }
+</style>
+
+<script>
+function switchAppTheme(themeClass, btn) {
+    const shell = document.getElementById('liveAppShell');
+    shell.className = 'live-app-shell ' + themeClass;
+    document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+}
+
+function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
+
+function setFormStyle(styleClass, btn) {
+    const stage = document.getElementById('liveFormStage');
+    stage.className = 'form-stage ' + styleClass;
+    
+    document.querySelectorAll('.form-style-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const badge = document.getElementById('activeStyleBadge');
+    const styleName = btn.querySelector('strong').innerText;
+    badge.innerText = 'STYLE: ' + styleName.toUpperCase();
+}
+</script>
+
+</body>
+</html>

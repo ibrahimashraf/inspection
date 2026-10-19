@@ -1,4 +1,20 @@
 				/* PREVIEW RENDERER */
+				function estimateRecordPages(r, engine) {
+					if (!r) return 1;
+					const eng = engine || currentEngine;
+					if (eng === 'LIFTING') {
+						const ann = !!(r.includePuwer === true && r.puwerRows && r.puwerRows.length)
+							|| !!(r.includeChecklist === true && r.checklist && r.checklist.length)
+							|| !!(r.includePhotos === true && (r.photos || []).some(p => p));
+						return ann ? 2 : 1;
+					} else {
+						const ann = !!(r.includeChecklist === true && r.checklist && r.checklist.length > 0)
+							|| !!(r.includePhotos === true && (r.photos || []).some(p => p));
+						return ann ? 2 : 1;
+					}
+				}
+				window.estimateRecordPages = estimateRecordPages;
+
 				function buildInstitutionalOverlays(r) {
 					if (featureToggles.overlays === false) return '';
 					let ov = '';
@@ -310,11 +326,15 @@
 							if (rows.length) t6 = '<table class="ctbl"><colgroup><col style="width:33.34%"><col style="width:33.33%"><col style="width:33.33%"></colgroup><tr><td colspan="3" class="csec">Defect Particulars &amp; Operability Verdict</td></tr>' + rows.join('') + '</table>';
 						}
 						const ql = qrChannel === 'EMAIL' ? 'Email Verify' : 'WhatsApp Verify';
+						const qrLink = typeof buildVerificationLink === 'function' ? buildVerificationLink(r) : '#';
 						const iS = (r.inspectorSigMode === 'UPLOAD' && r.inspectorSigUpload) ? r.inspectorSigUpload : r.inspectorSigLive;
 						const aS = (r.authSigMode === 'UPLOAD' && r.authSigUpload) ? r.authSigUpload : r.authSigLive;
-						const qC = '<td class="qr-cell" style="text-align:center;vertical-align:middle;padding:3px;cursor:pointer;" onclick="dispatchVerification()" title="Click to test / dispatch verification"><svg id="waQrSvg" width="90" height="90" role="img" aria-label="QR"></svg><div class="report-caption" style="font-size:4.6pt;margin-top:1px;">' + ql + '</div></td>';
+						const qC = '<td class="qr-cell" style="text-align:center;vertical-align:middle;padding:3px;" title="Scan QR or click link to verify">' +
+							'<div style="cursor:pointer;" onclick="dispatchVerification()" title="Click QR to test / dispatch verification"><svg id="waQrSvg" width="90" height="90" role="img" aria-label="QR"></svg></div>' +
+							'<a href="' + sanitizeForReport(qrLink) + '" target="_blank" rel="noopener noreferrer" class="report-caption qr-link-btn" onclick="event.stopPropagation();" title="Open verification link in browser / app">' + ql + ' ↗</a>' +
+							'</td>';
 						let sig = '';
-						if (isSecOn('sec_loler_5') && isOn('examinerName') && isOn('authName')) {
+						if (isSecOn('sec_loler_5')) {
 							sig = showQr ?
 								'<table class="ctbl sig-block"><colgroup><col style="width:38%"><col style="width:38%"><col style="width:24%"></colgroup><tr><td>' + lblSpan('Person Making this Report') + valSpan('examinerName', r.examinerName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;">' + (iS ? '<img src="' + iS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '<i>Signature on File</i>') + '</div></td><td>' + lblSpan('Person Authenticating') + valSpan('authName', r.authName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;">' + (aS ? '<img src="' + aS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '<i>Signature on File</i>') + '</div></td>' + qC + '</tr></table>' :
 								'<table class="ctbl sig-block"><colgroup><col style="width:50%"><col style="width:50%"></colgroup><tr><td>' + lblSpan('Person Making this Report') + valSpan('examinerName', r.examinerName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;">' + (iS ? '<img src="' + iS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '') + '</div></td><td>' + lblSpan('Person Authenticating') + valSpan('authName', r.authName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;">' + (aS ? '<img src="' + aS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '') + '</div></td></tr></table>';
@@ -440,7 +460,7 @@
 						}
 						const calT = cRows ? '<table class="ctbl">' + C4 + '<tr><td colspan="4" class="csec">Equipment, Calibration &amp; Environmental Controls</td></tr>' + cRows + '</table>' : '';
 
-						const findT = isSecOn('sec_ndt_5') ? ('<table class="ctbl">' + C4 + '<tr><td colspan="4" class="csec">Discontinuity / Joint Examination Findings</td></tr><tr class="report-tbl-head"><td>Joint #</td><td>Area</td><td>Findings</td><td>Result</td></tr>' + (r.indications || []).map(x => '<tr><td>' + sanitizeForReport(x.joint) + '</td><td>' + sanitizeForReport(x.area) + '</td><td>' + sanitizeForReport(x.finding) + '</td><td style="font-weight:bold;color:' + (x.result === 'PASS' ? '#16a34a' : '#dc2626') + ';">' + sanitizeForReport(x.result) + '</td></tr>').join('') + '</table>') : '';
+						const findT = isSecOn('sec_ndt_5') ? ('<table class="ctbl">' + C4 + '<tr><td colspan="4" class="csec">Discontinuity / Item Examination Findings</td></tr><tr class="report-tbl-head"><td>Item #</td><td>Area</td><td>Findings</td><td>Result</td></tr>' + (r.indications || []).map(x => '<tr><td>' + sanitizeForReport(x.item) + '</td><td>' + sanitizeForReport(x.area) + '</td><td>' + sanitizeForReport(x.finding) + '</td><td style="font-weight:bold;color:' + (x.result === 'PASS' ? '#16a34a' : '#dc2626') + ';">' + sanitizeForReport(x.result) + '</td></tr>').join('') + '</table>') : '';
 
 						let eRows = '';
 						if (isSecOn('sec_ndt_6')) {
@@ -475,7 +495,13 @@
 							const cs = [];
 							if (isOn('inspectorName')) cs.push({ s: 1, h: lblSpan('Tested By (Inspector)') + valSpan('inspectorName', r.inspectorName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;margin-top:2px;">' + (iS ? '<img src="' + iS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '<span style="font-style:italic;color:#64748b;font-size:6pt;">Signature on File</span>') + '</div>' });
 							if (isOn('witnessName')) cs.push({ s: 1, h: lblSpan('Witnessed By') + valSpan('witnessName', r.witnessName) + '<div style="height:70px;display:flex;align-items:center;justify-content:flex-start;padding:2px 0;margin-top:2px;">' + (wS ? '<img src="' + wS + '" style="max-height:66px;max-width:100%;object-fit:contain;display:block;">' : '<span style="font-style:italic;color:#64748b;font-size:6pt;">Signature on File</span>') + '</div>' });
-							if (showQr) cs.push({ s: 1, h: '<div class="qr-cell" style="text-align:center;vertical-align:middle;padding:3px;cursor:pointer;" onclick="dispatchVerification()" title="Click to test / dispatch verification"><svg id="waQrSvg" width="90" height="90" role="img" aria-label="QR"></svg><div class="report-caption" style="font-size:4.6pt;margin-top:1px;">' + ql + '</div></div>' });
+							if (showQr) {
+								const qrLink = typeof buildVerificationLink === 'function' ? buildVerificationLink(r) : '#';
+								cs.push({ s: 1, h: '<div class="qr-cell" style="text-align:center;vertical-align:middle;padding:3px;" title="Scan QR or click link to verify">' +
+									'<div style="cursor:pointer;" onclick="dispatchVerification()" title="Click QR to test / dispatch verification"><svg id="waQrSvg" width="90" height="90" role="img" aria-label="QR"></svg></div>' +
+									'<a href="' + sanitizeForReport(qrLink) + '" target="_blank" rel="noopener noreferrer" class="report-caption qr-link-btn" onclick="event.stopPropagation();" title="Open verification link in browser / app">' + ql + ' ↗</a>' +
+									'</div>' });
+							}
 							if (cs.length) {
 								const tot = cs.length;
 								const cg = tot === 3 ? '<colgroup><col style="width:38%"><col style="width:38%"><col style="width:24%"></colgroup>' : (tot === 2 ? '<colgroup><col style="width:50%"><col style="width:50%"></colgroup>' : '<colgroup><col style="width:100%"></colgroup>');

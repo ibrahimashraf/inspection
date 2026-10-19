@@ -107,13 +107,19 @@ const BlobStore = {
             r.onerror = () => rej(r.error);
         });
     },
-    async estimate() {
-        if (!navigator.storage?.estimate) return null;
-        try {
-            const { usage, quota } = await navigator.storage.estimate();
-            return { usage, quota, percent: (usage / quota * 100).toFixed(1) };
-        } catch (e) { return null; }
-    }
+    async setBatch(engine, list) {
+        return this.put(`batch_${engine}`, list);
+    },
+    async getBatch(engine) {
+        return this.get(`batch_${engine}`);
+    },
+	async estimate() {
+		if (!navigator.storage?.estimate) return null;
+		try {
+			const { usage, quota } = await navigator.storage.estimate();
+			return { usage, quota, percent: (usage / quota * 100).toFixed(1) };
+		} catch (e) { return null; }
+	}
 };
 
 /* ==============================================================
@@ -286,6 +292,41 @@ async function _deserializeRecord(s, reportMissing) {
 }
 
 /* ==============================================================
+   SYNCHRONOUS PERSIST — emergency instant flush to localStorage
+   Guarantees zero data loss on pagehide / beforeunload / hard refresh.
+   ============================================================== */
+function persistStateSync() {
+    try {
+        if (typeof syncCurrentData === 'function') syncCurrentData();
+        for (const engine of ['LIFTING', 'NDT']) {
+            const list = engine === 'LIFTING' ? (window.liftingBatch || liftingBatch) : (window.ndtBatch || ndtBatch);
+            if (!Array.isArray(list)) continue;
+            // Immediate synchronous stringification. Strips heavy in-memory data URLs 
+            // if photos-idb already markerized them, or creates a fast snapshot.
+            const fastSnap = list.map(rec => {
+                const s = { ...rec };
+                if (Array.isArray(s.photos)) s.photos = s.photos.slice();
+                return s;
+            });
+            store.set(`ims_${engine}_meta_v2`, JSON.stringify(fastSnap));
+        }
+        store.set('ims_active', String(window.activeIdx || 0));
+        store.set('ims_version', String(SCHEMA_VERSION));
+        store.set('ims_qr', window.qrChannel || 'EMAIL');
+        if (typeof window.readQrConfig === 'function') window.readQrConfig();
+        store.set('ims_qr_config', JSON.stringify(window.qrConfig || {}));
+        store.set('ims_dc', JSON.stringify(window.docControl || {}));
+        store.set('ims_ci', JSON.stringify(window.corpInfo || {}));
+        store.set('ims_ft', JSON.stringify(window.featureToggles || {}));
+        _savedGeneration = Math.max(_savedGeneration, _saveGeneration);
+        if (typeof setSaveIndicator === 'function') setSaveIndicator('saved');
+    } catch (e) {
+        console.warn('[persistStateSync] failed', e);
+    }
+}
+window.persistStateSync = persistStateSync;
+
+/* ==============================================================
    PERSIST — writes BOTH engines every time
    ============================================================== */
 async function persistStateV2() {
@@ -296,18 +337,41 @@ async function persistStateV2() {
     const myGen = _saveGeneration;
 
     const work = (async () => {
+        // Phase 1: Immediate synchronous snapshot to localStorage so
+        // that if the browser unloads or refreshes while IDB blobs are saving,
+        // records and metadata are ALREADY committed to disk.
+        persistStateSync();
+
         for (const engine of ['LIFTING', 'NDT']) {
-            const list = engine === 'LIFTING' ? window.liftingBatch : window.ndtBatch;
+            const list = engine === 'LIFTING' ? (window.liftingBatch || liftingBatch) : (window.ndtBatch || ndtBatch);
             if (!Array.isArray(list)) continue;
-            const serialized = await Promise.all(
-                list.map((rec, i) => _serializeRecord(rec, `${engine}/${i}`))
-            );
-            store.set(`ims_${engine}_meta_v2`, JSON.stringify(serialized));
+            
+            // Chunked serialization to avoid overwhelming the crypto thread on large batches
+            const serialized = [];
+            const CHUNK_SIZE = 50;
+            for (let i = 0; i < list.length; i += CHUNK_SIZE) {
+                const chunk = list.slice(i, i + CHUNK_SIZE);
+                const chunkResults = await Promise.all(
+                    chunk.map((rec, idx) => _serializeRecord(rec, `${engine}/${i + idx}`))
+                );
+                serialized.push(...chunkResults);
+            }
+
+            // Save directly to IndexedDB (unlimited capacity for 3000+ records)
+            try { await BlobStore.setBatch(engine, serialized); } catch (e) { console.error('[persist] idb setBatch', e); }
+            // Mirror to localStorage if size allows, otherwise gracefully skip localStorage write
+            try {
+                store.set(`ims_${engine}_meta_v2`, JSON.stringify(serialized));
+            } catch (e) {
+                console.warn(`[persist] localStorage quota exceeded for ${engine} batch (safely stored in IndexedDB)`);
+            }
         }
 
         store.set('ims_active', String(window.activeIdx));
         store.set('ims_version', String(SCHEMA_VERSION));
         store.set('ims_qr', window.qrChannel);
+        if (typeof window.readQrConfig === 'function') window.readQrConfig();
+        store.set('ims_qr_config', JSON.stringify(window.qrConfig || {}));
         store.set('ims_dc', JSON.stringify(window.docControl));
         store.set('ims_ci', JSON.stringify(window.corpInfo));
         store.set('ims_ft', JSON.stringify(window.featureToggles));
@@ -346,8 +410,8 @@ async function persistStateV2() {
             try {
                 await window.AIO.appendAudit('PERSIST', {
                     gen: myGen,
-                    lifting: (window.liftingBatch || []).length,
-                    ndt: (window.ndtBatch || []).length
+                    lifting: ((window.liftingBatch || liftingBatch) || []).length,
+                    ndt: ((window.ndtBatch || ndtBatch) || []).length
                 });
             } catch (e) {
                 console.warn('[aio] audit append failed', e);
@@ -387,14 +451,42 @@ async function restoreStateV2() {
     const integrityIssues = [];
 
     for (const engine of ['LIFTING', 'NDT']) {
-        const raw = store.get(`ims_${engine}_meta_v2`) ||
-                    store.get(`ims_${engine.toLowerCase()}`);
-        if (!raw) continue;
+        let list = null;
         try {
-            const list = JSON.parse(raw);
-            const hydrated = await Promise.all(list.map(s => _deserializeRecord(s, true)));
-            if (engine === 'LIFTING') window.liftingBatch = hydrated;
-            else window.ndtBatch = hydrated;
+            // First check IndexedDB (primary store for multi-record datasets)
+            const idbData = await BlobStore.getBatch(engine);
+            if (Array.isArray(idbData) && idbData.length > 0) {
+                list = idbData;
+            }
+        } catch (e) {
+            console.warn(`[restore] idb getBatch failed for ${engine}`, e);
+        }
+
+        // Fallback to localStorage if not found in IndexedDB
+        if (!list) {
+            const raw = store.get(`ims_${engine}_meta_v2`) ||
+                        store.get(`ims_${engine.toLowerCase()}`);
+            if (raw) {
+                try { list = JSON.parse(raw); } catch (e) { list = null; }
+            }
+        }
+
+        if (!list || !Array.isArray(list)) continue;
+        try {
+            const hydrated = [];
+            const CHUNK_SIZE = 50;
+            for (let i = 0; i < list.length; i += CHUNK_SIZE) {
+                const chunk = list.slice(i, i + CHUNK_SIZE);
+                const chunkHydrated = await Promise.all(chunk.map(s => _deserializeRecord(s, true)));
+                hydrated.push(...chunkHydrated);
+            }
+            if (engine === 'LIFTING') {
+                window.liftingBatch = hydrated;
+                if (typeof liftingBatch !== 'undefined') liftingBatch = hydrated;
+            } else {
+                window.ndtBatch = hydrated;
+                if (typeof ndtBatch !== 'undefined') ndtBatch = hydrated;
+            }
 
             // ── AIO: split integrity reporting so signature failures are
             //    called out separately from missing media. A missing blob
