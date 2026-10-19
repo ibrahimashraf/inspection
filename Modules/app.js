@@ -469,6 +469,9 @@ store.set('ims_tab_' + currentEngine, tabId);
 					try {
 					const savedEngine = (typeof store !== 'undefined' && store.get ? store.get('ims_engine') : null) || 'LIFTING';
 					const savedTab = typeof store !== 'undefined' && store.get ? (store.get('ims_active_tab') || store.get('ims_tab_' + savedEngine)) : null;
+					if (!window.liftingBatch || !window.liftingBatch.length) {
+					window.liftingBatch = (typeof defaultLiftingBatch !== 'undefined') ? defaultLiftingBatch : (window.liftingBatch || []);
+					}
 					switchEngine(savedEngine === 'NDT' ? 'NDT' : 'LIFTING', savedTab);
 					} catch (e) {}
 					try { loadActiveRecord(); } catch (e) { showPreviewError(e); }

@@ -757,7 +757,12 @@
 			const setTxt = (id, v) => { const el = g(id); if (el) el.textContent = (v == null ? '' : v); };
 
 			if (currentEngine === 'LIFTING') {
-				const r = liftingBatch[activeIdx]; if (!r) return;
+				if (!liftingBatch || !liftingBatch.length) {
+					if (typeof defaultLiftingRecord === 'function') liftingBatch = [defaultLiftingRecord()];
+				}
+				if (activeIdx < 0 || activeIdx >= liftingBatch.length) activeIdx = 0;
+				const r = liftingBatch[activeIdx]; 
+				if (!r) return;
 				if (!r.puwerRows) r.puwerRows = defaultPuwerRows();
 				if (!r.examParticulars) r.examParticulars = DEFAULT_EXAM_PARTICULARS;
 				if (!r.quantity) r.quantity = '1';
@@ -816,8 +821,13 @@
 				renderSigThumbs();
 				redrawPadFromRecord('pad1', r.inspectorSigLive);
 				redrawPadFromRecord('pad2', r.authSigLive);
-			} else {
-				const r = ndtBatch[activeIdx]; if (!r) return;
+				} else {
+				if (!ndtBatch || !ndtBatch.length) {
+					if (typeof defaultNdtRecord === 'function') ndtBatch = [defaultNdtRecord()];
+				}
+				if (activeIdx < 0 || activeIdx >= ndtBatch.length) activeIdx = 0;
+				const r = ndtBatch[activeIdx]; 
+				if (!r) return;
 				if (!Array.isArray(r.photos)) r.photos = [];
 				if (!r.checklist) r.checklist = [];
 				if (!r.extraCells) r.extraCells = [];
