@@ -105,7 +105,7 @@
     <div class="toolbar-section">
         <span class="toolbar-section-badge">APP THEME &amp; UI</span>
         <div class="toolbar-group">
-            <label for="themeSelect">Theme:</label>
+            <label for="themeSelectToolbar">Theme:</label>
             <select id="themeSelectToolbar" onchange="setTheme(this.value); const s=document.getElementById('themeSelect'); if(s) s.value=this.value;">
                 <option value="dark">Slate (Default)</option>
                 <option value="light">Studio White</option>
@@ -868,7 +868,7 @@
 							<input type="text" id="goToInputValue" class="form-control" placeholder="e.g. 57" autocomplete="off" required>
 						</div>
 						<div id="goToRecentReportsBlock" style="display:none;">
-							<label class="fg-title" style="margin-bottom:var(--space-1);display:block;">Or pick from batch:</label>
+							<label class="fg-title" for="goToQuickReportSelect" style="margin-bottom:var(--space-1);display:block;">Or pick from batch:</label>
 							<select id="goToQuickReportSelect" class="form-control" onchange="onQuickReportSelect(this.value)">
 								<option value="">-- Quick select report in current batch --</option>
 							</select>
