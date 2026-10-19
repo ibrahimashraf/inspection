@@ -37,17 +37,30 @@ const Migrations = {
 };
 
 async function migrateState() {
-    const stored = parseInt(store.get('ims_version') || '1', 10);
+    const rawVersion = store.get('ims_version');
+    if (!rawVersion) {
+        store.set('ims_version', String(SCHEMA_VERSION));
+        return;
+    }
+    const stored = parseInt(rawVersion, 10);
     if (stored === SCHEMA_VERSION) return;
     if (stored > SCHEMA_VERSION) {
         if (typeof showToast === 'function') showToast('Data from a newer version.', 'error');
         return;
     }
+
+    const rawLifting = store.get('ims_lifting');
+    const rawNdt = store.get('ims_ndt');
+    if (!rawLifting && !rawNdt) {
+        store.set('ims_version', String(SCHEMA_VERSION));
+        return;
+    }
+
     console.log(`[migration] v${stored} → v${SCHEMA_VERSION}`);
 
     let state = {
-        liftingBatch: JSON.parse(store.get('ims_lifting') || '[]'),
-        ndtBatch: JSON.parse(store.get('ims_ndt') || '[]')
+        liftingBatch: JSON.parse(rawLifting || '[]'),
+        ndtBatch: JSON.parse(rawNdt || '[]')
     };
 
     for (let v = stored; v < SCHEMA_VERSION; v++) {
@@ -63,8 +76,14 @@ async function migrateState() {
         }
     }
 
-    if (state.liftingBatch?.length) window.liftingBatch = state.liftingBatch;
-    if (state.ndtBatch?.length) window.ndtBatch = state.ndtBatch;
+    if (state.liftingBatch?.length) {
+        window.liftingBatch = state.liftingBatch;
+        if (typeof liftingBatch !== 'undefined') liftingBatch = state.liftingBatch;
+    }
+    if (state.ndtBatch?.length) {
+        window.ndtBatch = state.ndtBatch;
+        if (typeof ndtBatch !== 'undefined') ndtBatch = state.ndtBatch;
+    }
     store.set('ims_version', String(SCHEMA_VERSION));
     await persistStateV2();
     if (typeof showToast === 'function') showToast(`Data upgraded to v${SCHEMA_VERSION}`, 'success');

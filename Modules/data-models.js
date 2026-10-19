@@ -141,38 +141,83 @@ function getNextReportNumber(p) {
 					};
 				}
 
+				function defaultLiftingRecord(base) {
+					const a = base || {};
+					return {
+						reportNo: getNextReportNumber('LFT'),
+						reportDate: a.reportDate || todayISO(),
+						jobRef: a.jobRef || "WO-0954",
+						poRef: a.poRef || "PO-2026-8812",
+						companyAccred: a.companyAccred || "Integin Global Inspection Services Ltd.",
+						standards: a.standards || "BS EN 13889, ISO 4309, ASME B30.26",
+						sopRef: a.sopRef || "SOP-LIFT-044 Rev 4",
+						fieldToggles: {},
+						sectionToggles: {},
+						includePuwer: false,
+						includeChecklist: false,
+						includePhotos: false,
+						puwerRows: defaultPuwerRows(),
+						employer: a.employer || "Global Marine Logistics Ltd.++London, UK",
+						premises: a.premises || "North Sea Marine Terminal - Rigging Yard B",
+						subLocation: a.subLocation || "Heavy Lift Rigging Loft / Bay 4",
+						colourCode: a.colourCode || "GREEN",
+						description: a.description || "Grade 80 High-Tensile Bolt Type Anchor Safety Bow Shackle",
+						swl: a.swl || "17.0 Tonnes",
+						quantity: a.quantity || "1",
+						identification: a.identification || "Stamp: Crosby G-2130 / EQ-SHK-009",
+						manufacturer: a.manufacturer || "Crosby Group",
+						model: a.model || "G-2130",
+						serial: a.serial || "SN-CR-88401",
+						plantId: a.plantId || "EQ-SHK-009",
+						mfgYear: a.mfgYear || "2023",
+						lastExamDate: a.lastExamDate || "2026-04-15",
+						markingsLegible: a.markingsLegible || "YES",
+						q_firstExam: a.q_firstExam || "NO",
+						q_installedCorrectly: a.q_installedCorrectly || "N/A",
+						q_int6m: a.q_int6m || "YES",
+						q_int12m: a.q_int12m || "NO",
+						q_scheme: a.q_scheme || "NO",
+						q_exceptional: a.q_exceptional || "NO",
+						examParticulars: a.examParticulars || DEFAULT_EXAM_PARTICULARS,
+						additionalTesting: a.additionalTesting || "NO",
+						additionalTestingDetails: a.additionalTestingDetails || "",
+						proofLoadApplied: a.proofLoadApplied || "Visual and Dimensional Examination Only",
+						lastProofDetails: a.lastProofDetails || "2024-05-12 | Cert #PLT-44018",
+						nextProofDate: a.nextProofDate || "2028-05-11",
+						defectDesc: a.defectDesc || "NONE. No cracks, visible deformation, galling, or thread wear detected. Verified safe for lifting operations.",
+						dangerImm: a.dangerImm || "NO",
+						dangerTimeText: a.dangerTimeText || "N/A",
+						remedies: a.remedies || "None required.",
+						isSafe: a.isSafe || "YES",
+						examDate: a.examDate || todayISO(),
+						nextExamDate: a.nextExamDate || calculateNextDate(todayISO(), 6),
+						verdictLabel: "",
+						verdictText: "",
+						extraCells: [],
+						examinerName: a.examinerName || "Marcus Vance | Senior LEEA Inspector",
+						authName: a.authName || "David H. Miller | Technical Director",
+						checklist: [
+							{ item: "Visual check for corrosion, distortion & wear", status: "PASS", note: "Clean, zero defects" },
+							{ item: "Bow diameter and pin alignment verification", status: "PASS", note: "Within OEM tolerances" },
+							{ item: "Identification stamp legibility and WLL rating", status: "PASS", note: "Clear & embossed" }
+						],
+						photos: Array(12).fill(null),
+						inspectorSigLive: null,
+						inspectorSigUpload: null,
+						inspectorSigMode: 'LIVE',
+						authSigLive: null,
+						authSigUpload: null,
+						authSigMode: 'LIVE',
+						stampUpload: null,
+						stampPos: { x: 70, y: 76 },
+						selected: false
+					};
+				}
+
 				/* INITIAL DATA */
-				var liftingBatch = [{
-					reportNo: "LFT-20261017-01", reportDate: "2026-10-17", jobRef: "WO-0954", poRef: "PO-2026-8812",
-					companyAccred: "Integin Global Inspection Services Ltd.", standards: "BS EN 13889, ISO 4309, ASME B30.26", sopRef: "SOP-LIFT-044 Rev 4",
-					fieldToggles: {}, sectionToggles: {}, includePuwer: false, includeChecklist: false, includePhotos: false, puwerRows: defaultPuwerRows(),
-					employer: "Global Marine Logistics Ltd.++London, UK", premises: "North Sea Marine Terminal - Rigging Yard B",
-					subLocation: "Heavy Lift Rigging Loft / Bay 4", colourCode: "GREEN",
-					description: "Grade 80 High-Tensile Bolt Type Anchor Safety Bow Shackle",
-					swl: "17.0 Tonnes", quantity: "1", identification: "Stamp: Crosby G-2130 / EQ-SHK-009",
-					manufacturer: "Crosby Group", model: "G-2130", serial: "SN-CR-88401", plantId: "EQ-SHK-009", mfgYear: "2023",
-					lastExamDate: "2026-04-15", markingsLegible: "YES",
-					q_firstExam: "NO", q_installedCorrectly: "N/A", q_int6m: "YES", q_int12m: "NO", q_scheme: "NO", q_exceptional: "NO",
-					examParticulars: DEFAULT_EXAM_PARTICULARS,
-					additionalTesting: "NO", additionalTestingDetails: "",
-					proofLoadApplied: "Visual and Dimensional Examination Only",
-					lastProofDetails: "2024-05-12 | Cert #PLT-44018", nextProofDate: "2028-05-11",
-					defectDesc: "NONE. No cracks, visible deformation, galling, or thread wear detected. Verified safe for lifting operations.",
-					dangerImm: "NO", dangerTimeText: "N/A", remedies: "None required.", isSafe: "YES",
-					examDate: "2026-10-17", nextExamDate: "2027-04-16",
-					verdictLabel: "", verdictText: "", extraCells: [],
-					examinerName: "Marcus Vance | Senior LEEA Inspector",
-					authName: "David H. Miller | Technical Director",
-					checklist: [
-						{ item: "Visual check for corrosion, distortion & wear", status: "PASS", note: "Clean, zero defects" },
-						{ item: "Bow diameter and pin alignment verification", status: "PASS", note: "Within OEM tolerances" },
-						{ item: "Identification stamp legibility and WLL rating", status: "PASS", note: "Clear & embossed" }
-					],
-					photos: Array(12).fill(null),
-					inspectorSigLive: null, inspectorSigUpload: null, inspectorSigMode: 'LIVE',
-					authSigLive: null, authSigUpload: null, authSigMode: 'LIVE',
-					stampUpload: null, stampPos: { x: 70, y: 76 }, selected: false
-				}];
+				var liftingBatch = [defaultLiftingRecord({
+					reportNo: "LFT-20261017-01", reportDate: "2026-10-17", examDate: "2026-10-17", nextExamDate: "2027-04-16"
+				})];
 
 				var ndtBatch = [Object.assign(defaultNdtRecord(null), {
 					reportNo: "NDT-20261017-01", client: "Apex Engineering & Energy Corp.", location: "Bravo Platform - Wellhead Manifold Deck",
@@ -187,3 +232,10 @@ function getNextReportNumber(p) {
 						{ item: "Item C-1011", area: "Stress Relief Groove", finding: "Clean profile, no discontinuity", result: "PASS" }
 					]
 				})];
+
+				window.defaultLiftingRecord = defaultLiftingRecord;
+				window.defaultNdtRecord = defaultNdtRecord;
+				window.defaultLiftingBatch = liftingBatch;
+				window.defaultNdtBatch = ndtBatch;
+				window.liftingBatch = liftingBatch;
+				window.ndtBatch = ndtBatch;

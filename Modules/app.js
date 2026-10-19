@@ -12,14 +12,16 @@
 
 					currentEngine = id;
 					try { if (typeof store !== 'undefined' && store.set) store.set('ims_engine', id); } catch (e) {}
-					const list = id === 'LIFTING' ? liftingBatch : ndtBatch;
+					const list = id === 'LIFTING'
+						? (window.liftingBatch || liftingBatch)
+						: (window.ndtBatch || ndtBatch);
 
 					// Restore with clamp. Three cases:
 					//   - remembered index in range → restore it
 					//   - list shrank since last visit → clamp to last valid row
 					//   - list is empty → 0 (guards the -1 arithmetic below)
 					const remembered = activeIdxByEngine[id] || 0;
-					activeIdx = (list.length === 0)
+					activeIdx = (!list || list.length === 0)
 						? 0
 						: Math.min(Math.max(0, remembered), list.length - 1);
 
